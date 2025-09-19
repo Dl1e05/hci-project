@@ -1,0 +1,55 @@
+[project]
+name = "hci-project"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi[standard]>=0.116.2",
+    "pydantic>=2.11.9",
+    "python-jose[cryptography]>=3.5.0",
+    "sqlalchemy>=2.0.43",
+]
+[tool.ruff]
+target-version = "py312"
+line-length = 128
+src = ["src"]
+exclude = [".venv", ".mypy_cache", "__pycache__", "uv.lock", "migrations"]
+ignore = [
+    "B008",
+]
+
+[tool.ruff.lint]
+select = [
+  "E",   # pycodestyle
+  "F",   # pyflakes
+  "I",   # isort
+  "B",   # flake8-bugbear
+  "UP",  # pyupgrade
+  "C4",  # flake8-comprehensions
+  "ARG", # flake8-unused-arguments
+  "RET", # flake8-return
+  "SIM", # flake8-simplify
+]
+
+[tool.mypy]
+python_version = "3.12"
+mypy_path = "src"
+packages = ["app"]
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unused_configs = true
+no_implicit_optional = true
+strict_optional = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disable_error_code = ["annotation-unchecked"]
+
+plugins = ["pydantic.mypy"]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.18.2",
+    "ruff>=0.13.1",
+]

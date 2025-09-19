@@ -1,0 +1,17 @@
+.venv/
+__pycache__/
+*.pyc
+uv.lock
+node_modules/
+dist/
+.env
+
+.python-version
+.idea/
+
+.devenv*
+devenv.local.nix
+
+.direnv
+
+.pre-commit-config.yaml
