@@ -19,8 +19,6 @@ class RegistrationService:
     async def register(self, data: UserCreate) -> UserRead:
         user = User(
             username=data.username,
-            first_name=data.first_name,
-            last_name=data.last_name,
             password=hash_password(data.password.get_secret_value()),
             email=data.email,
             is_active=True,

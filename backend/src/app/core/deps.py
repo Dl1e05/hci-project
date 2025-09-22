@@ -19,5 +19,5 @@ def require_user_from_cookie(request: Request) -> UUID:
         raise HTTPException(status_code=404, detail="Not Found")
     try:
         return UUID(sub)
-    except ValueError:
-        raise HTTPException(status_code=401, detail="Invalid subject format")
+    except ValueError as e:
+        raise HTTPException(status_code=401, detail="Invalid subject format") from e

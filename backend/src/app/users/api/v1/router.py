@@ -1,9 +1,10 @@
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, status
+
+from app.core.deps import require_user_from_cookie
 from app.users.schemas import UserRead
 from app.users.services.services import GetUsers
-from app.core.deps import require_user_from_cookie
 
 router = APIRouter(prefix="/profile", tags=["profile"])
 

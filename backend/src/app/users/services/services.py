@@ -1,8 +1,8 @@
 from uuid import UUID
 
 from fastapi import Depends, HTTPException, status
-from src.app.users.repo import UserRepo, get_user_repo
 
+from app.users.repo import UserRepo, get_user_repo
 from app.users.schemas import UserRead
 
 

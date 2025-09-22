@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status, Response
+from fastapi import APIRouter, Depends, Response, status
 
 from app.auth.schemas import LoginInput, TokenPair
 from app.auth.services.login import LoginService
@@ -18,12 +18,7 @@ async def login(data: LoginInput, response: Response, service: LoginService = De
     token_pair = await service.login(data)
 
     response.set_cookie(
-        key="access_token",
-        value=token_pair.access_token,
-        httponly=True,
-        secure=True,
-        samesite="lax",
-        max_age=3600
+        key="access_token", value=token_pair.access_token, httponly=True, secure=True, samesite="lax", max_age=3600
     )
     response.set_cookie(
         key="refresh_token",
@@ -31,6 +26,6 @@ async def login(data: LoginInput, response: Response, service: LoginService = De
         httponly=True,
         secure=True,
         samesite="lax",
-        max_age=60 * 60 * 24 * 7
+        max_age=60 * 60 * 24 * 7,
     )
     return token_pair
