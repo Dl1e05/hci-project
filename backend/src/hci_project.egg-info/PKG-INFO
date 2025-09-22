@@ -1,0 +1,20 @@
+Metadata-Version: 2.4
+Name: hci-project
+Version: 0.1.0
+Summary: Add your description here
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+Requires-Dist: asyncpg>=0.30.0
+Requires-Dist: fastapi[standard]>=0.116.2
+Requires-Dist: mypy>=1.18.2
+Requires-Dist: passlib[bcrypt]>=1.7.4
+Requires-Dist: pydantic>=2.11.9
+Requires-Dist: python-jose>=3.5.0
+Requires-Dist: ruff>=0.13.1
+Requires-Dist: sqlalchemy>=2.0.43
+Requires-Dist: types-python-jose>=3.5.0.20250531
+Requires-Dist: uvicorn>=0.35.0
+
+# hci-project
+# backend
+# frontend

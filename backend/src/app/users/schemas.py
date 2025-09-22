@@ -18,10 +18,7 @@ Password = Annotated[SecretStr, StringConstraints(min_length=8)]
 
 class UserBase(ORMModel):
     username: Username
-    first_name: Name50
-    last_name: Name50
     email: EmailStr
-    phone_number: PhoneE164
     birth_date: date
 
     @field_validator("email")
