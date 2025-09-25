@@ -9,6 +9,7 @@ Requires-Dist: fastapi[standard]>=0.116.2
 Requires-Dist: mypy>=1.18.2
 Requires-Dist: passlib[bcrypt]>=1.7.4
 Requires-Dist: pydantic>=2.11.9
+Requires-Dist: pydantic-settings>=2.10.1
 Requires-Dist: python-jose>=3.5.0
 Requires-Dist: ruff>=0.13.1
 Requires-Dist: sqlalchemy>=2.0.43
@@ -17,4 +18,8 @@ Requires-Dist: uvicorn>=0.35.0
 
 # hci-project
 # backend
+To proper aacount work use: 
+uv venv
+#after enter the output from terminal
+uv pip install -e .
 # frontend
