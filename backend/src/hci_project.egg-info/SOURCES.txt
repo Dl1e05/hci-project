@@ -2,6 +2,7 @@ README.md
 pyproject.toml
 src/app/__init__.py
 src/app/base.py
+src/app/import_models.py
 src/app/main.py
 src/app/auth/__init__.py
 src/app/auth/repo.py
@@ -26,6 +27,7 @@ src/app/users/api/__init__.py
 src/app/users/api/v1/__init__.py
 src/app/users/api/v1/router.py
 src/app/users/services/__init__.py
+src/app/users/services/errors.py
 src/app/users/services/services.py
 src/hci_project.egg-info/PKG-INFO
 src/hci_project.egg-info/SOURCES.txt

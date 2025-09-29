@@ -4,7 +4,9 @@ Version: 0.1.0
 Summary: Add your description here
 Requires-Python: >=3.12
 Description-Content-Type: text/markdown
+Requires-Dist: alembic>=1.16.5
 Requires-Dist: asyncpg>=0.30.0
+Requires-Dist: bcrypt==4.0.1
 Requires-Dist: fastapi[standard]>=0.116.2
 Requires-Dist: mypy>=1.18.2
 Requires-Dist: passlib[bcrypt]>=1.7.4
