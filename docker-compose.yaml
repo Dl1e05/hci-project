@@ -1,0 +1,44 @@
+name: hci-project
+version: '3.8'
+
+services:
+  backend:
+    # Указываем, что нужно собрать образ из папки ./backend
+    build: ./backend
+    container_name: fastapi-backend-hci
+    ports:
+      - "8001:8000"
+    volumes:
+      # Монтируем код для "горячей" перезагрузки в процессе разработки
+      - ./backend:/app
+    environment:
+      # Переменная для FastAPI (или Uvicorn), чтобы видеть изменения
+      - PYTHONUNBUFFERED=1
+      # Переменные для подключения к базе данных
+      - POSTGRES_USER=HCI
+      - POSTGRES_PASSWORD=HCIpass
+      - POSTGRES_DB=HCIDB
+      - POSTGRES_HOST=db
+      - DATABASE_URL=postgresql+asyncpg://HCI:HCIpass@db:5432/HCIDB
+      - SECRET_KEY=0242985e4ad60acfaabcd6fab48fdd8eb1b2be1293656d3307e780ddc01e8166
+    depends_on:
+      - db
+    restart: always
+
+  db:
+    image: postgres:13-alpine
+    container_name: postgres-db-hci
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=HCI
+      - POSTGRES_PASSWORD=HCIpass
+      - POSTGRES_DB=HCIDB
+    volumes:
+      # Именованный том для сохранения данных БД
+      - db_data_hci:/var/lib/postgresql/data
+    restart: always
+
+# Определение томов
+volumes:
+  db_data_hci:
