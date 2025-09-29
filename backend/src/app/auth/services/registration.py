@@ -9,6 +9,7 @@ from app.core.db import get_async_session
 from app.core.security import hash_password
 from app.users.models import User
 from app.users.schemas import UserCreate, UserRead
+from app.users.services.errors import classify_integrity_error
 
 
 class RegistrationService:
@@ -19,8 +20,9 @@ class RegistrationService:
     async def register(self, data: UserCreate) -> UserRead:
         user = User(
             username=data.username,
-            password=hash_password(data.password.get_secret_value()),
             email=data.email,
+            birth_date=data.birth_date,
+            password=hash_password(data.password.get_secret_value()),
             is_active=True,
         )
         try:
@@ -28,18 +30,15 @@ class RegistrationService:
             await self.db.commit()
         except IntegrityError as e:
             await self.db.rollback()
-            msg = "User already exists"
-            if "users_username_key" in str(e.orig):
-                msg = "Username already exists"
-            elif "users_email_key" in str(e.orig):
-                msg = "Email already exists"
-            raise HTTPException(status_code=400, detail=msg) from e
+            status, msg = classify_integrity_error(e)
+            raise HTTPException(status_code=status, detail=msg) from e
 
         await self.db.refresh(user)
         return UserRead.model_validate(user)
 
 
 def get_registration_service(
-    repo: AuthRepo = Depends(get_auth_repo), db: AsyncSession = Depends(get_async_session)
+    db: AsyncSession = Depends(get_async_session)
 ) -> RegistrationService:
+    repo = get_auth_repo(db)
     return RegistrationService(repo=repo, db=db)
