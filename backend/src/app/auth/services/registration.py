@@ -37,8 +37,6 @@ class RegistrationService:
         return UserRead.model_validate(user)
 
 
-def get_registration_service(
-    db: AsyncSession = Depends(get_async_session)
-) -> RegistrationService:
+def get_registration_service(db: AsyncSession = Depends(get_async_session)) -> RegistrationService:
     repo = get_auth_repo(db)
     return RegistrationService(repo=repo, db=db)

@@ -15,6 +15,6 @@ class LoginService:
         user = await self.repo.get(login)
 
         if not user or not verify_password(data.password, user.password):
-            raise HTTPException(status_code=401, detail="Invalid Credentials")
+            raise HTTPException(status_code=401, detail='Invalid Credentials')
 
         return create_token_pair(user.id)
