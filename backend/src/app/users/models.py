@@ -17,7 +17,7 @@ class User(Base):
     last_name: Mapped[str] = mapped_column(String(50), nullable=True)
     password: Mapped[str] = mapped_column(String(255), nullable=False)
     email: Mapped[str] = mapped_column(String(100), nullable=False, unique=True)
-    phone_number: Mapped[str] = mapped_column(String(15), nullable=False, unique=True)
+    phone_number: Mapped[str] = mapped_column(String(15), nullable=True, unique=True)
     birth_date: Mapped[date] = mapped_column(Date, nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=text("true"))
 
