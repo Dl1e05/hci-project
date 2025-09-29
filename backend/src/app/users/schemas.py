@@ -12,7 +12,7 @@ from app.base import ORMModel
 Username = Annotated[str, StringConstraints(min_length=3, max_length=50)]
 Name50 = Annotated[str, StringConstraints(min_length=1, max_length=50)]
 OptName50 = Annotated[str | None, StringConstraints(min_length=1, max_length=50)]
-PhoneE164 = Annotated[str, StringConstraints(pattern=r"^\+[1-9]\d{7,14}$", max_length=16)]
+PhoneE164 = Annotated[str, StringConstraints(pattern=r'^\+[1-9]\d{7,14}$', max_length=16)]
 Password = Annotated[SecretStr, StringConstraints(min_length=8)]
 
 
@@ -21,12 +21,12 @@ class UserBase(ORMModel):
     email: EmailStr
     birth_date: date
 
-    @field_validator("email")
+    @field_validator('email')
     @classmethod
     def norm_email(cls, v: str) -> str:
         return v.strip().lower()
 
-    @field_validator("username")
+    @field_validator('username')
     @classmethod
     def norm_username(cls, v: str) -> str:
         return v.strip()
@@ -36,7 +36,7 @@ class UserCreate(UserBase):
     password: Password
     password_repeat: Password
 
-    @model_validator(mode="after")
+    @model_validator(mode='after')
     def password_match(self) -> UserCreate:
         if self.password.get_secret_value() != self.password_repeat.get_secret_value():
             raise ValueError("Passwords don't match")
@@ -53,13 +53,13 @@ class UserUpdate(ORMModel):
     password: Password | None = None
     password_repeat: Password | None = None
 
-    @model_validator(mode="after")
+    @model_validator(mode='after')
     def passwords_match(self) -> UserUpdate:
         p1 = self.password.get_secret_value() if self.password is not None else None
         p2 = self.password_repeat.get_secret_value() if self.password_repeat is not None else None
 
         if (p1 is None) ^ (p2 is None):
-            raise ValueError("Both password and password_repeat are required to change password")
+            raise ValueError('Both password and password_repeat are required to change password')
         if p1 is not None and p1 != p2:
             raise ValueError("Passwords don't match")
         return self

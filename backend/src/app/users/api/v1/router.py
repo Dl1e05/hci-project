@@ -6,9 +6,9 @@ from app.core.deps import require_user_from_cookie
 from app.users.schemas import UserRead
 from app.users.services.services import GetUsers
 
-router = APIRouter(prefix="/profile", tags=["profile"])
+router = APIRouter(prefix='/profile', tags=['profile'])
 
 
-@router.get("/me", response_model=UserRead, status_code=status.HTTP_200_OK, summary="Get current user profile")
+@router.get('/me', response_model=UserRead, status_code=status.HTTP_200_OK, summary='Get current user profile')
 async def get_user_me(user_id: UUID = Depends(require_user_from_cookie), services: GetUsers = Depends(GetUsers)) -> UserRead:
     return await services.get_user_me(user_id)

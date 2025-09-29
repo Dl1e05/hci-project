@@ -23,7 +23,8 @@ dependencies = [
 target-version = "py312"
 line-length = 128
 src = ["src"]
-exclude = [".venv", ".mypy_cache", "__pycache__", "uv.lock", "migrations"]
+show-fixes = true
+exclude = [".venv", ".mypy_cache", "__pycache__", "uv.lock", "alembic"]
 ignore = [
     "B008",
 ]
@@ -70,3 +71,7 @@ package-dir = {"" = "src"}
 [tool.setuptools.packages.find]
 where = ["src"]
 include = ["app*"]
+
+[tool.ruff.format]
+quote-style = "single"
+

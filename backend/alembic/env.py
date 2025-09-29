@@ -1,8 +1,9 @@
 from __future__ import annotations
+
 import asyncio
 import sys
-from pathlib import Path
 from logging.config import fileConfig
+from pathlib import Path
 
 from alembic import context
 from sqlalchemy import pool
@@ -18,9 +19,9 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
+import app.import_models  # noqa: F401
 from app.base import Base
 from app.core.config import settings
-import app.import_models # noqa: F401
 
 target_metadata = Base.metadata
 

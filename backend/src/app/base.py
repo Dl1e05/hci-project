@@ -16,4 +16,4 @@ class Base(DeclarativeBase):
 
 # Must be inherited by all pydantic models
 class ORMModel(BaseModel):
-    model_config = ConfigDict(from_attributes=True, extra="forbid")
+    model_config = ConfigDict(from_attributes=True, extra='forbid')
