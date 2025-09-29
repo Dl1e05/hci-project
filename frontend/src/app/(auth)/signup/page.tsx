@@ -1,8 +1,10 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AuthModal  from '../components/auth-module';
 import Input from '@/components/Input/Input';
 import Button from '@/components/Button/Button';
+import Register from '@/app/(auth)/api/api';
+import axios from "axios";
 
 
 export default function SignUp() {
@@ -10,6 +12,29 @@ export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setError("");
+
+        try {
+            const response = await Register {
+                username,
+                password,
+                confirmPassword,
+                email,
+            });
+            console.log("Success", response.data);
+            navigate("/login");
+        }
+        catch (err) {
+            if(axios.isAxiosError(err) && err.response) {
+                const errorMsg = Object.values(err.response.data).flat().join(" ");
+                setError(errorMsg);
+            }
+        }
+  };
 
   const handleSignUp = (e: React.FormEvent) => {
     e.preventDefault();
