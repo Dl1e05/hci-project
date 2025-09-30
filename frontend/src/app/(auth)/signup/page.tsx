@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import AuthModal  from '../components/auth-module';
 import Input from '@/components/Input/Input';
 import Button from '@/components/Button/Button';
-
 import { register } from '../api/register';
 import axios from "axios";
 import { useRouter } from 'next/navigation';
@@ -14,9 +13,8 @@ export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
 
@@ -39,7 +37,6 @@ export default function SignUp() {
                 password,
                 confirmPassword, //confirm_password: confirmPassword, // Имя поля может зависеть от бэкенда
                 email,
-                phone_number: '',
             });
             console.log("Success", response.data);
             router.push("/login");
