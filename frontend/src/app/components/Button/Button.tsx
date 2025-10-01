@@ -12,7 +12,7 @@ interface ButtonProps{
 
 
 export default function Button({children, onClick, type = "button", className = "", disabled = false}: ButtonProps) {
-  const baseStyles = "w-90 py-1.5 px-10 border border-gray-400 rounded-full font-semibold text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+  const baseStyles = "w-[270px] py-4 border border-gray-400 rounded-full font-semibold text-gray-700 hover:bg-gray-100 transition-colors duration-200"
   return (
     <button
       type = {type}

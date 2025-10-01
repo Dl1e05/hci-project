@@ -1,8 +1,8 @@
 'use client'
 import React, { useState } from 'react';
 import AuthModal  from '../components/auth-module';
-import Input from '@/components/Input/Input';
-import Button from '@/components/Button/Button';
+import Input from '@/app/components/Input/Input';
+import Button from '@/app/components/Button/Button';
 import { register } from '../api/register';
 import axios from "axios";
 import { useRouter } from 'next/navigation';
@@ -68,9 +68,10 @@ export default function SignUp() {
   <>  
     <AuthModal>
     <div className='text-center'>
-      <h2 className="text-2xl font-semibold mb-6">Create an account</h2>
+      <h2 className="text-[32px] font-semibold mb-6">Create an account</h2>
     </div>
-    <div className='w-full max-w-sm mx-auto'>
+    
+    <div className='w-full max-w-[555px] mx-auto'>
       <form onSubmit={handleSubmit}>
         {error && (
           <p className='text-red-500 text-sm mb-2 text-center font-medium'>{error}</p>
@@ -106,9 +107,9 @@ export default function SignUp() {
       
       <div className="flex justify-center mt-6 mb-0.5">
         <Button 
-        type='submit'
-        className={`text-xl w-full py-3`}
-        disabled={isLoading}
+          type='submit'
+          className={`text-[22px] font-medium`}
+          disabled={isLoading}
         >
           {isLoading ? 'Регистрация...' : 'Create an account'}
         </Button>
