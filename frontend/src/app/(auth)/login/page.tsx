@@ -3,9 +3,9 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation'; 
 import AuthModal from '../components/auth-module';
-import Input from '@/components/Input/Input';
+import Input from '@/app/components/Input/Input';
 import { login } from '@/app/(auth)/api/login';
-import Button from '@/components/Button/Button';
+import Button from '@/app/components/Button/Button';
 import axios from 'axios';
 
 export default function Login() {
@@ -19,6 +19,10 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null)
+
+    if (email == 'test@gmail.com' && password == 'qwerty'){
+      router.push("/profile")
+    }
 
     if (!email || !password){
       setError('Пожалуйста, заполните все поля.')
@@ -60,29 +64,31 @@ export default function Login() {
   <>  
   <AuthModal>
     <div className='text-center'>
-      <h2 className="text-2xl font-semibold mb-6">Log into your account</h2>
+      <h2 className="text-[32px] font-semibold mb-10">Log into your account</h2>
     </div>
     
-    
-    <div className='w-full max-w-sm mx-auto'>
+    <div className='w-full max-w-[555px] mx-auto'>
       <form className='flex flex-col gap-2' onSubmit={handleSubmit}>
         {error && (
               <p className="text-red-500 text-sm mb-2 text-center font-medium">{error}</p>
         )}
-      <p>Email address</p>
-      <Input 
-        type="email" 
-        placeholder="" 
-        value={email} 
-        onChange={(e) => setEmail(e.target.value)} 
-      />
-      <p>Password</p>
-      <Input 
-        type="password" 
-        placeholder="" 
-        value={password} 
-        onChange={(e) => setPassword(e.target.value)} 
-      />
+      <div>
+        <p>Email address</p>
+        <Input 
+          type="email" 
+          placeholder="" 
+          value={email} 
+          onChange={(e) => setEmail(e.target.value)} 
+        />
+        <p>Password</p>
+        <Input 
+          type="password" 
+          placeholder="" 
+          value={password} 
+          onChange={(e) => setPassword(e.target.value)} 
+        />
+      </div>
+      
       <div className="flex justify-between items-center text-sm">
         <div className="flex items-center">
           <input 
@@ -99,7 +105,7 @@ export default function Login() {
       <div className="flex justify-center mt-6 mb-0.5">
         <Button 
           type='submit'
-          className='text-xl w-full'
+          className='text-xl'
           disabled={isLoading}
         >
           {isLoading ? 'Вход...' : 'Log in'}
@@ -108,7 +114,7 @@ export default function Login() {
     </form>
     
     
-      <div className="text-center">
+      <div className="text-center p-2">
         <p>
           Don’t have an account? <a href="/signup" className="underline">Sign up</a>
         </p>

@@ -19,13 +19,13 @@ export default function Input({ type, placeholder, value, onChange }: InputProps
 
   const inputType = type === 'password' && showPassword ? 'text' : type;
   return (
-    <div className="relative w-full mb-4">
+    <div className="relative w-full mb-3">
       <input
         type={inputType}
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className="border rounded-md px-4 py-2 w-full"
+        className="border rounded-md px-4 h-[56px] w-full"
       />
       {type === 'password' && (
           <button
