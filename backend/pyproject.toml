@@ -42,6 +42,11 @@ select = [
   "SIM", # flake8-simplify
 ]
 
+[mypy]
+python_version = 3.12
+mypy_path = "src"
+explicit_package_bases = true
+
 [tool.mypy]
 python_version = "3.12"
 mypy_path = "src"

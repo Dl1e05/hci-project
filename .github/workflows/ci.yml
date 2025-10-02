@@ -40,4 +40,6 @@ jobs:
         run: uv sync --locked --project backend
 
       - name: Mypy
-        run: uv run --project backend mypy backend/src/app --explicit-package-bases --package-root src
+        run: uv run mypy src/app --explicit-package-bases --package-root src
+        working-directory: backend
+
