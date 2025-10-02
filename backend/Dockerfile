@@ -5,11 +5,9 @@ FROM python:${PYTHON_VERSION}-slim as base
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+ENV PYTHONPATH=/app/src
 
 WORKDIR /app
-
-# Новая строка для исправления импортов
-ENV PYTHONPATH="/app/src"
 
 # Install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
@@ -28,5 +26,5 @@ RUN uv sync --frozen
 
 EXPOSE 8000
 
-# Run with uv (эта строка уже исправлена)
-CMD ["uv", "run", "uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+# Run migrations and start server
+CMD ["sh", "-c", "uv run alembic upgrade head && uv run uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"]
