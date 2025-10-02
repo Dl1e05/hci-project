@@ -17,6 +17,7 @@ app.add_middleware(
 
 app.include_router(main_router)
 
-@app.get("/")
+
+@app.get('/')
 async def read_root() -> dict:
-    return {"message": "Welcome to the FastAPI application!"}
+    return {'message': 'Welcome to the FastAPI application!'}
