@@ -22,22 +22,10 @@ async def login(data: LoginInput, response: Response, service: LoginService = De
 
     return token_pair
 
+
 def _set_auth_cookies(response: Response, access_token: str, refresh_token: str, refresh_max_age: int) -> None:
-    response.set_cookie(
-        key='access_token',
-        value=access_token,
-        httponly=True,
-        secure=False,
-        samesite='lax',
-        max_age=3600
-    )
+    response.set_cookie(key='access_token', value=access_token, httponly=True, secure=False, samesite='lax', max_age=3600)
 
     response.set_cookie(
-        key='refresh_token',
-        value=refresh_token,
-        httponly=True,
-        secure=False,
-        samesite='lax',
-        max_age=refresh_max_age
+        key='refresh_token', value=refresh_token, httponly=True, secure=False, samesite='lax', max_age=refresh_max_age
     )
-
