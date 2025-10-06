@@ -6,6 +6,7 @@ import { API_URL, getHeaders } from "../..";
 type LoginPayload = {
   username_or_email: string;
   password: string;
+  is_remember_me: boolean;
 };
 
 // type LoginResponce = {
@@ -21,12 +22,12 @@ type LoginPayload = {
 
 export async function login(payload: LoginPayload) {
   try {
-    const responce = await fetch(`${API_URL}/auth/login/`, {
+    const response = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: await getHeaders(),
         body: JSON.stringify(payload)   
     })
-    const data = await responce.json()
+    const data = await response.json()
     return data
   } catch (error) {
     console.error('Login error:', error)

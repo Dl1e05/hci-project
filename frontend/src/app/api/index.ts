@@ -1,11 +1,8 @@
-import { headers } from 'next/headers'
-
-const API_URL = 'http://127.0.0.1:8001'
+const API_URL = 'http://localhost:8001'
 
 const getHeaders = async () => {
 	return {
-		'Content-Type': 'application/json',
-		...(await headers())
+		'Content-Type': 'application/json'
 	}
 }
 

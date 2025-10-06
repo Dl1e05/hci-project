@@ -5,16 +5,17 @@ import { API_URL, getHeaders } from "../..";
 
 type RegisterPayload = {
   username: string;
-  password: string;
-  confirmPassword: string;
   email: string;
+  birth_date: string;
+  password: string;
+  password_repeat: string;
 };
 
 // type RegisterResponce = {
 //     message?: string
 //     user?: {
 //         id: string
-//         email?:string
+//         email?:string--
 //         username: string
 //     }
 //     errors?: Record<string, string[]>
@@ -22,12 +23,12 @@ type RegisterPayload = {
 
 export async function register(payload: RegisterPayload) {
   try {
-    const responce = await fetch(`${API_URL}`, {
+    const response = await fetch(`${API_URL}/auth/register`, {
         method: 'POST',
         headers: await getHeaders(),
         body: JSON.stringify(payload)
     })
-    const data = await responce.json()
+    const data = await response.json()
     return data
   } catch (error) {
     console.error('Register error:', error)

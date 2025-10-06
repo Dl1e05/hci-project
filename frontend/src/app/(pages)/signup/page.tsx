@@ -10,8 +10,9 @@ import { useRouter } from 'next/navigation';
 interface SignUpFormData {
   username: string
   email: string
+  birth_date: string
   password: string
-  confirmPassword: string
+  password_repeat: string
 }
 
 export default function SignUp() {
@@ -36,8 +37,9 @@ export default function SignUp() {
 		try {
 			const response = await register({
 				username: data.username,
+                birth_date: data.birth_date,
 				password: data.password,
-				confirmPassword: data.confirmPassword,
+                password_repeat: data.password_repeat,
 				email: data.email
 			})
 			console.log('Success', response)
@@ -99,6 +101,17 @@ export default function SignUp() {
                 error={errors.email?.message}
               />
             </div>
+
+            <div>
+              <p>Birth date</p>
+              <Input 
+                type="date"
+                {...registerField('birth_date', {
+                  required: 'birth date is required',
+                })}
+                error={errors.birth_date?.message}
+              />
+            </div>
             
             <div>
               <p>Password</p>
@@ -118,12 +131,12 @@ export default function SignUp() {
               <p>Confirm password</p>
                 <Input
                   type="password"
-                  {...registerField('confirmPassword', {
+                  {...registerField('password_repeat', {
                     required: 'Please confirm your password',
                     validate: (value) =>
                       value === password || 'Passwords do not match'
                   })}
-                  error={errors.confirmPassword?.message}
+                  error={errors.password_repeat?.message}
                 />
             </div>
           
