@@ -1,0 +1,46 @@
+name: hci-project
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    container_name: fastapi-backend-hci
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PYTHONPATH=/app/src
+      - POSTGRES_USER=HCI
+      - POSTGRES_PASSWORD=HCIpass
+      - POSTGRES_DB=HCIDB
+      - POSTGRES_HOST=db
+      - DATABASE_URL=postgresql+asyncpg://HCI:HCIpass@db:5432/HCIDB
+      - SECRET_KEY=p5NLMvIADDk1kdVCoRtfk81YjcVXOXhBvTod6TAJyoxsbW5UdcpMG8MFIHUEHvQT
+      - DEBUG=True
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: always
+
+  db:
+    image: postgres:13-alpine
+    container_name: postgres-db-hci
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=HCI
+      - POSTGRES_PASSWORD=HCIpass
+      - POSTGRES_DB=HCIDB
+    volumes:
+      - db_data_hci:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U HCI -d HCIDB"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+volumes:
+  db_data_hci:
