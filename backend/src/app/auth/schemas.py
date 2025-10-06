@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class TokenPair(BaseModel):
@@ -14,3 +14,4 @@ class RefreshInput(BaseModel):
 class LoginInput(BaseModel):
     username_or_email: str
     password: str
+    is_remember_me: bool = Field(default=False)
