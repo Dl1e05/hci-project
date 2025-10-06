@@ -16,16 +16,28 @@ async def register(user: UserCreate, service: RegistrationService = Depends(get_
 @router.post('/login', response_model=TokenPair, status_code=status.HTTP_200_OK, summary='Login with JWT receive')
 async def login(data: LoginInput, response: Response, service: LoginService = Depends(LoginService)) -> TokenPair:  # noqa: B008
     token_pair = await service.login(data)
+    refresh_max_age = 60 * 60 * 24 * 7 if data.is_remember_me else 60 * 60 * 24
 
+    _set_auth_cookies(response, token_pair.access_token, token_pair.refresh_token, refresh_max_age)
+
+    return token_pair
+
+def _set_auth_cookies(response: Response, access_token: str, refresh_token: str, refresh_max_age: int) -> None:
     response.set_cookie(
-        key='access_token', value=token_pair.access_token, httponly=True, secure=True, samesite='lax', max_age=3600
-    )
-    response.set_cookie(
-        key='refresh_token',
-        value=token_pair.refresh_token,
+        key='access_token',
+        value=access_token,
         httponly=True,
         secure=False,
         samesite='lax',
-        max_age=60 * 60 * 24 * 7,
+        max_age=3600
     )
-    return token_pair
+
+    response.set_cookie(
+        key='refresh_token',
+        value=refresh_token,
+        httponly=True,
+        secure=False,
+        samesite='lax',
+        max_age=refresh_max_age
+    )
+
