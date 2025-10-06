@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 type LoginForm = {
   username_or_email: string;
   password: string;
-  remember?: boolean;
+  is_remember_me: boolean;
 };
 
 export default function Login() {
@@ -21,14 +21,14 @@ export default function Login() {
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
-  } = useForm<LoginForm>({ defaultValues: { username_or_email: '', password: '', remember: false } });
+  } = useForm<LoginForm>({ defaultValues: { username_or_email: '', password: '', is_remember_me: false } });
 
   const onSubmit = async (data: LoginForm) => {
     try {
-      const res = await login({ username_or_email: data.username_or_email, password: data.password });
+      const res = await login({ username_or_email: data.username_or_email, password: data.password, is_remember_me: data.is_remember_me });
       const { access_token, refresh_token } = res || {};
 
-      const storage = data.remember ? localStorage : sessionStorage;
+      const storage = (data.is_remember_me ?? false )? localStorage : sessionStorage;
       if (access_token) storage.setItem('access_token', access_token);
       if (refresh_token) storage.setItem('refresh_token', refresh_token);
 
@@ -46,18 +46,20 @@ export default function Login() {
       </div>
 
       <div className="w-full max-w-[555px] mx-auto">
-        <form className="flex flex-col gap-2" onSubmit={handleSubmit(onSubmit)}>
-          {errors.root?.message && (
-            <p className="text-red-500 text-sm mb-2 text-center font-medium">{errors.root.message}</p>
-          )}
+        <form className="flex flex-col gap-2" onSubmit={handleSubmit(onSubmit)} noValidate>
+          <div className="min-h-5 text-center">
+            {errors.root?.message && (
+              <p className="text-red-500 text-sm font-medium">{errors.root.message}</p>
+            )}
+          </div>
 
           <div>
             <p>Email address</p>
             <Input
-              type="email"
+              type="username_or_email"
               {...register('username_or_email', {
-                required: 'Введите email или username',
-                pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: 'Некорректный email' },
+                required: 'Введите username или email',
+                pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+|[^\s@]+$/, message: 'Некорректный формат' },
               })}
               error={errors.username_or_email?.message}
             />
@@ -77,7 +79,7 @@ export default function Login() {
 
           <div className="flex justify-between items-center text-sm">
             <div className="flex items-center gap-2">
-              <input type="checkbox" id="remember-me" {...register('remember')} />
+              <input type="checkbox" id="remember-me" {...register('is_remember_me')} />
               <label htmlFor="remember-me">Remember me</label>
             </div>
             <a href="/forgot-password" className="underline">Forgot your password?</a>

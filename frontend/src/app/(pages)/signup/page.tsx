@@ -10,12 +10,12 @@ import { useRouter } from 'next/navigation';
 interface SignUpFormData {
   username: string
   email: string
+  birth_date: string
   password: string
-  confirmPassword: string
+  password_repeat: string
 }
 
 export default function SignUp() {
-  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
@@ -24,36 +24,32 @@ export default function SignUp() {
     register: registerField,
     handleSubmit,
     watch,
+    setError,
     formState: { errors }
   } = useForm<SignUpFormData>()
   
   const password = watch('password')
 
   const onSubmit = async (data: SignUpFormData) => {
-		setError('')
-		setIsLoading(true)
+    setIsLoading(true)
 
-		try {
-			const response = await register({
-				username: data.username,
-				password: data.password,
-				confirmPassword: data.confirmPassword,
-				email: data.email
-			})
-			console.log('Success', response)
-			router.push('/login')
-		} catch (err) {
-			let errorMsg = 'Ошибка регистрации.'
-
-			if (err instanceof Error) {
-				errorMsg = err.message
-			}
-
-			setError(errorMsg)
-		} finally {
-			setIsLoading(false)
-		}
-	}
+    try {
+      const response = await register({
+        username: data.username,
+        birth_date: data.birth_date,
+        password: data.password,
+        password_repeat: data.password_repeat,
+        email: data.email
+      })
+      console.log('Success', response)
+      router.push('/login')
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Registration failed'
+      setError('root', { type: 'server', message })
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
 
   return (
@@ -65,9 +61,9 @@ export default function SignUp() {
       
         <div className='w-full max-w-[555px] mx-auto'>
           <form onSubmit={handleSubmit(onSubmit)}>
-            {error && (
+            {errors.root?.message && (
               <p className='text-red-500 text-sm mb-2 text-center font-medium'>
-                {error}
+                {errors.root.message}
               </p>
             )}
             <div>
@@ -99,6 +95,17 @@ export default function SignUp() {
                 error={errors.email?.message}
               />
             </div>
+
+            <div>
+              <p>Birth date</p>
+              <Input 
+                type="date"
+                {...registerField('birth_date', {
+                  required: 'birth date is required',
+                })}
+                error={errors.birth_date?.message}
+              />
+            </div>
             
             <div>
               <p>Password</p>
@@ -118,12 +125,12 @@ export default function SignUp() {
               <p>Confirm password</p>
                 <Input
                   type="password"
-                  {...registerField('confirmPassword', {
+                  {...registerField('password_repeat', {
                     required: 'Please confirm your password',
                     validate: (value) =>
                       value === password || 'Passwords do not match'
                   })}
-                  error={errors.confirmPassword?.message}
+                  error={errors.password_repeat?.message}
                 />
             </div>
           
