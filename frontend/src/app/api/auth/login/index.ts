@@ -7,17 +7,6 @@ type LoginPayload = {
   is_remember_me: boolean;
 };
 
-// type LoginResponce = {
-//     access_token?: string
-//     refresh_token?: string
-//     user?: {
-//         id: number
-//         email: string
-//         username: string
-//     }
-//     message?: string
-// }
-
 export async function login(payload: LoginPayload) {
   try {
     const response = await fetch(`${API_URL}/auth/login`, {
@@ -32,7 +21,7 @@ export async function login(payload: LoginPayload) {
 
     if (!response.ok) {
       const message = isJson ? (data?.detail || data?.message || 'Login failed') : (data || 'Login failed')
-      throw new Error(message)
+      new Error(message)
     }
 
     return data
