@@ -34,7 +34,15 @@ export default function Login() {
 
       router.push('/profile');
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Ошибка входа. Проверьте данные.';
+      console.error('Login error:', err);
+      let message = 'Ошибка входа. Проверьте данные.';
+      
+      if (err instanceof Error) {
+        message = err.message;
+      } else if (typeof err === 'string') {
+        message = err;
+      }
+      
       setError('root', { type: 'server', message });
     }
   };
@@ -71,7 +79,7 @@ export default function Login() {
               type="password"
               {...register('password', {
                 required: 'Введите пароль',
-                minLength: { value: 6, message: 'Минимум 6 символов' },
+                minLength: { value: 6, message: 'Минимум 8 символов' },
               })}
               error={errors.password?.message}
             />
