@@ -21,6 +21,19 @@ class UserRepo:
         res = await self.db.execute(select(User).where(User.is_active))
         return res.scalars().all()
 
+    async def patch(self, user_id: UUID, update_data: dict) -> User | None:
+        user = await self.get(user_id)
+        if not user:
+            return None
+        
+        for field, value in update_data.items():
+            if hasattr(user, field) and value is not None:
+                setattr(user, field, value)
+        
+        await self.db.commit()
+        await self.db.refresh(user)
+        return user
+
 
 def get_user_repo(db: AsyncSession = Depends(get_async_session)) -> UserRepo:
     return UserRepo(db)
