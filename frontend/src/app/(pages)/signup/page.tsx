@@ -16,7 +16,6 @@ interface SignUpFormData {
 }
 
 export default function SignUp() {
-  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
@@ -25,37 +24,32 @@ export default function SignUp() {
     register: registerField,
     handleSubmit,
     watch,
+    setError,
     formState: { errors }
   } = useForm<SignUpFormData>()
   
   const password = watch('password')
 
   const onSubmit = async (data: SignUpFormData) => {
-		setError('')
-		setIsLoading(true)
+    setIsLoading(true)
 
-		try {
-			const response = await register({
-				username: data.username,
-                birth_date: data.birth_date,
-				password: data.password,
-                password_repeat: data.password_repeat,
-				email: data.email
-			})
-			console.log('Success', response)
-			router.push('/login')
-		} catch (err) {
-			let errorMsg = 'Ошибка регистрации.'
-
-			if (err instanceof Error) {
-				errorMsg = err.message
-			}
-
-			setError(errorMsg)
-		} finally {
-			setIsLoading(false)
-		}
-	}
+    try {
+      const response = await register({
+        username: data.username,
+        birth_date: data.birth_date,
+        password: data.password,
+        password_repeat: data.password_repeat,
+        email: data.email
+      })
+      console.log('Success', response)
+      router.push('/login')
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Registration failed'
+      setError('root', { type: 'server', message })
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
 
   return (
@@ -67,9 +61,9 @@ export default function SignUp() {
       
         <div className='w-full max-w-[555px] mx-auto'>
           <form onSubmit={handleSubmit(onSubmit)}>
-            {error && (
+            {errors.root?.message && (
               <p className='text-red-500 text-sm mb-2 text-center font-medium'>
-                {error}
+                {errors.root.message}
               </p>
             )}
             <div>

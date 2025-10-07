@@ -47,9 +47,11 @@ export default function Login() {
 
       <div className="w-full max-w-[555px] mx-auto">
         <form className="flex flex-col gap-2" onSubmit={handleSubmit(onSubmit)} noValidate>
-          {errors.root?.message && (
-            <p className="text-red-500 text-sm mb-2 text-center font-medium">{errors.root.message}</p>
-          )}
+          <div className="min-h-5 text-center">
+            {errors.root?.message && (
+              <p className="text-red-500 text-sm font-medium">{errors.root.message}</p>
+            )}
+          </div>
 
           <div>
             <p>Email address</p>
