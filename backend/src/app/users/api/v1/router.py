@@ -3,8 +3,8 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, status
 
 from app.core.deps import require_user_from_cookie
-from app.users.schemas import UserRead
-from app.users.services.services import GetUsers
+from app.users.schemas import UserRead, UserUpdate
+from app.users.services.services import GetUsers, UpdateUser
 
 router = APIRouter(prefix='/profile', tags=['profile'])
 
@@ -22,3 +22,8 @@ async def get_all_active_users(services: GetUsers = Depends(GetUsers)) -> list[U
 @router.get('/{user_id}', response_model=UserRead, status_code=status.HTTP_200_OK, summary='Get user profile by ID')
 async def get_user_by_id(user_id: UUID, services: GetUsers = Depends(GetUsers)) -> UserRead:
     return await services.get_user_by_id(user_id)
+
+
+@router.patch('/{user_id}', response_model=UserRead, status_code=status.HTTP_200_OK, summary='Partial Update by ID')
+async def patch_user_by_id(user_id: UUID, user_data: UserUpdate, services: UpdateUser = Depends(UpdateUser)) -> UserRead:
+    return await services.update_user_by_id(user_id, user_data)
