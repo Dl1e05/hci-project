@@ -1,55 +1,50 @@
+// 📁 components/Sidebar.tsx
+
 import React from 'react';
-import { Home, Settings, Users, FileText, LucideIcon } from 'lucide-react';
+import { IoApps, IoTimeOutline, IoNotificationsOutline, IoSettingsOutline, IoPersonOutline } from 'react-icons/io5';
 
-interface MenuItem {
-  icon: LucideIcon;
-  label: string;
-  active?: boolean;
-  href?: string;
-}
+// Задаем ширину, например, 80px
+const SIDEBAR_WIDTH = '80px';
 
-interface SidebarProps {
-  isOpen: boolean;
-}
-
-const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
-  const menuItems: MenuItem[] = [
-    { icon: Home, label: 'Dashboard', active: true, href: '/' },
-    { icon: Users, label: 'Users', href: '/users' },
-    { icon: FileText, label: 'Documents', href: '/documents' },
-    { icon: Settings, label: 'Settings', href: '/settings' },
+export default function Sidebar() {
+  const icons = [
+    { icon: IoApps, key: 'dashboard' },
+    { icon: IoTimeOutline, key: 'history' },
+    { icon: IoNotificationsOutline, key: 'notifications' },
+    { icon: IoPersonOutline, key: 'profile' }, // Добавил иконку профиля
+    { icon: IoSettingsOutline, key: 'settings' },
   ];
 
   return (
-    <aside className={`fixed left-0 top-0 h-full bg-slate-100 transition-all duration-300 z-40 ${isOpen ? 'w-64' : 'w-16'}`}>
-      <div className="flex flex-col h-full">
-        {/* Sidebar Header */}
-        <div className="p-4 border-b border-slate-300">
-          <div className="flex items-center justify-center">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg"></div>
+      <nav
+          // 💡 Ключевые стили: фиксированное позиционирование и цвет фона
+          className="fixed top-0 left-0 h-full bg-white border-r border-gray-200 flex flex-col items-center py-6"
+          style={{ width: SIDEBAR_WIDTH }}
+      >
+        {/* Логотип/Квадраты вверху */}
+        <div className="mb-10 p-2">
+          <div className="grid grid-cols-2 gap-1">
+            {/* Имитация вашего логотипа из двух квадратов */}
+            <div className="w-4 h-4 bg-blue-500 rounded-sm"></div>
+            <div className="w-4 h-4 bg-gray-300 rounded-sm"></div>
+            <div className="w-4 h-4 bg-gray-300 rounded-sm"></div>
+            <div className="w-4 h-4 bg-blue-500 rounded-sm"></div>
           </div>
         </div>
 
-        {/* Menu Items */}
-        <nav className="flex-1 p-4 space-y-2">
-          {menuItems.map((item, index) => (
-            <button
-              key={index}
-              className={`w-full flex items-center gap-3 px-3 py-3 rounded-lg transition-colors ${
-                item.active 
-                  ? 'bg-blue-600 text-white' 
-                  : 'text-slate-600 hover:bg-slate-200'
-              }`}
-              title={item.label}
-            >
-              <item.icon size={20} />
-              {isOpen && <span className="text-sm font-medium">{item.label}</span>}
-            </button>
+        {/* Список навигационных иконок */}
+        <div className="flex flex-col gap-8">
+          {icons.map((item) => (
+              <div
+                  key={item.key}
+                  className="p-3 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer text-gray-500 hover:text-blue-600"
+                  // Пример активного состояния:
+                  // className={item.key === 'dashboard' ? "p-3 rounded-xl bg-blue-100 text-blue-600" : "..."}
+              >
+                <item.icon size={28} />
+              </div>
           ))}
-        </nav>
-      </div>
-    </aside>
+        </div>
+      </nav>
   );
-};
-
-export default Sidebar;
+}
