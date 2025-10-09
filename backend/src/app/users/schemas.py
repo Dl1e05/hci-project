@@ -45,13 +45,31 @@ class UserCreate(UserBase):
 
 class UserUpdate(ORMModel):
     username: Annotated[str | None, StringConstraints(min_length=3, max_length=50)] = None
-    first_name: OptName50 = None
-    last_name: OptName50 = None
+    first_name: str | None = None
+    last_name: str | None = None
     email: EmailStr | None = None
-    phone_number: PhoneE164 | None = None
+    phone_number: str | None = None
     birth_date: date | None = None
     password: Password | None = None
     password_repeat: Password | None = None
+
+    @field_validator('first_name', 'last_name')
+    @classmethod
+    def validate_name_fields(cls, v):
+        if v is not None:
+            v = v.strip()
+            if len(v) < 1 or len(v) > 50:
+                raise ValueError('Name must be between 1 and 50 characters')
+        return v
+
+    @field_validator('phone_number')
+    @classmethod
+    def validate_phone_number(cls, v):
+        if v is not None:
+            import re
+            if not re.match(r'^\+[1-9]\d{7,14}$', v) or len(v) > 16:
+                raise ValueError('Phone number must be in E.164 format (+1234567890)')
+        return v
 
     @model_validator(mode='after')
     def passwords_match(self) -> UserUpdate:
