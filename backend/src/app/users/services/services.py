@@ -3,9 +3,9 @@ from uuid import UUID
 from fastapi import Depends, HTTPException, status
 from pydantic import ValidationError
 
+from app.core.security import hash_password
 from app.users.repo import UserRepo, get_user_repo
 from app.users.schemas import UserRead, UserUpdate
-from app.core.security import hash_password 
 
 
 class GetUsers:
@@ -36,10 +36,9 @@ class UpdateUser:
 
     async def update_user_by_id(self, user_id: UUID, user_data: UserUpdate) -> UserRead:
         update_dict = user_data.model_dump(exclude_none=True)
-        
+
         password = update_dict.pop('password', None)
-        password_repeat = update_dict.pop('password_repeat', None)
-        
+
         updated_user = await self.repo.patch(user_id, update_dict)
         if not updated_user:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'User with ID {user_id} not found')

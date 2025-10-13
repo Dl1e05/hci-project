@@ -25,11 +25,11 @@ class UserRepo:
         user = await self.get(user_id)
         if not user:
             return None
-        
+
         for field, value in update_data.items():
             if hasattr(user, field) and value is not None:
                 setattr(user, field, value)
-        
+
         await self.db.commit()
         await self.db.refresh(user)
         return user
