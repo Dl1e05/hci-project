@@ -9,16 +9,6 @@ type RegisterPayload = {
   password_repeat: string;
 };
 
-// type RegisterResponce = {
-//     message?: string
-//     user?: {
-//         id: string
-//         email?:string--
-//         username: string
-//     }
-//     errors?: Record<string, string[]>
-// }
-
 export async function register(payload: RegisterPayload) {
   try {
     const response = await fetch(`${API_URL}/auth/register`, {

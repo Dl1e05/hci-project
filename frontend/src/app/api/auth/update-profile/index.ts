@@ -1,8 +1,5 @@
-// app/api/auth/profile.ts или index.ts (там, где находятся fetchUserProfile и register)
-
 import { API_URL, getHeaders } from "../..";
 
-// Интерфейс для данных, которые могут быть отправлены на обновление
 export interface ProfileUpdatePayload {
     first_name?: string;
     last_name?: string;

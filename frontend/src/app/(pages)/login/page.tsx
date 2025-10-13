@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import AuthModal from '../components/Auth-module';
+import AuthModal from '../../components/Auth-module';
 import Input from '@/app/components/Input';
 import Button from '@/app/components/Button';
 import { login } from '@/app/api/auth/login'; // единый API-слой
