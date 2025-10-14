@@ -1,4 +1,5 @@
 from uuid import UUID
+import traceback
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -23,11 +24,24 @@ router = APIRouter(
 
 @router.post("/tags", response_model=TagsRead, status_code=HTTP_201_CREATED, tags=["tags"])
 async def create_tag(tag_data: TagsCreate, db: AsyncSession = Depends(get_async_session)) -> TagsRead:
-    existing_tag = await TagsService.get_by_code(db, tag_data.code)
-    if existing_tag:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Tag with code '{tag_data.code}' already exists")
-    
-    return await TagsService.create(db, tag_data)
+    try:
+        existing_tag = await TagsService.get_by_code(db, tag_data.code)
+        if existing_tag:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST, 
+                detail=f"Tag with code '{tag_data.code}' already exists"
+            )
+        
+        return await TagsService.create(db, tag_data)
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error creating tag: {str(e)}")
+        print(traceback.format_exc())
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Internal server error: {str(e)}"
+        )
 
 @router.get("/tags", response_model=list[TagsRead], tags=["tags"])
 async def get_all_tags(skip: int = 0, limit: int = 100, db: AsyncSession = Depends(get_async_session)) -> list[TagsRead]:
@@ -71,7 +85,15 @@ async def create_content_type(
         db: AsyncSession = Depends(get_async_session)
     ) -> ContentTypeRead:
 
-    return await ContentTypesService.create(db, content_type_data)
+    try:
+        return await ContentTypesService.create(db, content_type_data)
+    except Exception as e:
+        print(f"Error creating content type: {str(e)}")
+        print(traceback.format_exc())
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Internal server error: {str(e)}"
+        )
 
 @router.get("/content-types", response_model=list[ContentTypeRead], tags=["content-types"])
 async def get_content_types(

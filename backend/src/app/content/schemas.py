@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from pydantic import BaseModel, Field, PositiveInt
+from pydantic import BaseModel, Field
 
 
 class TagsBase(BaseModel):
@@ -17,14 +17,13 @@ class TagsUpdate(BaseModel):
 class TagsRead(TagsBase):
     id: UUID
 
-    class Config:
-        orm_mode = True
+    model_config = {"from_attributes": True}
 
 """------------------------------------------------------------------------"""
 
 class ContentTypeBase(BaseModel):
     name: str = Field(..., min_length=1, max_length=255)
-    order: PositiveInt = Field(..., gt=0)
+    order: int = Field(..., ge=1)
 
 
 class ContentTypeCreate(ContentTypeBase):
@@ -33,7 +32,7 @@ class ContentTypeCreate(ContentTypeBase):
 
 class ContentTypeUpdate(BaseModel):
     name: str | None = Field(None, min_length=1, max_length=255)
-    order: PositiveInt | None = Field(None, gt=0)
+    order: int | None = Field(None, ge=1)
     tag_ids: list[UUID] | None = None
 
 

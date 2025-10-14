@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from app.content.models import ContentType, Tags
-from app.content.schemas import ContentTypeCreate, ContentTypeRead, ContentTypeUpdate
+from app.content.schemas import ContentTypeCreate, ContentTypeRead, ContentTypeUpdate, TagsRead
 
 
 class ContentTypesService:
@@ -13,7 +13,7 @@ class ContentTypesService:
         self.db = db
     
     @staticmethod
-    async def create(db: AsyncSession, content_type_data: ContentTypeCreate) -> ContentType:
+    async def create(db: AsyncSession, content_type_data: ContentTypeCreate) -> ContentTypeRead:
         data_dict = content_type_data.model_dump(exclude={"tag_ids"})
         content_type = ContentType(**data_dict)
 
@@ -30,7 +30,7 @@ class ContentTypesService:
         return ContentTypeRead.model_validate(content_type)
     
     @staticmethod
-    async def get_all(db: AsyncSession, skip: int = 0, limit: int = 100) -> list[ContentType]:
+    async def get_all(db: AsyncSession, skip: int = 0, limit: int = 100) -> list[ContentTypeRead]:
         result = await db.execute(
             select(ContentType)
             .options(selectinload(ContentType.tags))
@@ -42,7 +42,7 @@ class ContentTypesService:
         return [ContentTypeRead.model_validate(ct) for ct in content]
 
     @staticmethod
-    async def get_by_id(db: AsyncSession, content_type_id: UUID) -> ContentType | None:
+    async def get_by_id(db: AsyncSession, content_type_id: UUID) -> ContentTypeRead | None:
         result = await db.execute(
             select(ContentType)
             .options(selectinload(ContentType.tags))
@@ -52,7 +52,7 @@ class ContentTypesService:
         return ContentTypeRead.model_validate(content_type)
     
     @staticmethod
-    async def update(db: AsyncSession, content_type_id: UUID, content_type_data: ContentTypeUpdate) -> ContentType | None:
+    async def update(db: AsyncSession, content_type_id: UUID, content_type_data: ContentTypeUpdate) -> ContentTypeRead | None:
         content_type = await ContentTypesService.get_by_id(db, content_type_id)
         if not content_type:
             return None
@@ -66,7 +66,7 @@ class ContentTypesService:
                 select(Tags).where(Tags.id.in_(content_type_data.tag_ids))
             )
             tags = list(result.scalars().all())
-            content_type.tags = tags
+            content_type.tags = [TagsRead.model_validate(tag) for tag in tags]
 
         await db.commit()
         await db.refresh(content_type, attribute_names=["tags"])
