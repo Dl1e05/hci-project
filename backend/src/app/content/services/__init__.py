@@ -1,4 +1,4 @@
-from .content_types import ContentTypesService
-from .tags import TagsService
+from .content_types_service import ContentTypesService
+from .tags_service import TagsService
 
-__all__ = ["TagsService", "ContentTypesService"]
+__all__ = ['TagsService', 'ContentTypesService']

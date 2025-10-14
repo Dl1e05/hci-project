@@ -7,19 +7,24 @@ class TagsBase(BaseModel):
     name: str
     code: str
 
+
 class TagsCreate(TagsBase):
     pass
+
 
 class TagsUpdate(BaseModel):
     name: str | None = None
     code: str | None = None
 
+
 class TagsRead(TagsBase):
     id: UUID
 
-    model_config = {"from_attributes": True}
+    model_config = {'from_attributes': True}
+
 
 """------------------------------------------------------------------------"""
+
 
 class ContentTypeBase(BaseModel):
     name: str = Field(..., min_length=1, max_length=255)

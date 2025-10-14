@@ -14,32 +14,25 @@ content_type_tags = Table(
     'content_type_tags',
     Base.metadata,
     Column('content_type_id', PG_UUID(as_uuid=True), ForeignKey('content_types.id', ondelete='CASCADE'), primary_key=True),
-    Column('tag_id', PG_UUID(as_uuid=True), ForeignKey('tags.id', ondelete='CASCADE'), primary_key=True)
+    Column('tag_id', PG_UUID(as_uuid=True), ForeignKey('tags.id', ondelete='CASCADE'), primary_key=True),
 )
 
+
 class Tags(Base):
-    __tablename__ = "tags"
+    __tablename__ = 'tags'
 
     id: Mapped[uuid.UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
     name: Mapped[str] = mapped_column(String, nullable=False, index=True)
     code: Mapped[str] = mapped_column(String, nullable=False, unique=True, index=True)
 
-    content_types: Mapped[list["ContentType"]] = relationship(
-        "ContentType",
-        secondary=content_type_tags,
-        back_populates="tags"
-    )
+    content_types: Mapped[list['ContentType']] = relationship('ContentType', secondary=content_type_tags, back_populates='tags')
 
 
 class ContentType(Base):
-    __tablename__ = "content_types"
+    __tablename__ = 'content_types'
 
     id: Mapped[uuid.UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
     name: Mapped[str] = mapped_column(String, nullable=False, index=True)
     order: Mapped[int] = mapped_column(Integer, nullable=False, index=True)
 
-    tags: Mapped[list["Tags"]] = relationship(
-        "Tags",
-        secondary=content_type_tags,
-        back_populates="content_types"
-    )
+    tags: Mapped[list['Tags']] = relationship('Tags', secondary=content_type_tags, back_populates='content_types')
