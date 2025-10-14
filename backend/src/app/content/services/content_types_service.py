@@ -19,7 +19,7 @@ class ContentTypesService:
 
         if content_type_data.tag_ids:
             result = await db.execute(select(Tags).where(Tags.id.in_(content_type_data.tag_ids)))
-            tags = list(result.scalars().all())
+            tags: list[Tags] = list(result.scalars().all())
             content_type.tags = tags
 
         db.add(content_type)
@@ -45,7 +45,6 @@ class ContentTypesService:
 
     @staticmethod
     async def update(db: AsyncSession, content_type_id: UUID, content_type_data: ContentTypeUpdate) -> ContentTypeRead | None:
-        # Fetch ORM entity directly
         result = await db.execute(
             select(ContentType).options(selectinload(ContentType.tags)).where(ContentType.id == content_type_id)
         )
@@ -58,8 +57,8 @@ class ContentTypesService:
             setattr(content_type_entity, field, value)
 
         if content_type_data.tag_ids is not None:
-            result = await db.execute(select(Tags).where(Tags.id.in_(content_type_data.tag_ids)))
-            tags = list(result.scalars().all())
+            tags_result = await db.execute(select(Tags).where(Tags.id.in_(content_type_data.tag_ids)))
+            tags: list[Tags] = list(tags_result.scalars().all())
             content_type_entity.tags = tags
 
         await db.commit()
@@ -68,7 +67,6 @@ class ContentTypesService:
 
     @staticmethod
     async def delete(db: AsyncSession, content_type_id: UUID) -> bool:
-        # Fetch ORM entity directly
         result = await db.execute(select(ContentType).where(ContentType.id == content_type_id))
         content_type_entity = result.scalar_one_or_none()
         if not content_type_entity:
