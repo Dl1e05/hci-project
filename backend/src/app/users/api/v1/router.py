@@ -15,7 +15,9 @@ async def get_user_me(user_id: UUID = Depends(require_user_from_cookie), service
 
 
 @router.patch('/me', response_model=UserRead, status_code=status.HTTP_200_OK, summary='Partial Update by ID')
-async def patch_user_me(user_data: UserUpdate, user_id: UUID = Depends(require_user_from_cookie), services: UpdateUser = Depends(UpdateUser)) -> UserRead:
+async def patch_user_me(
+    user_data: UserUpdate, user_id: UUID = Depends(require_user_from_cookie), services: UpdateUser = Depends(UpdateUser)
+) -> UserRead:
     return await services.update_user_by_id(user_id, user_data)
 
 
@@ -32,4 +34,3 @@ async def get_user_by_id(user_id: UUID, services: GetUsers = Depends(GetUsers)) 
 @router.patch('/{user_id}', response_model=UserRead, status_code=status.HTTP_200_OK, summary='Partial Update by ID')
 async def patch_user_by_id(user_id: UUID, user_data: UserUpdate, services: UpdateUser = Depends(UpdateUser)) -> UserRead:
     return await services.update_user_by_id(user_id, user_data)
-

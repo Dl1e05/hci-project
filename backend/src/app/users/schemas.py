@@ -55,7 +55,7 @@ class UserUpdate(ORMModel):
 
     @field_validator('first_name', 'last_name')
     @classmethod
-    def validate_name_fields(cls, v):
+    def validate_name_fields(cls, v: str | None) -> str | None:
         if v is not None:
             v = v.strip()
             if len(v) < 1 or len(v) > 50:
@@ -64,9 +64,10 @@ class UserUpdate(ORMModel):
 
     @field_validator('phone_number')
     @classmethod
-    def validate_phone_number(cls, v):
+    def validate_phone_number(cls, v: str | None) -> str | None:
         if v is not None:
             import re
+
             if not re.match(r'^\+[1-9]\d{7,14}$', v) or len(v) > 16:
                 raise ValueError('Phone number must be in E.164 format (+1234567890)')
         return v
@@ -85,4 +86,7 @@ class UserUpdate(ORMModel):
 
 class UserRead(UserBase):
     id: UUID
+    first_name: str | None = None
+    last_name: str | None = None
+    phone_number: str | None = None
     is_active: bool = Field(default=True)

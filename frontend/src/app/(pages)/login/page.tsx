@@ -32,7 +32,7 @@ export default function Login() {
       if (access_token) storage.setItem('access_token', access_token);
       if (refresh_token) storage.setItem('refresh_token', refresh_token);
 
-      router.push('/profile');
+      router.push('/home');
     } catch (err) {
       console.error('Login error:', err);
       let message = 'Ошибка входа. Проверьте данные.';
