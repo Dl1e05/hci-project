@@ -1,41 +1,33 @@
 'use client';
-
-import React, { useState, ReactNode } from 'react';
+import React from 'react';
+import { usePathname } from 'next/navigation';
 import Sidebar from '../Sidebar';
 import Header from '../Header';
 import Footer from '../Footer';
 
 interface LayoutProps {
-  children: ReactNode;
+    children: React.ReactNode;
+    username?: string;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
+const SIDEBAR_PX = 80;
 
-  const toggleSidebar = (): void => {
-    setSidebarOpen(!sidebarOpen);
-  };
+export default function Layout({ children, username }: LayoutProps) {
+    const pathname = usePathname();
+    const showSidebar = pathname !== '/' && pathname !== '/home';
 
-  return (
-    <div className="min-h-screen bg-slate-50">
-      <Sidebar isOpen={sidebarOpen} />
-      <Header toggleSidebar={toggleSidebar} />
-      
-      {/* Main content */}
-      <main 
-        className={`transition-all duration-300 pt-20 ${sidebarOpen ? 'ml-64' : 'ml-16'}`}
-        style={{ minHeight: 'calc(100vh - 200px)' }}
-      >
-        <div className="p-6">
-          {children}
+    return (
+        <div className="min-h-screen bg-slate-50">
+            {/* Sidebar скрыт на главной */}
+            {showSidebar && <Sidebar />}
+
+            <Header username={username} hasSidebar={showSidebar} />
+
+            <main style={showSidebar ? { marginLeft: `${SIDEBAR_PX}px` } : undefined}>
+                {children}
+            </main>
+
+            <Footer />
         </div>
-      </main>
-
-      <div className={`transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-16'}`}>
-        <Footer />
-      </div>
-    </div>
-  );
-};
-
-export default Layout;
+    );
+}
