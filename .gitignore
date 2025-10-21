@@ -5,6 +5,7 @@ uv.lock
 node_modules/
 dist/
 .env
+public/
 
 .python-version
 .idea/
