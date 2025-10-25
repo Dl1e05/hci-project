@@ -2,14 +2,12 @@ from uuid import UUID
 
 from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import HTTPBearer
-
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.db import get_async_session
+from app.core.security import decode_token
 from app.users.models import User
 from app.users.repo import UserRepo
-
-from app.core.security import decode_token
 
 bearer = HTTPBearer(bearerFormat='JWT')
 
