@@ -4,6 +4,7 @@ from fastapi import Depends, HTTPException, status
 from pydantic import ValidationError
 
 from app.core.security import hash_password
+from app.users.models import User
 from app.users.repo import UserRepo, get_user_repo
 from app.users.schemas import UserRead, UserUpdate
 
