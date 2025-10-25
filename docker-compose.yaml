@@ -8,7 +8,11 @@ services:
     ports:
       - "8001:8000"
     volumes:
-      - ./backend:/app
+      - ./backend/src:/app/src
+      - ./backend/alembic:/app/alembic
+      - ./backend/alembic.ini:/app/alembic.ini
+      - ./backend/pyproject.toml:/app/pyproject.toml
+      - ./backend/uv.lock:/app/uv.lock
     environment:
       - PYTHONUNBUFFERED=1
       - PYTHONPATH=/app/src
