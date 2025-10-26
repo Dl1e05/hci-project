@@ -4,8 +4,8 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from app.content.models import ContentType, Tags
-from app.content.schemas import ContentTypeCreate, ContentTypeRead, ContentTypeUpdate
+from app.references.models import ContentType, Tags
+from app.references.schemas import ContentTypeCreate, ContentTypeRead, ContentTypeUpdate
 
 
 class ContentTypesService:

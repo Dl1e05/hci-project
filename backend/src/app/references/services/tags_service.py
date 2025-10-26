@@ -4,8 +4,8 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from app.content.models import Tags
-from app.content.schemas import TagsCreate, TagsRead, TagsUpdate
+from app.references.models import Tags
+from app.references.schemas import TagsCreate, TagsRead, TagsUpdate
 
 
 class TagsService:

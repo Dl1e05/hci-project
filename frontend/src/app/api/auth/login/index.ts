@@ -7,17 +7,6 @@ type LoginPayload = {
   is_remember_me: boolean;
 };
 
-// type LoginResponce = {
-//     access_token?: string
-//     refresh_token?: string
-//     user?: {
-//         id: number
-//         email: string
-//         username: string
-//     }
-//     message?: string
-// }
-
 export async function login(payload: LoginPayload) {
   try {
     const response = await fetch(`${API_URL}/auth/login`, {
@@ -31,7 +20,25 @@ export async function login(payload: LoginPayload) {
     const data = isJson ? await response.json() : await response.text()
 
     if (!response.ok) {
-      const message = isJson ? (data?.detail || data?.message || 'Login failed') : (data || 'Login failed')
+      let message = 'Login failed'
+      
+      if (isJson) {
+        // Handle validation errors (422)
+        if (response.status === 422 && data?.detail) {
+          if (Array.isArray(data.detail)) {
+            // Multiple validation errors
+            message = data.detail.map((err: any) => err.msg || err.message).join(', ')
+          } else {
+            message = data.detail
+          }
+        } else {
+          // Other errors
+          message = data?.detail || data?.message || 'Login failed'
+        }
+      } else {
+        message = data || 'Login failed'
+      }
+      
       throw new Error(message)
     }
 
