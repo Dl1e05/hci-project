@@ -14,7 +14,7 @@ const SIDEBAR_PX = 80;
 
 export default function Layout({ children, username }: LayoutProps) {
     const pathname = usePathname();
-    const showSidebar = pathname !== '/' && pathname !== '/home';
+    const showSidebar = pathname !== '/' && pathname !== '/home' && pathname !== '/catalog';
 
     return (
         <div className="min-h-screen bg-slate-50">

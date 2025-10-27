@@ -8,7 +8,7 @@ export const fallbackA1Content: ContentBannerProps[] = [
         id: 'a1-1',
         title: 'Movies',
         imageUrl: 'https://placehold.co/400x600/0891b2/ffffff?text=Finding+Nemo',
-        href: '/content/a1/movies'
+        href: '/catalog'
     },
     {
         id: 'a1-2',

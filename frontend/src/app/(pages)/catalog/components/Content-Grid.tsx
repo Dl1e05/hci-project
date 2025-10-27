@@ -2,7 +2,7 @@
 import React, { useState, useMemo } from 'react';
 import ContentCard from './Content-Card';
 import Pagination from './Pagination';
-import type { ContentCard as ContentCardType, ContentType } from '@/types/content';
+import type { ContentCard as ContentCardType, ContentType } from '@/app/types/content';
 
 type Props = {
     items: ContentCardType[];
@@ -10,7 +10,7 @@ type Props = {
     showFilters?: boolean;
 };
 
-export default function ContentGrid({ items, itemsPerPage = 12, showFilters = true }: Props) {
+export default function ContentGrid({ items, itemsPerPage = 24, showFilters = true }: Props) {
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedLevel, setSelectedLevel] = useState<string>('All');
     const [selectedType, setSelectedType] = useState<ContentType | 'All'>('All');
