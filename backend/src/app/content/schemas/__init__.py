@@ -1,50 +1,105 @@
-from .base import BaseSchema, TITLE, RELEASE_DATE, RATING, VIEW_COUNT, IS_ACTIVE, SHORT_DESCRIPTION, LONG_DESCRIPTION, TAGS_STRING, KEYWORDS, URL_FIELD
 from .content import (
-    BaseContentBase, BaseContentCreate, BaseContentUpdate, BaseContentRead,
-    SeriesBase, SeriesCreate, SeriesUpdate, SeriesRead,
-    BookBase, BookCreate, BookUpdate, BookRead,
-    FilmBase, FilmCreate, FilmUpdate, FilmRead,
-    AnimeBase, AnimeCreate, AnimeUpdate, AnimeRead,
-    PodcastBase, PodcastCreate, PodcastUpdate, PodcastRead,
-    CourseBase, CourseCreate, CourseUpdate, CourseRead,
-    ArticleBase, ArticleCreate, ArticleUpdate, ArticleRead,
-    GameBase, GameCreate, GameUpdate, GameRead,
-    VideoBase, VideoCreate, VideoUpdate, VideoRead,
+    # Base content schemas
+    BaseContentBase,
+    BaseContentCreate,
+    BaseContentUpdate,
+    BaseContentRead,
+    
+    # Series schemas
+    SeriesCreate,
+    SeriesUpdate,
+    SeriesRead,
+    
+    # Book schemas
+    BookCreate,
+    BookUpdate,
+    BookRead,
+    
+    # Film schemas
+    FilmCreate,
+    FilmUpdate,
+    FilmRead,
+    
+    # Anime schemas
+    AnimeCreate,
+    AnimeUpdate,
+    AnimeRead,
+    
+    # Podcast schemas
+    PodcastCreate,
+    PodcastUpdate,
+    PodcastRead,
+    
+    # Course schemas
+    CourseCreate,
+    CourseUpdate,
+    CourseRead,
+    
+    # Article schemas
+    ArticleCreate,
+    ArticleUpdate,
+    ArticleRead,
+    
+    # Game schemas
+    GameCreate,
+    GameUpdate,
+    GameRead,
+    
+    # Video schemas
+    VideoCreate,
+    VideoUpdate,
+    VideoRead,
 )
 
 __all__ = [
-    # Base schemas and type aliases
-    "BaseSchema", "TITLE", "RELEASE_DATE", "RATING", "VIEW_COUNT", "IS_ACTIVE", 
-    "SHORT_DESCRIPTION", "LONG_DESCRIPTION", "TAGS_STRING", "KEYWORDS", "URL_FIELD",
-    
     # Base content schemas
-    "BaseContentBase", "BaseContentCreate", "BaseContentUpdate", "BaseContentRead",
+    "BaseContentBase",
+    "BaseContentCreate",
+    "BaseContentUpdate",
+    "BaseContentRead",
     
     # Series schemas
-    "SeriesBase", "SeriesCreate", "SeriesUpdate", "SeriesRead",
+    "SeriesCreate",
+    "SeriesUpdate",
+    "SeriesRead",
     
     # Book schemas
-    "BookBase", "BookCreate", "BookUpdate", "BookRead",
+    "BookCreate",
+    "BookUpdate",
+    "BookRead",
     
     # Film schemas
-    "FilmBase", "FilmCreate", "FilmUpdate", "FilmRead",
+    "FilmCreate",
+    "FilmUpdate",
+    "FilmRead",
     
     # Anime schemas
-    "AnimeBase", "AnimeCreate", "AnimeUpdate", "AnimeRead",
+    "AnimeCreate",
+    "AnimeUpdate",
+    "AnimeRead",
     
     # Podcast schemas
-    "PodcastBase", "PodcastCreate", "PodcastUpdate", "PodcastRead",
+    "PodcastCreate",
+    "PodcastUpdate",
+    "PodcastRead",
     
     # Course schemas
-    "CourseBase", "CourseCreate", "CourseUpdate", "CourseRead",
+    "CourseCreate",
+    "CourseUpdate",
+    "CourseRead",
     
     # Article schemas
-    "ArticleBase", "ArticleCreate", "ArticleUpdate", "ArticleRead",
+    "ArticleCreate",
+    "ArticleUpdate",
+    "ArticleRead",
     
     # Game schemas
-    "GameBase", "GameCreate", "GameUpdate", "GameRead",
+    "GameCreate",
+    "GameUpdate",
+    "GameRead",
     
     # Video schemas
-    "VideoBase", "VideoCreate", "VideoUpdate", "VideoRead",
+    "VideoCreate",
+    "VideoUpdate",
+    "VideoRead",
 ]
-

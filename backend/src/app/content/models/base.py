@@ -4,7 +4,8 @@ from typing import TYPE_CHECKING
 
 from sqlalchemy import Column, DateTime, Integer, String, Table, Float, ForeignKey, Boolean, Text
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
-from app.references.models import Language, Genres, Country, AgeRating, Author, Tags
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy_utils import URLType
 
 from app.base import Base
 
@@ -42,9 +43,15 @@ content_tags = Table(
 
 
 class BaseContent(Base):
-    __abstract__ = True
+    __tablename__ = "contents"
 
     id: Mapped[uuid.UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
+    type: Mapped[str] = mapped_column(String(50), nullable=False, index=True)
+    
+    __mapper_args__ = {
+        "polymorphic_identity": "content",
+        "polymorphic_on": "type",
+    }
     title: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
     release_date: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, index=True)
     rating: Mapped[float]   = mapped_column(Float, nullable=False, index=True)
@@ -55,7 +62,6 @@ class BaseContent(Base):
     short_description: Mapped[str] = mapped_column(String(500), nullable=True)
     long_description: Mapped[str] = mapped_column(Text, nullable=True)
     
-    tags: Mapped[str] = mapped_column(String(500), nullable=True)
     keywords: Mapped[str] = mapped_column(String(500), nullable=True)
     
     original_language_id: Mapped[int] = mapped_column(Integer, ForeignKey('languages.id'), nullable=False, index=True)

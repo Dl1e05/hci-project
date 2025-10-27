@@ -139,7 +139,7 @@ class UserRating(Base):
 
     id: Mapped[uuid.UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
     user_id: Mapped[uuid.UUID] = mapped_column(PG_UUID(as_uuid=True), ForeignKey('users.id'), nullable=False, index=True)
-    content_id: Mapped[uuid.UUID] = mapped_column(PG_UUID(as_uuid=True), nullable=False, index=True)  # Generic content reference
+    content_id: Mapped[uuid.UUID] = mapped_column(PG_UUID(as_uuid=True), nullable=False, index=True)
     content_type: Mapped[str] = mapped_column(String(50), nullable=False, index=True)
     rating: Mapped[float] = mapped_column(Float, nullable=False, index=True)
     review: Mapped[str] = mapped_column(String(1000), nullable=True)
@@ -153,10 +153,10 @@ class UserProgress(Base):
 
     id: Mapped[uuid.UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
     user_id: Mapped[uuid.UUID] = mapped_column(PG_UUID(as_uuid=True), ForeignKey('users.id'), nullable=False, index=True)
-    content_id: Mapped[uuid.UUID] = mapped_column(PG_UUID(as_uuid=True), nullable=False, index=True)  # Generic content reference
+    content_id: Mapped[uuid.UUID] = mapped_column(PG_UUID(as_uuid=True), nullable=False, index=True)
     content_type: Mapped[str] = mapped_column(String(50), nullable=False, index=True)
     progress_percentage: Mapped[float] = mapped_column(Float, nullable=False, default=0.0)
-    current_position: Mapped[int] = mapped_column(Integer, nullable=True)  # For episodes, pages, etc.
+    current_position: Mapped[int] = mapped_column(Integer, nullable=True)
     is_completed: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
     completed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
