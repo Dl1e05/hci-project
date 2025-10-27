@@ -16,6 +16,7 @@ dependencies = [
     "python-jose>=3.5.0",
     "ruff>=0.13.1",
     "sqlalchemy>=2.0.43",
+    "sqlalchemy-utils>=0.42.0",
     "types-python-jose>=3.5.0.20250531",
     "uvicorn>=0.35.0",
 ]

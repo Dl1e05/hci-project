@@ -13,7 +13,7 @@ export async function login(payload: LoginPayload) {
         method: 'POST',
         headers: await getHeaders(),
         credentials: 'include',
-        body: JSON.stringify(payload)   
+        body: JSON.stringify(payload)
     })
     const contentType = response.headers.get('content-type') || ''
     const isJson = contentType.includes('application/json')
