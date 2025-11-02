@@ -58,4 +58,3 @@ class CountryService:
         await db.delete(country_entity)
         await db.commit()
         return True
-

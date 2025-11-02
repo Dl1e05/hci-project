@@ -33,7 +33,9 @@ async def get_course(course_id: UUID, db: AsyncSession = Depends(get_async_sessi
 
 
 @router.patch('/courses/{course_id}', response_model=CourseRead, tags=['courses'])
-async def update_course(course_id: UUID, course_data: CourseUpdate, db: AsyncSession = Depends(get_async_session)) -> CourseRead:
+async def update_course(
+    course_id: UUID, course_data: CourseUpdate, db: AsyncSession = Depends(get_async_session)
+) -> CourseRead:
     course = await CourseService.update(db, course_id, course_data)
     if not course:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Course with id {course_id} not found')
@@ -45,4 +47,3 @@ async def delete_course(course_id: UUID, db: AsyncSession = Depends(get_async_se
     deleted = await CourseService.delete(db, course_id)
     if not deleted:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Course with id {course_id} not found')
-

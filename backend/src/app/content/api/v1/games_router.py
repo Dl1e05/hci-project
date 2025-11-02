@@ -45,4 +45,3 @@ async def delete_game(game_id: UUID, db: AsyncSession = Depends(get_async_sessio
     deleted = await GameService.delete(db, game_id)
     if not deleted:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Game with id {game_id} not found')
-

@@ -32,7 +32,9 @@ class DifficultyLevelService:
         return result.scalar_one_or_none()
 
     @staticmethod
-    async def update(db: AsyncSession, difficulty_id: int, difficulty_data: DifficultyLevelUpdate) -> DifficultyLevelRead | None:
+    async def update(
+        db: AsyncSession, difficulty_id: int, difficulty_data: DifficultyLevelUpdate
+    ) -> DifficultyLevelRead | None:
         result = await db.execute(select(DifficultyLevel).where(DifficultyLevel.id == difficulty_id))
         difficulty_entity = result.scalar_one_or_none()
         if not difficulty_entity:
@@ -56,4 +58,3 @@ class DifficultyLevelService:
         await db.delete(difficulty_entity)
         await db.commit()
         return True
-

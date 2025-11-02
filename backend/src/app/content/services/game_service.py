@@ -33,4 +33,3 @@ class GameService:
     @staticmethod
     async def delete(db: AsyncSession, game_id: UUID) -> bool:
         return await ContentRepository.delete(db, Game, game_id)
-

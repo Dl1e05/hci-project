@@ -1,6 +1,8 @@
 from __future__ import annotations
+
 from pydantic import Field
-from .base import BaseContentBase, BaseContentUpdate, BaseContentCreate, BaseContentRead
+
+from .base import BaseContentCreate, BaseContentRead, BaseContentUpdate
 
 
 class SeriesCreate(BaseContentCreate):

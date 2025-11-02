@@ -56,4 +56,3 @@ class AgeRatingService:
         await db.delete(age_rating_entity)
         await db.commit()
         return True
-

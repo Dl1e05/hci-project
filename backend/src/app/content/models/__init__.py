@@ -1,25 +1,25 @@
+from .base import BaseContent
 from .content import (
-    Series,
-    Book,
-    Film,
     Anime,
-    Podcast,
-    Course,
     Article,
+    Book,
+    Course,
+    Film,
     Game,
+    Podcast,
+    Series,
     Video,
 )
-from .base import BaseContent
 
 __all__ = [
-    "BaseContent",
-    "Series",
-    "Book",
-    "Film",
-    "Anime",
-    "Podcast",
-    "Course",
-    "Article",
-    "Game",
-    "Video",
+    'BaseContent',
+    'Series',
+    'Book',
+    'Film',
+    'Anime',
+    'Podcast',
+    'Course',
+    'Article',
+    'Game',
+    'Video',
 ]

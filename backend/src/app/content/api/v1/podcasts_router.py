@@ -33,7 +33,9 @@ async def get_podcast(podcast_id: UUID, db: AsyncSession = Depends(get_async_ses
 
 
 @router.patch('/podcasts/{podcast_id}', response_model=PodcastRead, tags=['podcasts'])
-async def update_podcast(podcast_id: UUID, podcast_data: PodcastUpdate, db: AsyncSession = Depends(get_async_session)) -> PodcastRead:
+async def update_podcast(
+    podcast_id: UUID, podcast_data: PodcastUpdate, db: AsyncSession = Depends(get_async_session)
+) -> PodcastRead:
     podcast = await PodcastService.update(db, podcast_id, podcast_data)
     if not podcast:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Podcast with id {podcast_id} not found')
@@ -45,4 +47,3 @@ async def delete_podcast(podcast_id: UUID, db: AsyncSession = Depends(get_async_
     deleted = await PodcastService.delete(db, podcast_id)
     if not deleted:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Podcast with id {podcast_id} not found')
-

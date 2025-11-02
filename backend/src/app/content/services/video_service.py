@@ -33,4 +33,3 @@ class VideoService:
     @staticmethod
     async def delete(db: AsyncSession, video_id: UUID) -> bool:
         return await ContentRepository.delete(db, Video, video_id)
-

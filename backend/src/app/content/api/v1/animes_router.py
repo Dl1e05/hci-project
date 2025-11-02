@@ -45,4 +45,3 @@ async def delete_anime(anime_id: UUID, db: AsyncSession = Depends(get_async_sess
     deleted = await AnimeService.delete(db, anime_id)
     if not deleted:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Anime with id {anime_id} not found')
-

@@ -1,105 +1,88 @@
-from .content import (
-    # Base content schemas
+from .base import (
     BaseContentBase,
     BaseContentCreate,
-    BaseContentUpdate,
     BaseContentRead,
-    
-    # Series schemas
-    SeriesCreate,
-    SeriesUpdate,
-    SeriesRead,
-    
-    # Book schemas
-    BookCreate,
-    BookUpdate,
-    BookRead,
-    
-    # Film schemas
-    FilmCreate,
-    FilmUpdate,
-    FilmRead,
-    
+    BaseContentUpdate,
+)
+from .content import (
     # Anime schemas
     AnimeCreate,
-    AnimeUpdate,
     AnimeRead,
-    
-    # Podcast schemas
-    PodcastCreate,
-    PodcastUpdate,
-    PodcastRead,
-    
-    # Course schemas
-    CourseCreate,
-    CourseUpdate,
-    CourseRead,
-    
+    AnimeUpdate,
     # Article schemas
     ArticleCreate,
-    ArticleUpdate,
     ArticleRead,
-    
+    ArticleUpdate,
+    # Book schemas
+    BookCreate,
+    BookRead,
+    BookUpdate,
+    # Course schemas
+    CourseCreate,
+    CourseRead,
+    CourseUpdate,
+    # Film schemas
+    FilmCreate,
+    FilmRead,
+    FilmUpdate,
     # Game schemas
     GameCreate,
-    GameUpdate,
     GameRead,
-    
+    GameUpdate,
+    # Podcast schemas
+    PodcastCreate,
+    PodcastRead,
+    PodcastUpdate,
+    # Series schemas
+    SeriesCreate,
+    SeriesRead,
+    SeriesUpdate,
     # Video schemas
     VideoCreate,
-    VideoUpdate,
     VideoRead,
+    VideoUpdate,
 )
 
 __all__ = [
     # Base content schemas
-    "BaseContentBase",
-    "BaseContentCreate",
-    "BaseContentUpdate",
-    "BaseContentRead",
-    
+    'BaseContentBase',
+    'BaseContentCreate',
+    'BaseContentUpdate',
+    'BaseContentRead',
     # Series schemas
-    "SeriesCreate",
-    "SeriesUpdate",
-    "SeriesRead",
-    
+    'SeriesCreate',
+    'SeriesUpdate',
+    'SeriesRead',
     # Book schemas
-    "BookCreate",
-    "BookUpdate",
-    "BookRead",
-    
+    'BookCreate',
+    'BookUpdate',
+    'BookRead',
     # Film schemas
-    "FilmCreate",
-    "FilmUpdate",
-    "FilmRead",
-    
+    'FilmCreate',
+    'FilmUpdate',
+    'FilmRead',
     # Anime schemas
-    "AnimeCreate",
-    "AnimeUpdate",
-    "AnimeRead",
-    
+    'AnimeCreate',
+    'AnimeUpdate',
+    'AnimeRead',
     # Podcast schemas
-    "PodcastCreate",
-    "PodcastUpdate",
-    "PodcastRead",
-    
+    'PodcastCreate',
+    'PodcastUpdate',
+    'PodcastRead',
     # Course schemas
-    "CourseCreate",
-    "CourseUpdate",
-    "CourseRead",
-    
+    'CourseCreate',
+    'CourseUpdate',
+    'CourseRead',
     # Article schemas
-    "ArticleCreate",
-    "ArticleUpdate",
-    "ArticleRead",
-    
+    'ArticleCreate',
+    'ArticleUpdate',
+    'ArticleRead',
     # Game schemas
-    "GameCreate",
-    "GameUpdate",
-    "GameRead",
-    
+    'GameCreate',
+    'GameUpdate',
+    'GameRead',
     # Video schemas
-    "VideoCreate",
-    "VideoUpdate",
-    "VideoRead",
+    'VideoCreate',
+    'VideoUpdate',
+    'VideoRead',
 ]

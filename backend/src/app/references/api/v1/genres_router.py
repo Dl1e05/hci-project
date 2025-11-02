@@ -4,9 +4,9 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.status import HTTP_201_CREATED
 
+from app.core.db import get_async_session
 from app.references.schemas import GenresCreate, GenresRead, GenresUpdate
 from app.references.services.genres_service import GenresService
-from app.core.db import get_async_session
 
 router = APIRouter(prefix='/content')
 
@@ -54,4 +54,3 @@ async def delete_genre(genre_id: UUID, db: AsyncSession = Depends(get_async_sess
     deleted = await GenresService.delete(db, genre_id)
     if not deleted:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Genre with id {genre_id} not found')
-

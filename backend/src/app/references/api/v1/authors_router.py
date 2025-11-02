@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.status import HTTP_201_CREATED
 
+from app.core.db import get_async_session
 from app.references.schemas import AuthorCreate, AuthorRead, AuthorUpdate
 from app.references.services.author_service import AuthorService
-from app.core.db import get_async_session
 
 router = APIRouter(prefix='/content')
 
@@ -52,4 +52,3 @@ async def delete_author(author_id: int, db: AsyncSession = Depends(get_async_ses
     deleted = await AuthorService.delete(db, author_id)
     if not deleted:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Author with id {author_id} not found')
-
