@@ -20,6 +20,7 @@ class User(Base):
     phone_number: Mapped[str] = mapped_column(String(15), nullable=True, unique=True)
     birth_date: Mapped[date] = mapped_column(Date, nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=text('true'))
+    is_admin: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=text('false'))
 
     __table_args__ = (
         CheckConstraint('char_length(username) >= 3', name='ck_users_username_len'),

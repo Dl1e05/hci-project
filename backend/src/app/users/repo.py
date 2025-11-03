@@ -33,7 +33,7 @@ class UserRepo:
         await self.db.commit()
         await self.db.refresh(user)
         return user
-
+    
 
 def get_user_repo(db: AsyncSession = Depends(get_async_session)) -> UserRepo:
     return UserRepo(db)
