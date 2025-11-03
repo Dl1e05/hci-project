@@ -1,4 +1,4 @@
-import { API_URL } from "@/app/api";
+import  {API_URL} from "@/app/api/index";
 
 export interface UserProfile {
     first_name?: string; // соответствует полям в изображении

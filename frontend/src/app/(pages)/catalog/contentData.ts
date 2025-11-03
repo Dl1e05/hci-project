@@ -1,14 +1,16 @@
 import type { ContentCard } from "@/app/types/content";
 
+
 // MOVIES
 export const moviesData: ContentCard[] = [
     {
         id: 'movie-1',
         title: 'SpiderMan: Across The Spider-Verse',
+        slug: 'spiderman-across-the-spider-verse',
         year: 2023,
         rating: 8.7,
         description: 'Miles Morales returns for the next chapter of the Spider-Verse saga.',
-        imageUrl: 'https://placehold.co/300x450/e74c3c/ffffff?text=Spider-Man',
+        imageUrl: '/public/spiderman across the spider verse poster',
         genre: 'Superhero',
         languageLevel: 'C1',
         contentType: 'Movies'
@@ -16,6 +18,7 @@ export const moviesData: ContentCard[] = [
     {
         id: 'movie-2',
         title: 'Avatar: The Way of Water',
+        slug: 'avatar-the-way-of-water',
         year: 2022,
         rating: 7.6,
         description: 'Jake Sully and Ney\'tiri have formed a family.',
@@ -27,6 +30,7 @@ export const moviesData: ContentCard[] = [
     {
         id: 'movie-3',
         title: 'Interstellar',
+        slug: 'interstellar',
         year: 2014,
         rating: 8.6,
         description: 'A team of explorers travel through a wormhole in space.',
@@ -38,6 +42,7 @@ export const moviesData: ContentCard[] = [
     {
         id: 'movie-4',
         title: 'SpiderMan: Across The Spider-Verse',
+        slug: 'spiderman-across-the-spider-verse',
         year: 2023,
         rating: 8.7,
         description: 'Miles Morales returns for the next chapter of the Spider-Verse saga.',
@@ -49,6 +54,7 @@ export const moviesData: ContentCard[] = [
     {
         id: 'movie-5',
         title: 'Avatar: The Way of Water',
+        slug: 'avatar-the-way-of-water',
         year: 2022,
         rating: 7.6,
         description: 'Jake Sully and Ney\'tiri have formed a family.',
@@ -60,6 +66,7 @@ export const moviesData: ContentCard[] = [
     {
         id: 'movie-6',
         title: 'Interstellar',
+        slug: 'interstellar',
         year: 2014,
         rating: 8.6,
         description: 'A team of explorers travel through a wormhole in space.',
@@ -71,6 +78,7 @@ export const moviesData: ContentCard[] = [
     {
         id: 'movie-7',
         title: 'SpiderMan: Across The Spider-Verse',
+        slug: 'spiderman-across-the-spider-verse',
         year: 2023,
         rating: 8.7,
         description: 'Miles Morales returns for the next chapter of the Spider-Verse saga.',
@@ -82,6 +90,7 @@ export const moviesData: ContentCard[] = [
     {
         id: 'movie-8',
         title: 'Avatar: The Way of Water',
+        slug: 'avatar-the-way-of-water',
         year: 2022,
         rating: 7.6,
         description: 'Jake Sully and Ney\'tiri have formed a family.',
@@ -93,6 +102,7 @@ export const moviesData: ContentCard[] = [
     {
         id: 'movie-9',
         title: 'Interstellar',
+        slug: 'interstellar',
         year: 2014,
         rating: 8.6,
         description: 'A team of explorers travel through a wormhole in space.',
@@ -108,6 +118,7 @@ export const tvShowsData: ContentCard[] = [
     {
         id: 'tv-1',
         title: 'Breaking Bad',
+        slug: 'breaking-bad',
         year: 2008,
         rating: 9.5,
         description: 'A chemistry teacher diagnosed with cancer turns to cooking meth.',
@@ -119,6 +130,7 @@ export const tvShowsData: ContentCard[] = [
     {
         id: 'tv-2',
         title: 'Stranger Things',
+        slug: 'stranger-things',
         year: 2016,
         rating: 8.7,
         description: 'When a young boy disappears, a small town uncovers a mystery.',
@@ -130,6 +142,7 @@ export const tvShowsData: ContentCard[] = [
     {
         id: 'tv-3',
         title: 'The Crown',
+        slug: 'the-crown',
         year: 2016,
         rating: 8.6,
         description: 'Follows the political rivalries and romance of Queen Elizabeth II.',
@@ -145,6 +158,7 @@ export const booksData: ContentCard[] = [
     {
         id: 'book-1',
         title: 'Harry Potter and the Philosopher\'s Stone',
+        slug: 'harry-potter-and-the-philosophers-stone',
         year: 1997,
         rating: 8.8,
         description: 'A young wizard begins his journey at Hogwarts School.',
@@ -156,6 +170,7 @@ export const booksData: ContentCard[] = [
     {
         id: 'book-2',
         title: '1984',
+        slug: '1984',
         year: 1949,
         rating: 8.9,
         description: 'A dystopian novel set in a totalitarian society.',
@@ -167,6 +182,7 @@ export const booksData: ContentCard[] = [
     {
         id: 'book-3',
         title: 'The Hobbit',
+        slug: 'the-hobbit',
         year: 1937,
         rating: 8.7,
         description: 'Bilbo Baggins goes on an unexpected adventure.',
@@ -182,6 +198,7 @@ export const gamesData: ContentCard[] = [
     {
         id: 'game-1',
         title: 'The Last of Us',
+        slug: 'the-last-of-us',
         year: 2013,
         rating: 9.2,
         description: 'A post-apocalyptic action-adventure survival game.',
@@ -193,6 +210,7 @@ export const gamesData: ContentCard[] = [
     {
         id: 'game-2',
         title: 'Minecraft',
+        slug: 'minecraft',
         year: 2011,
         rating: 8.5,
         description: 'A sandbox game where players build and explore worlds.',
@@ -204,6 +222,7 @@ export const gamesData: ContentCard[] = [
     {
         id: 'game-3',
         title: 'Red Dead Redemption 2',
+        slug: 'red-dead-redemption-2',
         year: 2018,
         rating: 9.7,
         description: 'An epic tale of life in America\'s unforgiving heartland.',
@@ -215,9 +234,7 @@ export const gamesData: ContentCard[] = [
 ];
 
 // Все данные в одном объекте
-export const allContentData: Record<string, ContentCard[]> = {
-    'Movies': moviesData,
-    'TV shows': tvShowsData,
-    'Books': booksData,
-    'Games': gamesData,
-};
+export const allContentData = [...moviesData, ...tvShowsData, ...booksData, ...gamesData];
+export function findContentBySlug(slug: string): ContentCard | undefined {
+    return allContentData.find(item => item.slug === slug);
+}
