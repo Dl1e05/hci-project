@@ -38,10 +38,9 @@ class BaseContent(Base):
     long_description: Mapped[str | None] = mapped_column(Text, nullable=True)
     keywords: Mapped[str | None] = mapped_column(String(500), nullable=True)
 
-    banner: Mapped[str] = mapped_column(URLType(length=2048), nullable=False)
+    banner: Mapped[str | None] = mapped_column(URLType(length=2048), nullable=True)
     trailer: Mapped[str | None] = mapped_column(URLType(length=2048), nullable=True)
     link: Mapped[str | None] = mapped_column(URLType(length=2048), nullable=True)
-    poster: Mapped[str | None] = mapped_column(URLType(length=2048), nullable=True)
 
     original_language_id: Mapped[int] = mapped_column(
         Integer, ForeignKey('languages.id', ondelete='RESTRICT'), nullable=False, index=True

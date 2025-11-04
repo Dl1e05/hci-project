@@ -10,7 +10,7 @@ from app.content.schemas.content import BookCreate, BookRead, BookUpdate
 class BookService:
     @staticmethod
     async def create(db: AsyncSession, book_data: BookCreate) -> BookRead:
-        data = book_data.model_dump()
+        data = book_data.model_dump(mode='python')
         book = await ContentRepository.create(db, Book, data)
         return BookRead.model_validate(book)
 
@@ -26,7 +26,7 @@ class BookService:
 
     @staticmethod
     async def update(db: AsyncSession, book_id: UUID, book_data: BookUpdate) -> BookRead | None:
-        data = book_data.model_dump(exclude_unset=True)
+        data = book_data.model_dump(exclude_unset=True, mode='python')
         book = await ContentRepository.update(db, Book, book_id, data)
         return BookRead.model_validate(book) if book else None
 

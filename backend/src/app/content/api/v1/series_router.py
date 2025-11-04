@@ -1,19 +1,32 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.status import HTTP_201_CREATED
 
-from app.content.schemas.content import SeriesCreate, SeriesRead, SeriesUpdate
+from app.content.schemas.content import SeriesRead, SeriesUpdate
+from app.content.schemas.forms import SeriesFormData
 from app.content.services.series_service import SeriesService
 from app.core.db import get_async_session
+from app.core.storage import get_storage_service
 
 router = APIRouter(prefix='/content')
 
 
 @router.post('/series', response_model=SeriesRead, status_code=HTTP_201_CREATED, tags=['series'])
-async def create_series(series_data: SeriesCreate, db: AsyncSession = Depends(get_async_session)) -> SeriesRead:
+async def create_series(
+    form_data: SeriesFormData = Depends(),
+    banner: UploadFile = File(...),
+    db: AsyncSession = Depends(get_async_session),
+) -> SeriesRead:
     try:
+        storage = get_storage_service()
+
+        banner_key = storage.upload_file(banner.file, banner.filename or 'banner', banner.content_type, 'banners')
+        banner_url = storage.get_public_url(banner_key)
+
+        series_data = form_data.to_schema(banner_url=banner_url)
+
         return await SeriesService.create(db, series_data)
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)) from e

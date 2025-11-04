@@ -21,10 +21,9 @@ class BaseContentBase(ORMModel):
     short_description: SHORT_DESCRIPTION = None
     long_description: LONG_DESCRIPTION = None
     keywords: KEYWORDS = None
-    banner: HttpUrl = Field(..., max_length=2048)
+    banner: HttpUrl | None = Field(None, max_length=2048)
     trailer: URL_FIELD = None
     link: URL_FIELD = None
-    poster: URL_FIELD = None
 
 
 class BaseContentCreate(BaseContentBase):
@@ -48,7 +47,6 @@ class BaseContentUpdate(ORMModel):
     banner: HttpUrl | None = Field(None, max_length=2048)
     trailer: URL_FIELD = None
     link: URL_FIELD = None
-    poster: URL_FIELD = None
     original_language_id: int | None = None
     age_rating_id: int | None = None
     original_author_id: int | None = None

@@ -24,7 +24,6 @@ class TagsBase(ORMModel):
 
     name: NAME_64
     code: CODE_UNIQUE
-    category_id: UUID | None = None
 
 
 class TagsCreate(TagsBase):
@@ -38,7 +37,6 @@ class TagsUpdate(ORMModel):
 
     name: NAME_64 | None = None
     code: CODE_UNIQUE | None = None
-    category_id: UUID | None = None
 
 
 class TagsRead(TagsBase):

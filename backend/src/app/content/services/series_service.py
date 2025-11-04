@@ -10,7 +10,7 @@ from app.content.schemas.content import SeriesCreate, SeriesRead, SeriesUpdate
 class SeriesService:
     @staticmethod
     async def create(db: AsyncSession, series_data: SeriesCreate) -> SeriesRead:
-        data = series_data.model_dump()
+        data = series_data.model_dump(mode='python')
         series = await ContentRepository.create(db, Series, data)
         return SeriesRead.model_validate(series)
 
@@ -26,7 +26,7 @@ class SeriesService:
 
     @staticmethod
     async def update(db: AsyncSession, series_id: UUID, series_data: SeriesUpdate) -> SeriesRead | None:
-        data = series_data.model_dump(exclude_unset=True)
+        data = series_data.model_dump(exclude_unset=True, mode='python')
         series = await ContentRepository.update(db, Series, series_id, data)
         return SeriesRead.model_validate(series) if series else None
 

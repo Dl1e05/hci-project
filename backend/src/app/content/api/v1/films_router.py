@@ -1,19 +1,32 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.status import HTTP_201_CREATED
 
-from app.content.schemas.content import FilmCreate, FilmRead, FilmUpdate
+from app.content.schemas.content import FilmRead, FilmUpdate
+from app.content.schemas.forms import FilmFormData
 from app.content.services.film_service import FilmService
 from app.core.db import get_async_session
+from app.core.storage import get_storage_service
 
 router = APIRouter(prefix='/content')
 
 
 @router.post('/films', response_model=FilmRead, status_code=HTTP_201_CREATED, tags=['films'])
-async def create_film(film_data: FilmCreate, db: AsyncSession = Depends(get_async_session)) -> FilmRead:
+async def create_film(
+    form_data: FilmFormData = Depends(),
+    banner: UploadFile = File(...),
+    db: AsyncSession = Depends(get_async_session),
+) -> FilmRead:
     try:
+        storage = get_storage_service()
+
+        banner_key = storage.upload_file(banner.file, banner.filename or 'banner', banner.content_type, 'banners')
+        banner_url = storage.get_public_url(banner_key)
+
+        film_data = form_data.to_schema(banner_url=banner_url)
+
         return await FilmService.create(db, film_data)
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)) from e

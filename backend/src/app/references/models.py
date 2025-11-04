@@ -48,11 +48,7 @@ class Tags(Base):
     id: Mapped[uuid.UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
     name: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
     code: Mapped[str] = mapped_column(String(64), nullable=False, unique=True, index=True)
-    category_id: Mapped[uuid.UUID] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey('content_categories.id'), nullable=True, index=True
-    )
 
-    category: Mapped['ContentCategory'] = relationship('ContentCategory', back_populates='tags')
     contents: Mapped[list['BaseContent']] = relationship('BaseContent', secondary=content_tags, back_populates='content_tags')
 
 
@@ -132,8 +128,6 @@ class ContentCategory(Base):
     description: Mapped[str] = mapped_column(String(255), nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
     sort_order: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
-
-    tags: Mapped[list['Tags']] = relationship('Tags', back_populates='category')
 
 
 class ContentType(str, Enum):

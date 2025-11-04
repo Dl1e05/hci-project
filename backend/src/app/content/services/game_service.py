@@ -10,7 +10,7 @@ from app.content.schemas.content import GameCreate, GameRead, GameUpdate
 class GameService:
     @staticmethod
     async def create(db: AsyncSession, game_data: GameCreate) -> GameRead:
-        data = game_data.model_dump()
+        data = game_data.model_dump(mode='python')
         game = await ContentRepository.create(db, Game, data)
         return GameRead.model_validate(game)
 
@@ -26,7 +26,7 @@ class GameService:
 
     @staticmethod
     async def update(db: AsyncSession, game_id: UUID, game_data: GameUpdate) -> GameRead | None:
-        data = game_data.model_dump(exclude_unset=True)
+        data = game_data.model_dump(exclude_unset=True, mode='python')
         game = await ContentRepository.update(db, Game, game_id, data)
         return GameRead.model_validate(game) if game else None
 

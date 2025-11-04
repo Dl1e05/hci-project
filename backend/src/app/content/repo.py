@@ -10,12 +10,24 @@ from app.content.models.base import BaseContent
 T = TypeVar('T', bound=BaseContent)
 
 
+def _convert_url_fields(data: dict) -> dict:
+    """Convert HttpUrl objects to strings for database storage"""
+    url_fields = ['banner', 'trailer', 'link']
+    for field in url_fields:
+        if field in data and data[field] is not None:
+            data[field] = str(data[field])
+    return data
+
+
 class ContentRepository:
     """Base repository for content operations"""
 
     @staticmethod
     async def create(db: AsyncSession, model_class: type[T], data: dict) -> T:
         """Create a new content instance"""
+        # Convert URL fields to strings
+        data = _convert_url_fields(data)
+
         # Separate relationship data
         genre_ids = data.pop('genre_ids', [])
         audio_language_ids = data.pop('audio_language_ids', [])
@@ -104,6 +116,9 @@ class ContentRepository:
         content = result.scalar_one_or_none()
         if not content:
             return None
+
+        # Convert URL fields to strings
+        data = _convert_url_fields(data)
 
         # Separate relationship data
         genre_ids = data.pop('genre_ids', None)

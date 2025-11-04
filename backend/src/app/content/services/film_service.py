@@ -10,7 +10,7 @@ from app.content.schemas.content import FilmCreate, FilmRead, FilmUpdate
 class FilmService:
     @staticmethod
     async def create(db: AsyncSession, film_data: FilmCreate) -> FilmRead:
-        data = film_data.model_dump()
+        data = film_data.model_dump(mode='python')
         film = await ContentRepository.create(db, Film, data)
         return FilmRead.model_validate(film)
 
@@ -26,7 +26,7 @@ class FilmService:
 
     @staticmethod
     async def update(db: AsyncSession, film_id: UUID, film_data: FilmUpdate) -> FilmRead | None:
-        data = film_data.model_dump(exclude_unset=True)
+        data = film_data.model_dump(exclude_unset=True, mode='python')
         film = await ContentRepository.update(db, Film, film_id, data)
         return FilmRead.model_validate(film) if film else None
 
