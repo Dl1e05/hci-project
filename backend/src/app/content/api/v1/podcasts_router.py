@@ -1,19 +1,32 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.status import HTTP_201_CREATED
 
-from app.content.schemas.content import PodcastCreate, PodcastRead, PodcastUpdate
+from app.content.schemas.content import PodcastRead, PodcastUpdate
+from app.content.schemas.forms import PodcastFormData
 from app.content.services.podcast_service import PodcastService
 from app.core.db import get_async_session
+from app.core.storage import get_storage_service
 
 router = APIRouter(prefix='/content')
 
 
 @router.post('/podcasts', response_model=PodcastRead, status_code=HTTP_201_CREATED, tags=['podcasts'])
-async def create_podcast(podcast_data: PodcastCreate, db: AsyncSession = Depends(get_async_session)) -> PodcastRead:
+async def create_podcast(
+    form_data: PodcastFormData = Depends(),
+    banner: UploadFile = File(...),
+    db: AsyncSession = Depends(get_async_session),
+) -> PodcastRead:
     try:
+        storage = get_storage_service()
+
+        banner_key = storage.upload_file(banner.file, banner.filename or 'banner', banner.content_type, 'banners')
+        banner_url = storage.get_public_url(banner_key)
+
+        podcast_data = form_data.to_schema(banner_url=banner_url)
+
         return await PodcastService.create(db, podcast_data)
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)) from e

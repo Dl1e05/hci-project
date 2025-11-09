@@ -10,7 +10,7 @@ from app.content.schemas.content import VideoCreate, VideoRead, VideoUpdate
 class VideoService:
     @staticmethod
     async def create(db: AsyncSession, video_data: VideoCreate) -> VideoRead:
-        data = video_data.model_dump()
+        data = video_data.model_dump(mode='python')
         video = await ContentRepository.create(db, Video, data)
         return VideoRead.model_validate(video)
 
@@ -26,7 +26,7 @@ class VideoService:
 
     @staticmethod
     async def update(db: AsyncSession, video_id: UUID, video_data: VideoUpdate) -> VideoRead | None:
-        data = video_data.model_dump(exclude_unset=True)
+        data = video_data.model_dump(exclude_unset=True, mode='python')
         video = await ContentRepository.update(db, Video, video_id, data)
         return VideoRead.model_validate(video) if video else None
 

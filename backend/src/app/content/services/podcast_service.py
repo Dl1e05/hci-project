@@ -10,7 +10,7 @@ from app.content.schemas.content import PodcastCreate, PodcastRead, PodcastUpdat
 class PodcastService:
     @staticmethod
     async def create(db: AsyncSession, podcast_data: PodcastCreate) -> PodcastRead:
-        data = podcast_data.model_dump()
+        data = podcast_data.model_dump(mode='python')
         podcast = await ContentRepository.create(db, Podcast, data)
         return PodcastRead.model_validate(podcast)
 
@@ -26,7 +26,7 @@ class PodcastService:
 
     @staticmethod
     async def update(db: AsyncSession, podcast_id: UUID, podcast_data: PodcastUpdate) -> PodcastRead | None:
-        data = podcast_data.model_dump(exclude_unset=True)
+        data = podcast_data.model_dump(exclude_unset=True, mode='python')
         podcast = await ContentRepository.update(db, Podcast, podcast_id, data)
         return PodcastRead.model_validate(podcast) if podcast else None
 

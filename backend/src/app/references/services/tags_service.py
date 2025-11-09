@@ -22,7 +22,7 @@ class TagsService:
 
     @staticmethod
     async def get_all(db: AsyncSession, skip: int = 0, limit: int = 100) -> list[TagsRead]:
-        result = await db.execute(select(Tags).options(selectinload(Tags.content_types)).offset(skip).limit(limit))
+        result = await db.execute(select(Tags).offset(skip).limit(limit))
         tags = result.scalars().all()
         return [TagsRead.model_validate(tag) for tag in tags]
 

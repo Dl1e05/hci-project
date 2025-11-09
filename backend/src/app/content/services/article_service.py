@@ -10,7 +10,7 @@ from app.content.schemas.content import ArticleCreate, ArticleRead, ArticleUpdat
 class ArticleService:
     @staticmethod
     async def create(db: AsyncSession, article_data: ArticleCreate) -> ArticleRead:
-        data = article_data.model_dump()
+        data = article_data.model_dump(mode='python')
         article = await ContentRepository.create(db, Article, data)
         return ArticleRead.model_validate(article)
 
@@ -26,7 +26,7 @@ class ArticleService:
 
     @staticmethod
     async def update(db: AsyncSession, article_id: UUID, article_data: ArticleUpdate) -> ArticleRead | None:
-        data = article_data.model_dump(exclude_unset=True)
+        data = article_data.model_dump(exclude_unset=True, mode='python')
         article = await ContentRepository.update(db, Article, article_id, data)
         return ArticleRead.model_validate(article) if article else None
 

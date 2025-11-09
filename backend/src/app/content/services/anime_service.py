@@ -10,7 +10,7 @@ from app.content.schemas.content import AnimeCreate, AnimeRead, AnimeUpdate
 class AnimeService:
     @staticmethod
     async def create(db: AsyncSession, anime_data: AnimeCreate) -> AnimeRead:
-        data = anime_data.model_dump()
+        data = anime_data.model_dump(mode='python')
         anime = await ContentRepository.create(db, Anime, data)
         return AnimeRead.model_validate(anime)
 
@@ -26,7 +26,7 @@ class AnimeService:
 
     @staticmethod
     async def update(db: AsyncSession, anime_id: UUID, anime_data: AnimeUpdate) -> AnimeRead | None:
-        data = anime_data.model_dump(exclude_unset=True)
+        data = anime_data.model_dump(exclude_unset=True, mode='python')
         anime = await ContentRepository.update(db, Anime, anime_id, data)
         return AnimeRead.model_validate(anime) if anime else None
 
