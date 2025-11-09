@@ -1,6 +1,5 @@
 import type { ContentType } from '@/app/types/content';
 
-// Генерация slug из названия
 export function generateSlug(title: string): string {
     return title
         .toLowerCase()
@@ -10,30 +9,19 @@ export function generateSlug(title: string): string {
         .trim();
 }
 
-// Получить действие по типу контента
 export function getContentAction(contentType: ContentType): string {
-    const actions = {
+    const actions: Record<ContentType, string> = {
         'Movies': 'watch',
         'TV shows': 'watch',
+        'Anime': 'watch',
         'Books': 'read',
+        'Podcasts': 'listen',
         'Games': 'play',
     };
     return actions[contentType];
 }
 
-// Генерация URL для контента
-export function getContentUrl(item: { title: string; contentType: ContentType }): string {
+export function getContentUrl(item: { id: string; title: string; contentType: ContentType }): string {
     const action = getContentAction(item.contentType);
-    const slug = generateSlug(item.title);
-    return `/${action}/${slug}`;
-}
-
-// Определить тип контента по action
-export function getContentTypeByAction(action: string): ContentType | null {
-    const mapping: Record<string, ContentType> = {
-        'watch': 'Movies', // По умолчанию для watch
-        'read': 'Books',
-        'play': 'Games',
-    };
-    return mapping[action] || null;
+    return `/${action}/${item.id}`;
 }

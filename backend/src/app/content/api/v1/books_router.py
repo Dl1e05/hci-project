@@ -45,4 +45,3 @@ async def delete_book(book_id: UUID, db: AsyncSession = Depends(get_async_sessio
     deleted = await BookService.delete(db, book_id)
     if not deleted:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Book with id {book_id} not found')
-

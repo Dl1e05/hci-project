@@ -33,7 +33,9 @@ async def get_series(series_id: UUID, db: AsyncSession = Depends(get_async_sessi
 
 
 @router.patch('/series/{series_id}', response_model=SeriesRead, tags=['series'])
-async def update_series(series_id: UUID, series_data: SeriesUpdate, db: AsyncSession = Depends(get_async_session)) -> SeriesRead:
+async def update_series(
+    series_id: UUID, series_data: SeriesUpdate, db: AsyncSession = Depends(get_async_session)
+) -> SeriesRead:
     series = await SeriesService.update(db, series_id, series_data)
     if not series:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Series with id {series_id} not found')
@@ -45,4 +47,3 @@ async def delete_series(series_id: UUID, db: AsyncSession = Depends(get_async_se
     deleted = await SeriesService.delete(db, series_id)
     if not deleted:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Series with id {series_id} not found')
-

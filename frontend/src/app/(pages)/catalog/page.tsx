@@ -1,17 +1,43 @@
-'use client'
-import ContentGrid from '@/app/(pages)/catalog/components/Content-Grid';
-import { allContentData } from '@/app/(pages)/catalog/contentData';
-import Layout from '@/app/components/Layout';
+import React from 'react';
+import { fetchMovies, fetchAnime, fetchBooks, fetchGames, fetchPodcasts } from '@/app/lib/api/contentApi';
+import ContentGrid from './components/Content-Grid';
+import Filters from './components/Filters';
 
-export default function AllContentPage() {
-    const allItems = Object.values(allContentData).flat();
+type SearchParams = {
+    type?: 'movie' | 'anime' | 'book' | 'game' | 'podcast';
+    page?: string;
+    level?: string;
+};
+
+export default async function CatalogPage({
+                                              searchParams,
+                                          }: {
+    searchParams: SearchParams;
+}) {
+    const type = searchParams.type || 'movie';
+    const page = Number(searchParams.page) || 1;
+    const level = searchParams.level;
+
+    // Выбираем правильную функцию в зависимости от типа
+    const fetchFunctions = {
+        movie: fetchMovies,
+        anime: fetchAnime,
+        book: fetchBooks,
+        game: fetchGames,
+        podcast: fetchPodcasts,
+    };
+
+    const { items, total } = await fetchFunctions[type]({
+        page,
+        per_page: 12,
+        language_level: level,
+    });
 
     return (
-        <Layout>
-            <div className="container mx-auto px-6 py-8">
-                <h1 className="text-3xl font-bold text-gray-900 mb-8">All Content</h1>
-                <ContentGrid items={allItems} showFilters={true} />
-            </div>
-        </Layout>
+        <div className="container mx-auto px-6 py-8">
+            <h1 className="text-3xl font-bold mb-6">Catalog</h1>
+            <Filters />
+            <ContentGrid items={items} itemsPerPage={12} showFilters={false} />
+        </div>
     );
 }

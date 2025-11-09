@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.status import HTTP_201_CREATED
 
+from app.core.db import get_async_session
 from app.references.schemas import PlatformCreate, PlatformRead, PlatformUpdate
 from app.references.services.platform_service import PlatformService
-from app.core.db import get_async_session
 
 router = APIRouter(prefix='/content')
 
@@ -20,7 +20,9 @@ async def create_platform(platform_data: PlatformCreate, db: AsyncSession = Depe
 
 
 @router.get('/platforms', response_model=list[PlatformRead], tags=['platforms'])
-async def get_all_platforms(skip: int = 0, limit: int = 100, db: AsyncSession = Depends(get_async_session)) -> list[PlatformRead]:
+async def get_all_platforms(
+    skip: int = 0, limit: int = 100, db: AsyncSession = Depends(get_async_session)
+) -> list[PlatformRead]:
     return await PlatformService.get_all(db, skip=skip, limit=limit)
 
 
@@ -33,7 +35,9 @@ async def get_platform(platform_id: int, db: AsyncSession = Depends(get_async_se
 
 
 @router.patch('/platforms/{platform_id}', response_model=PlatformRead, tags=['platforms'])
-async def update_platform(platform_id: int, platform_data: PlatformUpdate, db: AsyncSession = Depends(get_async_session)) -> PlatformRead:
+async def update_platform(
+    platform_id: int, platform_data: PlatformUpdate, db: AsyncSession = Depends(get_async_session)
+) -> PlatformRead:
     if platform_data.name:
         existing_platform = await PlatformService.get_by_name(db, platform_data.name)
         if existing_platform and existing_platform.id != platform_id:
@@ -52,4 +56,3 @@ async def delete_platform(platform_id: int, db: AsyncSession = Depends(get_async
     deleted = await PlatformService.delete(db, platform_id)
     if not deleted:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Platform with id {platform_id} not found')
-

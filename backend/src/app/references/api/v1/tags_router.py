@@ -5,13 +5,13 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.status import HTTP_201_CREATED
 
+from app.core.db import get_async_session
 from app.references.schemas import (
     TagsCreate,
     TagsRead,
     TagsUpdate,
 )
 from app.references.services.tags_service import TagsService
-from app.core.db import get_async_session
 
 router = APIRouter(prefix='/content')
 

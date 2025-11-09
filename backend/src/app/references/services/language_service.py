@@ -56,4 +56,3 @@ class LanguageService:
         await db.delete(language_entity)
         await db.commit()
         return True
-

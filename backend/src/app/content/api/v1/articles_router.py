@@ -33,7 +33,9 @@ async def get_article(article_id: UUID, db: AsyncSession = Depends(get_async_ses
 
 
 @router.patch('/articles/{article_id}', response_model=ArticleRead, tags=['articles'])
-async def update_article(article_id: UUID, article_data: ArticleUpdate, db: AsyncSession = Depends(get_async_session)) -> ArticleRead:
+async def update_article(
+    article_id: UUID, article_data: ArticleUpdate, db: AsyncSession = Depends(get_async_session)
+) -> ArticleRead:
     article = await ArticleService.update(db, article_id, article_data)
     if not article:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Article with id {article_id} not found')
@@ -45,4 +47,3 @@ async def delete_article(article_id: UUID, db: AsyncSession = Depends(get_async_
     deleted = await ArticleService.delete(db, article_id)
     if not deleted:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Article with id {article_id} not found')
-

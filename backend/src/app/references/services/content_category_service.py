@@ -73,4 +73,3 @@ class ContentCategoryService:
         await db.delete(category_entity)
         await db.commit()
         return True
-

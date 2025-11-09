@@ -12,8 +12,8 @@ class RefreshInput(BaseModel):
 
 
 class LoginInput(BaseModel):
-    username_or_email: str = Field(min_length=1, description="Username or email is required")
-    password: str = Field(min_length=1, description="Password is required")
+    username_or_email: str = Field(min_length=1, description='Username or email is required')
+    password: str = Field(min_length=1, description='Password is required')
     is_remember_me: bool = Field(default=False)
 
     @field_validator('username_or_email')

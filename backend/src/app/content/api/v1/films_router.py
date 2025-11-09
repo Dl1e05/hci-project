@@ -45,4 +45,3 @@ async def delete_film(film_id: UUID, db: AsyncSession = Depends(get_async_sessio
     deleted = await FilmService.delete(db, film_id)
     if not deleted:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Film with id {film_id} not found')
-

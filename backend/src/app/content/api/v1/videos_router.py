@@ -45,4 +45,3 @@ async def delete_video(video_id: UUID, db: AsyncSession = Depends(get_async_sess
     deleted = await VideoService.delete(db, video_id)
     if not deleted:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Video with id {video_id} not found')
-

@@ -33,4 +33,3 @@ class FilmService:
     @staticmethod
     async def delete(db: AsyncSession, film_id: UUID) -> bool:
         return await ContentRepository.delete(db, Film, film_id)
-

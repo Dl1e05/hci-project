@@ -56,4 +56,3 @@ class AuthorService:
         await db.delete(author_entity)
         await db.commit()
         return True
-

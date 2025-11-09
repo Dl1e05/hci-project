@@ -1,10 +1,11 @@
-from app.base import ORMModel
-from app.references.schemas import TagsRead
 from datetime import datetime
 from typing import Annotated
 from uuid import UUID
-from pydantic import Field, StringConstraints, HttpUrl
 
+from pydantic import Field, HttpUrl, StringConstraints
+
+from app.base import ORMModel
+from app.references.schemas import TagsRead
 
 TITLE = Annotated[str, StringConstraints(min_length=1, max_length=128)]
 SHORT_DESCRIPTION = Annotated[str | None, StringConstraints(min_length=1, max_length=500)]
@@ -16,7 +17,6 @@ URL_FIELD = Annotated[HttpUrl | None, Field(max_length=2048)]
 class BaseContentBase(ORMModel):
     title: TITLE
     release_date: datetime
-    rating: float = Field(..., ge=0.0, le=10.0)
     is_active: bool = Field(default=True)
     short_description: SHORT_DESCRIPTION = None
     long_description: LONG_DESCRIPTION = None
@@ -41,7 +41,6 @@ class BaseContentCreate(BaseContentBase):
 class BaseContentUpdate(ORMModel):
     title: TITLE | None = None
     release_date: datetime | None = None
-    rating: float | None = Field(None, ge=0.0, le=10.0)
     is_active: bool | None = None
     short_description: SHORT_DESCRIPTION = None
     long_description: LONG_DESCRIPTION = None
@@ -63,6 +62,7 @@ class BaseContentUpdate(ORMModel):
 class BaseContentRead(BaseContentBase):
     id: UUID
     view_count: int = Field(ge=0)
+    rating: float = Field(..., ge=0.0, le=10.0)
     original_language_id: int
     age_rating_id: int
     original_author_id: int

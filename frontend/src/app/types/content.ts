@@ -1,9 +1,9 @@
-export type ContentType = 'Movies' | 'TV shows' | 'Books' | 'Games';
+export type ContentType = 'Movies' | 'TV shows' | 'Books' | 'Games' | 'Anime' | 'Podcasts';
 
 export type ContentCard = {
     id: string;
     title: string;
-    slug: string; // Добавили slug
+    slug: string;
     year: number;
     rating: number;
     description: string;
@@ -11,4 +11,14 @@ export type ContentCard = {
     genre: string;
     languageLevel: string;
     contentType: ContentType;
+
+    // Дополнительные поля
+    bannerUrl?: string;
+    trailerUrl?: string;
+    fullDescription?: string;
+    duration?: number;
+    director?: string;
+    keywords?: string;
+    isActive?: boolean;
+    link?: string;
 };

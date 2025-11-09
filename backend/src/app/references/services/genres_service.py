@@ -58,4 +58,3 @@ class GenresService:
         await db.delete(genre_entity)
         await db.commit()
         return True
-

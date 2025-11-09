@@ -33,4 +33,3 @@ class PodcastService:
     @staticmethod
     async def delete(db: AsyncSession, podcast_id: UUID) -> bool:
         return await ContentRepository.delete(db, Podcast, podcast_id)
-
