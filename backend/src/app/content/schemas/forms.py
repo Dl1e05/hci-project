@@ -16,15 +16,14 @@ from .content import (
 )
 
 
-def parse_list_field(value: list[str] | str | None, field_name: str = 'field') -> list[str]:
+def parse_list_field(value: list[str] | str | None, field_name: str = 'field') -> list[str]: # noqa: F401
     """Parse list field that may come as list, comma-separated string, or None."""
     if not value:
         return []
 
     if isinstance(value, str):
         # Handle comma-separated string
-        items = [item.strip() for item in value.split(',') if item.strip()]
-        return items
+        return [item.strip() for item in value.split(',') if item.strip()]
 
     # Handle list
     result = []
@@ -74,22 +73,22 @@ class BookFormData:
         try:
             self.genre_ids = [UUID(id) for id in parsed_genre_ids] if parsed_genre_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid UUID in genre_ids: {parsed_genre_ids}. Error: {e}')
+            raise ValueError(f'Invalid UUID in genre_ids: {parsed_genre_ids}. Error: {e}') from e
 
         try:
             self.audio_language_ids = [int(id) for id in parsed_audio_ids] if parsed_audio_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid integer in audio_language_ids: {parsed_audio_ids}. Error: {e}')
+            raise ValueError(f'Invalid integer in audio_language_ids: {parsed_audio_ids}. Error: {e}') from e
 
         try:
             self.subtitle_language_ids = [int(id) for id in parsed_subtitle_ids] if parsed_subtitle_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid integer in subtitle_language_ids: {parsed_subtitle_ids}. Error: {e}')
+            raise ValueError(f'Invalid integer in subtitle_language_ids: {parsed_subtitle_ids}. Error: {e}') from e
 
         try:
             self.tag_ids = [UUID(id) for id in parsed_tag_ids] if parsed_tag_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid UUID in tag_ids: {parsed_tag_ids}. Error: {e}')
+            raise ValueError(f'Invalid UUID in tag_ids: {parsed_tag_ids}. Error: {e}') from e
 
         self.title = title
         self.release_date = release_date
@@ -164,22 +163,22 @@ class FilmFormData:
         try:
             self.genre_ids = [UUID(id) for id in parsed_genre_ids] if parsed_genre_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid UUID in genre_ids: {parsed_genre_ids}. Error: {e}')
+            raise ValueError(f'Invalid UUID in genre_ids: {parsed_genre_ids}. Error: {e}') from e
 
         try:
             self.audio_language_ids = [int(id) for id in parsed_audio_ids] if parsed_audio_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid integer in audio_language_ids: {parsed_audio_ids}. Error: {e}')
+            raise ValueError(f'Invalid integer in audio_language_ids: {parsed_audio_ids}. Error: {e}') from e
 
         try:
             self.subtitle_language_ids = [int(id) for id in parsed_subtitle_ids] if parsed_subtitle_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid integer in subtitle_language_ids: {parsed_subtitle_ids}. Error: {e}')
+            raise ValueError(f'Invalid integer in subtitle_language_ids: {parsed_subtitle_ids}. Error: {e}') from e
 
         try:
             self.tag_ids = [UUID(id) for id in parsed_tag_ids] if parsed_tag_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid UUID in tag_ids: {parsed_tag_ids}. Error: {e}')
+            raise ValueError(f'Invalid UUID in tag_ids: {parsed_tag_ids}. Error: {e}') from e
 
         self.title = title
         self.release_date = release_date
@@ -252,22 +251,22 @@ class SeriesFormData:
         try:
             self.genre_ids = [UUID(id) for id in parsed_genre_ids] if parsed_genre_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid UUID in genre_ids: {parsed_genre_ids}. Error: {e}')
+            raise ValueError(f'Invalid UUID in genre_ids: {parsed_genre_ids}. Error: {e}') from e
 
         try:
             self.audio_language_ids = [int(id) for id in parsed_audio_ids] if parsed_audio_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid integer in audio_language_ids: {parsed_audio_ids}. Error: {e}')
+            raise ValueError(f'Invalid integer in audio_language_ids: {parsed_audio_ids}. Error: {e}') from e
 
         try:
             self.subtitle_language_ids = [int(id) for id in parsed_subtitle_ids] if parsed_subtitle_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid integer in subtitle_language_ids: {parsed_subtitle_ids}. Error: {e}')
+            raise ValueError(f'Invalid integer in subtitle_language_ids: {parsed_subtitle_ids}. Error: {e}') from e
 
         try:
             self.tag_ids = [UUID(id) for id in parsed_tag_ids] if parsed_tag_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid UUID in tag_ids: {parsed_tag_ids}. Error: {e}')
+            raise ValueError(f'Invalid UUID in tag_ids: {parsed_tag_ids}. Error: {e}') from e
 
         self.title = title
         self.release_date = release_date
@@ -344,22 +343,22 @@ class AnimeFormData:
         try:
             self.genre_ids = [UUID(id) for id in parsed_genre_ids] if parsed_genre_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid UUID in genre_ids: {parsed_genre_ids}. Error: {e}')
+            raise ValueError(f'Invalid UUID in genre_ids: {parsed_genre_ids}. Error: {e}') from e
 
         try:
             self.audio_language_ids = [int(id) for id in parsed_audio_ids] if parsed_audio_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid integer in audio_language_ids: {parsed_audio_ids}. Error: {e}')
+            raise ValueError(f'Invalid integer in audio_language_ids: {parsed_audio_ids}. Error: {e}') from e
 
         try:
             self.subtitle_language_ids = [int(id) for id in parsed_subtitle_ids] if parsed_subtitle_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid integer in subtitle_language_ids: {parsed_subtitle_ids}. Error: {e}')
+            raise ValueError(f'Invalid integer in subtitle_language_ids: {parsed_subtitle_ids}. Error: {e}') from e
 
         try:
             self.tag_ids = [UUID(id) for id in parsed_tag_ids] if parsed_tag_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid UUID in tag_ids: {parsed_tag_ids}. Error: {e}')
+            raise ValueError(f'Invalid UUID in tag_ids: {parsed_tag_ids}. Error: {e}') from e
 
         self.title = title
         self.release_date = release_date
@@ -436,22 +435,22 @@ class PodcastFormData:
         try:
             self.genre_ids = [UUID(id) for id in parsed_genre_ids] if parsed_genre_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid UUID in genre_ids: {parsed_genre_ids}. Error: {e}')
+            raise ValueError(f'Invalid UUID in genre_ids: {parsed_genre_ids}. Error: {e}') from e
 
         try:
             self.audio_language_ids = [int(id) for id in parsed_audio_ids] if parsed_audio_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid integer in audio_language_ids: {parsed_audio_ids}. Error: {e}')
+            raise ValueError(f'Invalid integer in audio_language_ids: {parsed_audio_ids}. Error: {e}') from e
 
         try:
             self.subtitle_language_ids = [int(id) for id in parsed_subtitle_ids] if parsed_subtitle_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid integer in subtitle_language_ids: {parsed_subtitle_ids}. Error: {e}')
+            raise ValueError(f'Invalid integer in subtitle_language_ids: {parsed_subtitle_ids}. Error: {e}') from e
 
         try:
             self.tag_ids = [UUID(id) for id in parsed_tag_ids] if parsed_tag_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid UUID in tag_ids: {parsed_tag_ids}. Error: {e}')
+            raise ValueError(f'Invalid UUID in tag_ids: {parsed_tag_ids}. Error: {e}') from e
 
         self.title = title
         self.release_date = release_date
@@ -528,22 +527,22 @@ class CourseFormData:
         try:
             self.genre_ids = [UUID(id) for id in parsed_genre_ids] if parsed_genre_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid UUID in genre_ids: {parsed_genre_ids}. Error: {e}')
+            raise ValueError(f'Invalid UUID in genre_ids: {parsed_genre_ids}. Error: {e}') from e
 
         try:
             self.audio_language_ids = [int(id) for id in parsed_audio_ids] if parsed_audio_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid integer in audio_language_ids: {parsed_audio_ids}. Error: {e}')
+            raise ValueError(f'Invalid integer in audio_language_ids: {parsed_audio_ids}. Error: {e}') from e
 
         try:
             self.subtitle_language_ids = [int(id) for id in parsed_subtitle_ids] if parsed_subtitle_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid integer in subtitle_language_ids: {parsed_subtitle_ids}. Error: {e}')
+            raise ValueError(f'Invalid integer in subtitle_language_ids: {parsed_subtitle_ids}. Error: {e}') from e
 
         try:
             self.tag_ids = [UUID(id) for id in parsed_tag_ids] if parsed_tag_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid UUID in tag_ids: {parsed_tag_ids}. Error: {e}')
+            raise ValueError(f'Invalid UUID in tag_ids: {parsed_tag_ids}. Error: {e}') from e
 
         self.title = title
         self.release_date = release_date
@@ -619,22 +618,22 @@ class ArticleFormData:
         try:
             self.genre_ids = [UUID(id) for id in parsed_genre_ids] if parsed_genre_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid UUID in genre_ids: {parsed_genre_ids}. Error: {e}')
+            raise ValueError(f'Invalid UUID in genre_ids: {parsed_genre_ids}. Error: {e}') from e
 
         try:
             self.audio_language_ids = [int(id) for id in parsed_audio_ids] if parsed_audio_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid integer in audio_language_ids: {parsed_audio_ids}. Error: {e}')
+            raise ValueError(f'Invalid integer in audio_language_ids: {parsed_audio_ids}. Error: {e}') from e
 
         try:
             self.subtitle_language_ids = [int(id) for id in parsed_subtitle_ids] if parsed_subtitle_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid integer in subtitle_language_ids: {parsed_subtitle_ids}. Error: {e}')
+            raise ValueError(f'Invalid integer in subtitle_language_ids: {parsed_subtitle_ids}. Error: {e}') from e
 
         try:
             self.tag_ids = [UUID(id) for id in parsed_tag_ids] if parsed_tag_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid UUID in tag_ids: {parsed_tag_ids}. Error: {e}')
+            raise ValueError(f'Invalid UUID in tag_ids: {parsed_tag_ids}. Error: {e}') from e
 
         self.title = title
         self.release_date = release_date
@@ -709,22 +708,22 @@ class GameFormData:
         try:
             self.genre_ids = [UUID(id) for id in parsed_genre_ids] if parsed_genre_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid UUID in genre_ids: {parsed_genre_ids}. Error: {e}')
+            raise ValueError(f'Invalid UUID in genre_ids: {parsed_genre_ids}. Error: {e}') from e
 
         try:
             self.audio_language_ids = [int(id) for id in parsed_audio_ids] if parsed_audio_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid integer in audio_language_ids: {parsed_audio_ids}. Error: {e}')
+            raise ValueError(f'Invalid integer in audio_language_ids: {parsed_audio_ids}. Error: {e}') from e
 
         try:
             self.subtitle_language_ids = [int(id) for id in parsed_subtitle_ids] if parsed_subtitle_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid integer in subtitle_language_ids: {parsed_subtitle_ids}. Error: {e}')
+            raise ValueError(f'Invalid integer in subtitle_language_ids: {parsed_subtitle_ids}. Error: {e}') from e
 
         try:
             self.tag_ids = [UUID(id) for id in parsed_tag_ids] if parsed_tag_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid UUID in tag_ids: {parsed_tag_ids}. Error: {e}')
+            raise ValueError(f'Invalid UUID in tag_ids: {parsed_tag_ids}. Error: {e}') from e
 
         self.title = title
         self.release_date = release_date
@@ -799,22 +798,22 @@ class VideoFormData:
         try:
             self.genre_ids = [UUID(id) for id in parsed_genre_ids] if parsed_genre_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid UUID in genre_ids: {parsed_genre_ids}. Error: {e}')
+            raise ValueError(f'Invalid UUID in genre_ids: {parsed_genre_ids}. Error: {e}') from e
 
         try:
             self.audio_language_ids = [int(id) for id in parsed_audio_ids] if parsed_audio_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid integer in audio_language_ids: {parsed_audio_ids}. Error: {e}')
+            raise ValueError(f'Invalid integer in audio_language_ids: {parsed_audio_ids}. Error: {e}') from e
 
         try:
             self.subtitle_language_ids = [int(id) for id in parsed_subtitle_ids] if parsed_subtitle_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid integer in subtitle_language_ids: {parsed_subtitle_ids}. Error: {e}')
+            raise ValueError(f'Invalid integer in subtitle_language_ids: {parsed_subtitle_ids}. Error: {e}') from e
 
         try:
             self.tag_ids = [UUID(id) for id in parsed_tag_ids] if parsed_tag_ids else []
         except ValueError as e:
-            raise ValueError(f'Invalid UUID in tag_ids: {parsed_tag_ids}. Error: {e}')
+            raise ValueError(f'Invalid UUID in tag_ids: {parsed_tag_ids}. Error: {e}') from e
 
         self.title = title
         self.release_date = release_date

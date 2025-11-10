@@ -42,26 +42,30 @@ class ContentRepository:
         if genre_ids:
             from app.references.models import Genres
 
-            result = await db.execute(select(Genres).where(Genres.id.in_(genre_ids)))
-            content.genres = list(result.scalars().all())
+            genres_result = await db.execute(select(Genres).where(Genres.id.in_(genre_ids)))
+            genres_list: list[Genres] = list(genres_result.scalars().all())
+            content.genres = genres_list
 
         if audio_language_ids:
             from app.references.models import Language
 
-            result = await db.execute(select(Language).where(Language.id.in_(audio_language_ids)))
-            content.audio_languages = list(result.scalars().all())
+            audio_langs_result = await db.execute(select(Language).where(Language.id.in_(audio_language_ids)))
+            audio_languages_list: list[Language] = list(audio_langs_result.scalars().all())
+            content.audio_languages = audio_languages_list
 
         if subtitle_language_ids:
             from app.references.models import Language
 
-            result = await db.execute(select(Language).where(Language.id.in_(subtitle_language_ids)))
-            content.subtitle_languages = list(result.scalars().all())
+            subtitle_langs_result = await db.execute(select(Language).where(Language.id.in_(subtitle_language_ids)))
+            subtitle_languages_list: list[Language] = list(subtitle_langs_result.scalars().all())
+            content.subtitle_languages = subtitle_languages_list
 
         if tag_ids:
             from app.references.models import Tags
 
-            result = await db.execute(select(Tags).where(Tags.id.in_(tag_ids)))
-            content.content_tags = list(result.scalars().all())
+            tags_result = await db.execute(select(Tags).where(Tags.id.in_(tag_ids)))
+            tags_list: list[Tags] = list(tags_result.scalars().all())
+            content.content_tags = tags_list
 
         await db.commit()
         await db.refresh(content, attribute_names=['genres', 'audio_languages', 'subtitle_languages', 'content_tags'])
@@ -77,6 +81,10 @@ class ContentRepository:
                 selectinload(model_class.audio_languages),
                 selectinload(model_class.subtitle_languages),
                 selectinload(model_class.content_tags),
+                selectinload(model_class.original_language),
+                selectinload(model_class.age_rating),
+                selectinload(model_class.original_author),
+                selectinload(model_class.country),
             )
             .offset(skip)
             .limit(limit)
@@ -94,6 +102,10 @@ class ContentRepository:
                 selectinload(model_class.audio_languages),
                 selectinload(model_class.subtitle_languages),
                 selectinload(model_class.content_tags),
+                selectinload(model_class.original_language),
+                selectinload(model_class.age_rating),
+                selectinload(model_class.original_author),
+                selectinload(model_class.country),
             )
             .where(model_class.id == content_id)
         )
@@ -110,6 +122,10 @@ class ContentRepository:
                 selectinload(model_class.audio_languages),
                 selectinload(model_class.subtitle_languages),
                 selectinload(model_class.content_tags),
+                selectinload(model_class.original_language),
+                selectinload(model_class.age_rating),
+                selectinload(model_class.original_author),
+                selectinload(model_class.country),
             )
             .where(model_class.id == content_id)
         )
@@ -134,26 +150,30 @@ class ContentRepository:
         if genre_ids is not None:
             from app.references.models import Genres
 
-            result = await db.execute(select(Genres).where(Genres.id.in_(genre_ids)))
-            content.genres = list(result.scalars().all())
+            genres_result = await db.execute(select(Genres).where(Genres.id.in_(genre_ids)))
+            genres_list: list[Genres] = list(genres_result.scalars().all())
+            content.genres = genres_list
 
         if audio_language_ids is not None:
             from app.references.models import Language
 
-            result = await db.execute(select(Language).where(Language.id.in_(audio_language_ids)))
-            content.audio_languages = list(result.scalars().all())
+            audio_langs_result = await db.execute(select(Language).where(Language.id.in_(audio_language_ids)))
+            audio_languages_list: list[Language] = list(audio_langs_result.scalars().all())
+            content.audio_languages = audio_languages_list
 
         if subtitle_language_ids is not None:
             from app.references.models import Language
 
-            result = await db.execute(select(Language).where(Language.id.in_(subtitle_language_ids)))
-            content.subtitle_languages = list(result.scalars().all())
+            subtitle_langs_result = await db.execute(select(Language).where(Language.id.in_(subtitle_language_ids)))
+            subtitle_languages_list: list[Language] = list(subtitle_langs_result.scalars().all())
+            content.subtitle_languages = subtitle_languages_list
 
         if tag_ids is not None:
             from app.references.models import Tags
 
-            result = await db.execute(select(Tags).where(Tags.id.in_(tag_ids)))
-            content.content_tags = list(result.scalars().all())
+            tags_result = await db.execute(select(Tags).where(Tags.id.in_(tag_ids)))
+            tags_list: list[Tags] = list(tags_result.scalars().all())
+            content.content_tags = tags_list
 
         await db.commit()
         await db.refresh(content, attribute_names=['genres', 'audio_languages', 'subtitle_languages', 'content_tags'])
