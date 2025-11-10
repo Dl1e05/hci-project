@@ -19,23 +19,13 @@ class ContentCategoryService:
 
     @staticmethod
     async def get_all(db: AsyncSession, skip: int = 0, limit: int = 100) -> list[ContentCategoryRead]:
-        result = await db.execute(
-            select(ContentCategory)
-            .options(selectinload(ContentCategory.parent), selectinload(ContentCategory.children))
-            .offset(skip)
-            .limit(limit)
-            .order_by(ContentCategory.sort_order)
-        )
+        result = await db.execute(select(ContentCategory).offset(skip).limit(limit).order_by(ContentCategory.sort_order))
         categories = result.scalars().all()
         return [ContentCategoryRead.model_validate(category) for category in categories]
 
     @staticmethod
     async def get_by_id(db: AsyncSession, category_id: UUID) -> ContentCategoryRead | None:
-        result = await db.execute(
-            select(ContentCategory)
-            .options(selectinload(ContentCategory.parent), selectinload(ContentCategory.children))
-            .where(ContentCategory.id == category_id)
-        )
+        result = await db.execute(select(ContentCategory).where(ContentCategory.id == category_id))
         category = result.scalar_one_or_none()
         return ContentCategoryRead.model_validate(category) if category else None
 
@@ -46,11 +36,7 @@ class ContentCategoryService:
 
     @staticmethod
     async def update(db: AsyncSession, category_id: UUID, category_data: ContentCategoryUpdate) -> ContentCategoryRead | None:
-        result = await db.execute(
-            select(ContentCategory)
-            .options(selectinload(ContentCategory.parent), selectinload(ContentCategory.children))
-            .where(ContentCategory.id == category_id)
-        )
+        result = await db.execute(select(ContentCategory).where(ContentCategory.id == category_id))
         category_entity = result.scalar_one_or_none()
         if not category_entity:
             return None
@@ -60,7 +46,7 @@ class ContentCategoryService:
             setattr(category_entity, field, value)
 
         await db.commit()
-        await db.refresh(category_entity, attribute_names=['parent', 'children'])
+        await db.refresh(category_entity)
         return ContentCategoryRead.model_validate(category_entity)
 
     @staticmethod

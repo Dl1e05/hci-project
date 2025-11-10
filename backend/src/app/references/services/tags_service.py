@@ -22,13 +22,15 @@ class TagsService:
 
     @staticmethod
     async def get_all(db: AsyncSession, skip: int = 0, limit: int = 100) -> list[TagsRead]:
-        result = await db.execute(select(Tags).offset(skip).limit(limit))
+        result = await db.execute(
+            select(Tags).options(selectinload(Tags.contents)).offset(skip).limit(limit)
+        )
         tags = result.scalars().all()
         return [TagsRead.model_validate(tag) for tag in tags]
 
     @staticmethod
     async def get_by_id(db: AsyncSession, tag_id: UUID) -> TagsRead | None:
-        result = await db.execute(select(Tags).options(selectinload(Tags.content_types)).where(Tags.id == tag_id))
+        result = await db.execute(select(Tags).options(selectinload(Tags.contents)).where(Tags.id == tag_id))
         tag = result.scalar_one_or_none()
         return TagsRead.model_validate(tag) if tag else None
 

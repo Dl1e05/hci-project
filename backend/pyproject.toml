@@ -67,6 +67,10 @@ disable_error_code = ["annotation-unchecked"]
 
 plugins = ["pydantic.mypy"]
 
+[[tool.mypy.overrides]]
+module = ["boto3", "botocore.*", "sqlalchemy_utils", "pydantic_settings"]
+ignore_missing_imports = true
+
 [dependency-groups]
 dev = [
     "mypy>=1.18.2",
