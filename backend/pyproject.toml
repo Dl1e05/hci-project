@@ -8,14 +8,18 @@ dependencies = [
     "alembic>=1.16.5",
     "asyncpg>=0.30.0",
     "bcrypt==4.0.1",
+    "boto3>=1.35.0",
     "fastapi[standard]>=0.116.2",
     "mypy>=1.18.2",
     "passlib[bcrypt]>=1.7.4",
     "pydantic>=2.11.9",
     "pydantic-settings>=2.10.1",
+    "python-dotenv>=1.0.0",
     "python-jose>=3.5.0",
+    "python-multipart>=0.0.9",
     "ruff>=0.13.1",
     "sqlalchemy>=2.0.43",
+    "sqlalchemy-utils>=0.42.0",
     "types-python-jose>=3.5.0.20250531",
     "uvicorn>=0.35.0",
 ]
@@ -62,6 +66,10 @@ check_untyped_defs = true
 disable_error_code = ["annotation-unchecked"]
 
 plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = ["boto3", "botocore.*", "sqlalchemy_utils", "pydantic_settings"]
+ignore_missing_imports = true
 
 [dependency-groups]
 dev = [
