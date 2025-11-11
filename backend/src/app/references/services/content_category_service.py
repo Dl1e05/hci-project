@@ -2,7 +2,6 @@ from uuid import UUID
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload
 
 from app.references.models import ContentCategory
 from app.references.schemas import ContentCategoryCreate, ContentCategoryRead, ContentCategoryUpdate

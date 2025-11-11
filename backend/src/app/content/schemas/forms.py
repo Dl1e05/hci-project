@@ -16,7 +16,7 @@ from .content import (
 )
 
 
-def parse_list_field(value: list[str] | str | None, field_name: str = 'field') -> list[str]: # noqa: F401
+def parse_list_field(value: list[str] | str | None) -> list[str]:  # noqa: F401
     """Parse list field that may come as list, comma-separated string, or None."""
     if not value:
         return []
