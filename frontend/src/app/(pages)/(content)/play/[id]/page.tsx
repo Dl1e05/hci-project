@@ -1,8 +1,10 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
-import Layout from '@/app/components/Layout';
-import Image from 'next/image';
-import { fetchGameById } from '@/app/lib/api/contentApi';
+import { fetchGameById, fetchGames } from '@/app/lib/api/contentApi';
+import ContentHero from '@/app/components/Content-Hero';
+import AboutSection from '@/app/components/About-Section';
+import SimilarContent from '@/app/components/Similar-Content';
+import ReviewsSection from '@/app/components/Review-Section';
 
 type Props = {
     params: { id: string };
@@ -14,27 +16,19 @@ export default async function PlayDetailPage({ params }: Props) {
         notFound();
     }
 
+    // Fetch some similar items (same type), exclude current
+    const { items: rawSimilar } = await fetchGames({ per_page: 8 });
+    const similarItems = rawSimilar.filter((i) => i.id !== item.id).slice(0, 8);
+
     return (
-        <Layout>
-            <div className="container mx-auto px-6 py-8">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div className="relative aspect-[2/3] rounded-2xl overflow-hidden">
-                        <Image src={item.imageUrl} alt={item.title} fill className="object-cover" />
-                    </div>
-                    <div>
-                        <h1 className="text-4xl font-bold text-gray-900 mb-4">{item.title}</h1>
-                        <div className="flex items-center gap-4 mb-6">
-                            <span className="bg-yellow-400 text-gray-900 text-lg font-bold px-3 py-1 rounded">{item.rating}</span>
-                            <span className="text-gray-600">{item.year}</span>
-                            <span className="px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-sm">{item.genre}</span>
-                            <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">{item.languageLevel}</span>
-                        </div>
-                        <p className="text-gray-700 text-lg leading-relaxed mb-8">{item.description}</p>
-                        <button className="bg-slate-700 hover:bg-slate-800 text-white px-8 py-3 rounded-lg font-semibold transition-colors">Start Playing</button>
-                    </div>
-                </div>
+        <div className="min-h-screen bg-slate-800">
+            <ContentHero item={item} />
+            <div className="container mx-auto px-6 py-12">
+                <AboutSection item={item} />
+                <SimilarContent items={similarItems} title="Similar Games" />
+                <ReviewsSection contentId={item.id} />
             </div>
-        </Layout>
+        </div>
     );
 }
 

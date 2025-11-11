@@ -18,14 +18,31 @@ export async function fetchContent(
     params?: FetchParams
 ): Promise<{ items: ContentCard[]; total: number }> {
     try {
+        // Map frontend types to backend resource paths
+        const resourceMap: Record<ApiContentType, string> = {
+            movie: 'films',
+            anime: 'animes',
+            book: 'books',
+            podcast: 'podcasts',
+            tvshow: 'series',
+            game: 'games',
+        };
+        const resource = resourceMap[type] || type;
+
+        // Backend supports skip/limit instead of page/per_page
+        const perPage = params?.per_page ?? 24;
+        const page = params?.page ?? 1;
+        const skip = Math.max(0, (page - 1) * perPage);
+        const limit = perPage;
+
         const queryParams = new URLSearchParams();
-        if (params?.page) queryParams.set('page', params.page.toString());
-        if (params?.per_page) queryParams.set('per_page', params.per_page.toString());
+        queryParams.set('skip', skip.toString());
+        queryParams.set('limit', limit.toString());
         if (params?.language_level) queryParams.set('language_level', params.language_level);
         if (params?.genre_id) queryParams.set('genre_id', params.genre_id);
         if (params?.search) queryParams.set('search', params.search);
 
-        const url = `${API_BASE_URL}/content/${type}?${queryParams}`;
+        const url = `${API_BASE_URL}/content/${resource}?${queryParams.toString()}`;
         console.log('📡 Fetching:', url);
 
         const res = await fetch(url, {
@@ -39,15 +56,25 @@ export async function fetchContent(
             throw new Error(`API error: ${res.status}`);
         }
 
-        const data: ApiResponse<ApiContent> = await res.json();
-        const items = data.data.map(item => mapApiContentToCard(item, type));
+        const json = await res.json();
+        let items: ContentCard[] = [];
+        let total = 0;
+
+        if (Array.isArray(json)) {
+            // Backend returns a list directly
+            items = (json as ApiContent[]).map((item) => mapApiContentToCard(item, type));
+            total = items.length; // No total provided; use current batch length
+        } else {
+            // Fallback to paginated shape { data, total, ... }
+            const data = json as ApiResponse<ApiContent>;
+            items = data.data.map((item) => mapApiContentToCard(item, type));
+            total = data.total ?? items.length;
+        }
 
         console.log('✅ Loaded from API:', items.length, 'items');
-        return { items, total: data.total };
-
+        return { items, total };
     } catch (error) {
         console.error('❌ Failed to fetch content:', error);
-        // Возвращаем пустой массив или можно добавить fallback
         return { items: [], total: 0 };
     }
 }
@@ -58,7 +85,17 @@ export async function fetchContentById(
     id: string
 ): Promise<ContentCard | null> {
     try {
-        const url = `${API_BASE_URL}/content/${type}/${id}`;
+        const resourceMap: Record<ApiContentType, string> = {
+            movie: 'films',
+            anime: 'animes',
+            book: 'books',
+            podcast: 'podcasts',
+            tvshow: 'series',
+            game: 'games',
+        };
+        const resource = resourceMap[type] || type;
+
+        const url = `${API_BASE_URL}/content/${resource}/${id}`;
         console.log('📡 Fetching:', url);
 
         const res = await fetch(url, {

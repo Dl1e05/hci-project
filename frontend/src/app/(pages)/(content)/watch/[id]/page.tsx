@@ -1,6 +1,6 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
-import { fetchMovieById } from '@/app/lib/api/contentApi';
+import { fetchMovieById, fetchMovies } from '@/app/lib/api/contentApi';
 import ContentHero from '@/app/components/Content-Hero';
 import AboutSection from '@/app/components/About-Section';
 import SimilarContent from '@/app/components/Similar-Content';
@@ -16,12 +16,16 @@ export default async function WatchDetailPage({ params }: Props) {
         notFound();
     }
 
+    // Fetch some similar items (same type), exclude current
+    const { items: rawSimilar } = await fetchMovies({ per_page: 8 });
+    const similarItems = rawSimilar.filter((i) => i.id !== item.id).slice(0, 8);
+
     return (
         <div className="min-h-screen bg-slate-800">
             <ContentHero item={item} />
             <div className="container mx-auto px-6 py-12">
                 <AboutSection item={item} />
-                <SimilarContent contentType="movie" currentId={item.id} />
+                <SimilarContent items={similarItems} title="Similar Movies" />
                 <ReviewsSection contentId={item.id} />
             </div>
         </div>

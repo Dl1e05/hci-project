@@ -74,7 +74,7 @@ export default function ContentGrid({ items, itemsPerPage = 24, showFilters = tr
             )}
 
             {/* Сетка карточек */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6">
                 {currentItems.map((item) => (
                     <ContentCard key={item.id} item={item} />
                 ))}

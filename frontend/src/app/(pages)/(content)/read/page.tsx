@@ -4,7 +4,12 @@ import ContentGrid from '@/app/(pages)/catalog/components/Content-Grid';
 import { fetchBooks } from '@/app/lib/api/contentApi';
 
 export default async function ReadPage() {
-    const { items } = await fetchBooks({ per_page: 24 }).catch(() => ({ items: [] } as any));
+    let items: import('@/app/types/content').ContentCard[];
+    try {
+        ({ items } = await fetchBooks({ per_page: 24 }));
+    } catch {
+        items = [];
+    }
     return (
         <Layout>
             <div className="container mx-auto px-6 py-8">

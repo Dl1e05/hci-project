@@ -1,6 +1,6 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
-import { fetchBookById, fetchBooks } from '@/app/lib/api/contentApi';
+import { fetchPodcastById, fetchPodcasts } from '@/app/lib/api/contentApi';
 import ContentHero from '@/app/components/Content-Hero';
 import AboutSection from '@/app/components/About-Section';
 import SimilarContent from '@/app/components/Similar-Content';
@@ -10,14 +10,14 @@ type Props = {
     params: { id: string };
 };
 
-export default async function ReadDetailPage({ params }: Props) {
-    const item = await fetchBookById(params.id);
-    if (!item || item.contentType !== 'Books') {
+export default async function ListenDetailPage({ params }: Props) {
+    const item = await fetchPodcastById(params.id);
+    if (!item || item.contentType !== 'Podcasts') {
         notFound();
     }
 
     // Fetch some similar items (same type), exclude current
-    const { items: rawSimilar } = await fetchBooks({ per_page: 8 });
+    const { items: rawSimilar } = await fetchPodcasts({ per_page: 8 });
     const similarItems = rawSimilar.filter((i) => i.id !== item.id).slice(0, 8);
 
     return (
@@ -25,12 +25,9 @@ export default async function ReadDetailPage({ params }: Props) {
             <ContentHero item={item} />
             <div className="container mx-auto px-6 py-12">
                 <AboutSection item={item} />
-                <SimilarContent items={similarItems} title="Similar Books" />
+                <SimilarContent items={similarItems} title="Similar Podcasts" />
                 <ReviewsSection contentId={item.id} />
             </div>
         </div>
     );
 }
-
-
-

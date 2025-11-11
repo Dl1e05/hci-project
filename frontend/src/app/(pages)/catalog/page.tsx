@@ -2,6 +2,7 @@ import React from 'react';
 import { fetchMovies, fetchAnime, fetchBooks, fetchGames, fetchPodcasts } from '@/app/lib/api/contentApi';
 import ContentGrid from './components/Content-Grid';
 import Filters from './components/Filters';
+import Layout from "@/app/components/Layout";
 
 type SearchParams = {
     type?: 'movie' | 'anime' | 'book' | 'game' | 'podcast';
@@ -29,15 +30,17 @@ export default async function CatalogPage({
 
     const { items, total } = await fetchFunctions[type]({
         page,
-        per_page: 12,
+        per_page: 24,
         language_level: level,
     });
 
     return (
-        <div className="container mx-auto px-6 py-8">
-            <h1 className="text-3xl font-bold mb-6">Catalog</h1>
-            <Filters />
-            <ContentGrid items={items} itemsPerPage={12} showFilters={false} />
-        </div>
+        <Layout>
+            <div className="container mx-auto px-6 py-8">
+                <h1 className="text-3xl font-bold mb-6">Catalog</h1>
+                <Filters />
+                <ContentGrid items={items} itemsPerPage={24} showFilters={false} />
+            </div>
+        </Layout>
     );
 }
