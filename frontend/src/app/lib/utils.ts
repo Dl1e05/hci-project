@@ -1,5 +1,25 @@
 import type { ContentType } from '@/app/types/content';
 
+/**
+ * Проверяет, авторизован ли пользователь, проверяя наличие токена в localStorage или sessionStorage
+ */
+export function isAuthenticated(): boolean {
+    if (typeof window === 'undefined') return false;
+    const accessToken = localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
+    return !!accessToken;
+}
+
+/**
+ * Выход из системы - очищает токены из localStorage и sessionStorage
+ */
+export function logout(): void {
+    if (typeof window === 'undefined') return;
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    sessionStorage.removeItem('access_token');
+    sessionStorage.removeItem('refresh_token');
+}
+
 export function generateSlug(title: string): string {
     return title
         .toLowerCase()

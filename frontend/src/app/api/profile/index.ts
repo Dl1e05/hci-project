@@ -1,4 +1,4 @@
-import  {API_URL} from "@/app/api/index";
+import { API_URL, getHeaders } from "@/app/api/index";
 
 export interface UserProfile {
     first_name?: string; // соответствует полям в изображении
@@ -15,7 +15,7 @@ export async function fetchUserProfile(): Promise<UserProfile> {
     try {
         const response = await fetch(`${API_URL}/profile/me`, { // Проверьте ваш URL
             method: 'GET',
-            headers: { 'Content-Type': 'application/json'}, // Должно содержать Access Token
+            headers: await getHeaders(),
             credentials: 'include'
         })
 
@@ -27,7 +27,9 @@ export async function fetchUserProfile(): Promise<UserProfile> {
         if (!response.ok) {
             const detail = isJson ? (data?.detail || data?.message) : undefined
             const message = Array.isArray(detail) ? (detail[0]?.msg || 'Failed to fetch profile') : (detail || 'Failed to fetch profile')
-            throw new Error(message)
+            const error = new Error(message) as Error & { status?: number }
+            error.status = response.status
+            throw error
         }
 
         return data as UserProfile

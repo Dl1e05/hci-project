@@ -37,7 +37,6 @@ export default async function CatalogPage({
     return (
         <Layout>
             <div className="container mx-auto px-6 py-8">
-                <h1 className="text-3xl font-bold mb-6">Catalog</h1>
                 <Filters />
                 <ContentGrid items={items} itemsPerPage={24} showFilters={false} />
             </div>

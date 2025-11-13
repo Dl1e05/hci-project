@@ -12,22 +12,28 @@ interface LayoutProps {
 
 const SIDEBAR_PX = 80;
 
+// Проверяем, является ли путь страницей из папки (content)
+function isContentPage(pathname: string): boolean {
+    return pathname.startsWith('/watch') || 
+           pathname.startsWith('/read') || 
+           pathname.startsWith('/play') || 
+           pathname.startsWith('/listen');
+}
+
 export default function Layout({ children, username }: LayoutProps) {
     const pathname = usePathname();
-    const showSidebar = pathname !== '/' && pathname !== '/home' && pathname !== '/catalog';
+    const showSidebar = !isContentPage(pathname);
 
     return (
-        <div className="min-h-screen bg-slate-50">
-            {/* Sidebar скрыт на главной */}
+        <div className="min-h-dvh flex flex-col" style={{ backgroundColor: '#F9F9F9' }}>
             {showSidebar && <Sidebar />}
 
-            <Header username={username} hasSidebar={showSidebar} />
-
-            <main style={showSidebar ? { marginLeft: `${SIDEBAR_PX}px` } : undefined}>
-                {children}
-            </main>
-
-            <Footer />
+            {/* одна колонка справа от сайдбара */}
+            <div style={showSidebar ? { marginLeft: `${SIDEBAR_PX}px` } : undefined} className="flex flex-col min-h-dvh">
+                <Header username={username} hasSidebar={showSidebar} />
+                <main className="flex-1">{children}</main>
+                <Footer />
+            </div>
         </div>
     );
 }

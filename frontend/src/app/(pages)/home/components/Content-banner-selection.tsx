@@ -33,7 +33,7 @@ function mapContentTypeToQuery(type?: ContentCard['contentType']): 'movie' | 'an
 
 export default function ContentBannerSection({ level, items, description, badge, viewMoreHref }: Props) {
     return (
-        <section className="w-full py-8 px-6 bg-slate-100">
+        <section className="w-full py-8 px-6" style={{ backgroundColor: '#F9F9F9' }}>
             <div className="max-w-7xl mx-auto">
                 {/* Заголовок и кнопка */}
                 <div className="mb-6 flex items-center justify-between">
