@@ -27,7 +27,7 @@ export async function login(payload: LoginPayload) {
         if (response.status === 422 && data?.detail) {
           if (Array.isArray(data.detail)) {
             // Multiple validation errors
-            message = data.detail.map((err: any) => err.msg || err.message).join(', ')
+            message = (data.detail as Array<{ msg?: string; message?: string }>).map((err) => err.msg || err.message || '').filter(Boolean).join(', ') || 'Login failed'
           } else {
             message = data.detail
           }

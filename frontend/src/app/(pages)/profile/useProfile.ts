@@ -1,12 +1,15 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import type { UserProfile, ProfileFormData } from "@/app/types/profile";
 import { fetchUserProfile } from "@/app/api/profile";
 import { updateProfile } from "@/app/api/auth/update-profile";
 import { buildUpdatePayload, mergeProfiles, toFormData } from "./mappers";
+import { isAuthenticated } from "@/app/lib/utils";
 
 export const useProfile = () => {
+    const router = useRouter();
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
@@ -25,12 +28,18 @@ export const useProfile = () => {
                 setError(null);
             } catch (e) {
                 const msg = e instanceof Error ? e.message : "Failed to load profile";
+                // Если ошибка 401 (Not authenticated), перенаправляем на login
+                const status = (e as Error & { status?: number })?.status;
+                if (status === 401 || msg.includes('Not authenticated') || msg.includes('401')) {
+                    router.replace('/login');
+                    return;
+                }
                 setError(msg);
             } finally {
                 setLoading(false);
             }
         })();
-    }, []);
+    }, [router]);
 
     // авто-скрытие error (через 4 сек)
     useEffect(() => {

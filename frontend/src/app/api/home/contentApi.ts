@@ -1,32 +1,26 @@
-import type { ContentBannerProps } from "@/app/(pages)/home/components/Content-banner";
-import { fallbackContentBanners } from "@/app/(pages)/home/fallbackData";
+import { fetchMovies, fetchAnime, fetchBooks } from '@/app/lib/api/contentApi';
+import type { ContentCard } from '@/app/types/content';
 
-export async function fetchContentBanner(): Promise<ContentBannerProps[]> {
-    // Если нет API_BASE_URL, сразу возвращаем fallback данные
-    if (!process.env.API_BASE_URL) {
-        console.log('⚠️ API_BASE_URL not configured, using fallback data');
-        return fallbackContentBanners;
-    }
-
+// Для главной страницы - получаем по несколько элементов каждого типа
+export async function fetchHomeContent(): Promise<{
+    movies: ContentCard[];
+    anime: ContentCard[];
+    books: ContentCard[];
+}> {
     try {
-        const res = await fetch(`${process.env.API_BASE_URL}/content-banners`, {
-            cache: 'no-store',
-            // Добавляем таймаут
-            signal: AbortSignal.timeout(5000), // 5 секунд таймаут
-        });
+        const [moviesResult, animeResult, booksResult] = await Promise.all([
+            fetchMovies({ per_page: 4 }),
+            fetchAnime({ per_page: 4 }),
+            fetchBooks({ per_page: 4 }),
+        ]);
 
-        if (!res.ok) {
-            console.warn('⚠️ API returned error, using fallback data');
-            return fallbackContentBanners;
-        }
-
-        const data = await res.json();
-        console.log('✅ Data loaded from API');
-        return data;
-
+        return {
+            movies: moviesResult.items,
+            anime: animeResult.items,
+            books: booksResult.items,
+        };
     } catch (error) {
-        console.error('❌ Failed to fetch from API:', error);
-        console.log('⚠️ Using fallback data');
-        return fallbackContentBanners;
+        console.error('Failed to fetch home content:', error);
+        return { movies: [], anime: [], books: [] };
     }
 }

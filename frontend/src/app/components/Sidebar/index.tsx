@@ -1,40 +1,44 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { IoApps, IoTimeOutline, IoNotificationsOutline, IoSettingsOutline, IoPersonOutline } from 'react-icons/io5';
+import {
+    IoApps,
+    IoTimeOutline,
+    IoNotificationsOutline,
+    IoSettingsOutline,
+    IoPersonOutline,
+    IoHeart
+} from 'react-icons/io5';
 
 const SIDEBAR_PX = 80;
+
+// Проверяем, является ли путь страницей из папки (content)
+function isContentPage(pathname: string): boolean {
+    return pathname.startsWith('/watch') || 
+           pathname.startsWith('/read') || 
+           pathname.startsWith('/play') || 
+           pathname.startsWith('/listen');
+}
 
 export default function Sidebar() {
     const pathname = usePathname();
 
-    // не рисуем на главной
-    if (pathname === '/') return null;
-    if (pathname === '/home') return null;
+    // не рисуем на страницах (content)
+    if (isContentPage(pathname)) return null;
 
     const items = [
-        { href: '/home',          Icon: IoApps },
-        { href: '/history',       Icon: IoTimeOutline },
-        { href: '/notifications', Icon: IoNotificationsOutline },
-        { href: '/profile',       Icon: IoPersonOutline },
-        { href: '/settings',      Icon: IoSettingsOutline },
+        { href: '/',         Icon: IoApps },
+        { href: '/personal',  Icon: IoHeart },
+        { href: '/analytics', Icon: IoTimeOutline },
+        { href: '/settings', Icon: IoSettingsOutline },
     ];
 
     return (
         <nav
-            className="fixed top-0 left-0 h-full bg-white border-r border-gray-200 flex flex-col items-center py-6 z-50"
+            className="fixed top-0 left-0 h-full bg-white border-r border-gray-200 flex flex-col items-center z-50"
             style={{ width: `${SIDEBAR_PX}px` }}
         >
-            <Link href="/home" className="mb-10 p-2">
-                <div className="grid grid-cols-2 gap-1">
-                    <div className="w-4 h-4 bg-blue-500 rounded-sm" />
-                    <div className="w-4 h-4 bg-gray-300 rounded-sm" />
-                    <div className="w-4 h-4 bg-gray-300 rounded-sm" />
-                    <div className="w-4 h-4 bg-blue-500 rounded-sm" />
-                </div>
-            </Link>
-
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-8 pt-[120px] pb-6">
                 {items.map(({ href, Icon }) => {
                     const active = pathname === href;
                     return (
