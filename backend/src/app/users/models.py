@@ -1,17 +1,25 @@
 import uuid
 from datetime import date
+from typing import TYPE_CHECKING
 
 from sqlalchemy import Boolean, CheckConstraint, Date, String, text
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.base import Base
+
+if TYPE_CHECKING:
+    from app.lists.models import UserContentList
 
 
 class User(Base):
     __tablename__ = 'users'
 
-    id: Mapped[uuid.UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, server_default=text('gen_random_uuid()'))
+    id: Mapped[uuid.UUID] = mapped_column(
+        PG_UUID(as_uuid=True),
+        primary_key=True,
+        server_default=text('gen_random_uuid()'),
+    )
     username: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
     first_name: Mapped[str] = mapped_column(String(50), nullable=True)
     last_name: Mapped[str] = mapped_column(String(50), nullable=True)
@@ -29,4 +37,11 @@ class User(Base):
         ),
         CheckConstraint("phone_number ~ '^\\+[1-9][0-9]{7,14}$'", name='ck_users_phone_e164'),
         CheckConstraint('birth_date <= CURRENT_DATE', name='ck_users_birth_date_past'),
+    )
+
+    content_lists: Mapped[list['UserContentList']] = relationship(
+        'UserContentList',
+        back_populates='user',
+        cascade='all, delete-orphan',
+        passive_deletes=True,
     )

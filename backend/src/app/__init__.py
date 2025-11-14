@@ -25,6 +25,7 @@ from app.references.api.v1.platforms_router import router as platforms_router
 # Reference routers
 from app.references.api.v1.tags_router import router as tags_router
 from app.users.api.v1.router import router as users_router
+from app.lists.api.v1.router import router as lists_router
 
 main_router = APIRouter()
 
@@ -54,5 +55,6 @@ main_router.include_router(courses_router)
 main_router.include_router(articles_router)
 main_router.include_router(games_router)
 main_router.include_router(videos_router)
+main_router.include_router(lists_router)
 
 __all__ = ['main_router']
