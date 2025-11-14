@@ -13,6 +13,7 @@ from app.content.api.v1.podcasts_router import router as podcasts_router
 # Content routers
 from app.content.api.v1.series_router import router as series_router
 from app.content.api.v1.videos_router import router as videos_router
+from app.lists.api.v1.router import router as lists_router
 from app.references.api.v1.age_ratings_router import router as age_ratings_router
 from app.references.api.v1.authors_router import router as authors_router
 from app.references.api.v1.content_categories_router import router as content_categories_router
@@ -25,7 +26,6 @@ from app.references.api.v1.platforms_router import router as platforms_router
 # Reference routers
 from app.references.api.v1.tags_router import router as tags_router
 from app.users.api.v1.router import router as users_router
-from app.lists.api.v1.router import router as lists_router
 
 main_router = APIRouter()
 

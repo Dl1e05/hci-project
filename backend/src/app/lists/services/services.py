@@ -1,10 +1,10 @@
 from uuid import UUID
 
-from sqlalchemy import select, func, desc
+from sqlalchemy import desc, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.lists.models import UserContentList, WatchStatus
-from app.lists.schemas import UserContentListCreate, UserContentListUpdate, WatchStatusEnum
+from app.lists.schemas import UserContentListCreate, UserContentListUpdate
 
 
 class WatchListService:
@@ -122,7 +122,7 @@ class WatchListService:
         )
         entries = result.scalars().all()
 
-        grouped = {
+        grouped: dict[str, list[UserContentList]] = {
             'completed': [],
             'planned': [],
             'dropped': []

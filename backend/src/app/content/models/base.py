@@ -79,7 +79,7 @@ class BaseContent(Base):
         viewonly=True,
     )
 
-    user_lists: Mapped[list['UserContentList']] = relationship(
+    user_lists: Mapped[list[UserContentList]] = relationship(
         'UserContentList',
         back_populates='content',
         cascade='all, delete-orphan',

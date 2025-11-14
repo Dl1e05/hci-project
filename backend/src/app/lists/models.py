@@ -1,12 +1,17 @@
-from uuid import UUID, uuid4
 from enum import Enum
+from typing import TYPE_CHECKING
+from uuid import UUID, uuid4
 
-from sqlalchemy import Enum as SQLEnum, ForeignKey, UniqueConstraint
+from sqlalchemy import Enum as SQLEnum
+from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.base import Base
 
+if TYPE_CHECKING:
+    from app.content.models.base import BaseContent
+    from app.users.models import User
 
 class WatchStatus(str, Enum):
     COMPLETED = "completed"

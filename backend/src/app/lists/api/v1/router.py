@@ -1,16 +1,18 @@
 from uuid import UUID
+
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.core.db import get_async_session
 from app.core.security import get_user_from_token
-from app.lists.models import WatchStatus
+from app.lists.models import UserContentList, WatchStatus
 from app.lists.schemas import (
     UserContentListCreate,
+    UserContentListRead,
+    UserContentListReadGroups,
+    UserContentListReadStats,
     UserContentListUpdate,
     WatchStatusEnum,
-    UserContentListRead,
-    UserContentListReadStats,
-    UserContentListReadGroups,
 )
 from app.lists.services.services import WatchListService
 
@@ -22,18 +24,16 @@ async def add_to_watchlist(
     data: UserContentListCreate,
     current_user: UUID = Depends(get_user_from_token),
     db: AsyncSession = Depends(get_async_session)
-):
-    """Добавить контент в список"""
+) -> UserContentList:
     try:
-        entry = await WatchListService.add_to_list(
+        return await WatchListService.add_to_list(
             db=db,
             user_id=current_user,
             content_id=content_id,
             data=data
         )
-        return entry
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=str(e)) from e
 
 
 @router.get('/{content_id}', response_model=UserContentListRead, tags=['Watchlist'])
@@ -41,8 +41,7 @@ async def get_watchlist_entry(
     content_id: UUID,
     current_user: UUID = Depends(get_user_from_token),
     db: AsyncSession = Depends(get_async_session)
-):
-    """Получить запись"""
+) -> UserContentList:
     entry = await WatchListService.get_user_list(
         db=db,
         user_id=current_user,
@@ -59,8 +58,7 @@ async def update_watchlist_entry(
     data: UserContentListUpdate,
     current_user: UUID = Depends(get_user_from_token),
     db: AsyncSession = Depends(get_async_session)
-):
-    """Обновить запись"""
+) -> UserContentList:
     entry = await WatchListService.update_list_entry(
         db=db,
         user_id=current_user,
@@ -77,8 +75,7 @@ async def remove_from_watchlist(
     content_id: UUID,
     current_user: UUID = Depends(get_user_from_token),
     db: AsyncSession = Depends(get_async_session)
-):
-    """Удалить из списка"""
+) -> dict[str, str]:
     success = await WatchListService.remove_from_list(
         db=db,
         user_id=current_user,
@@ -95,8 +92,7 @@ async def get_completed(
     limit: int = Query(20, ge=1, le=100),
     current_user: UUID = Depends(get_user_from_token),
     db: AsyncSession = Depends(get_async_session)
-):
-    """Получить завершённые"""
+) -> list[UserContentList]:
     entries, _ = await WatchListService.get_user_list_by_status(
         db=db,
         user_id=current_user,
@@ -113,8 +109,7 @@ async def get_planned(
     limit: int = Query(20, ge=1, le=100),
     current_user: UUID = Depends(get_user_from_token),
     db: AsyncSession = Depends(get_async_session)
-):
-    """Получить планируемые"""
+) -> list[UserContentList]:
     entries, _ = await WatchListService.get_user_list_by_status(
         db=db,
         user_id=current_user,
@@ -131,8 +126,7 @@ async def get_dropped(
     limit: int = Query(20, ge=1, le=100),
     current_user: UUID = Depends(get_user_from_token),
     db: AsyncSession = Depends(get_async_session)
-):
-    """Получить заброшенные"""
+) -> list[UserContentList]:
     entries, _ = await WatchListService.get_user_list_by_status(
         db=db,
         user_id=current_user,
@@ -147,8 +141,7 @@ async def get_dropped(
 async def get_all_grouped(
     current_user: UUID = Depends(get_user_from_token),
     db: AsyncSession = Depends(get_async_session)
-):
-    """Получить все, сгруппированные"""
+) -> UserContentListReadGroups:
     grouped = await WatchListService.get_user_lists_grouped(
         db=db,
         user_id=current_user
@@ -160,8 +153,7 @@ async def get_all_grouped(
 async def get_user_stats(
     current_user: UUID = Depends(get_user_from_token),
     db: AsyncSession = Depends(get_async_session)
-):
-    """Получить статистику"""
+) -> UserContentListReadStats:
     stats = await WatchListService.get_user_stats(
         db=db,
         user_id=current_user
@@ -174,16 +166,16 @@ async def mark_as_completed(
     content_id: UUID,
     current_user: UUID = Depends(get_user_from_token),
     db: AsyncSession = Depends(get_async_session)
-):
-    """Отметить как завершено"""
+) -> UserContentList:
     entry = await WatchListService.get_user_list(db, current_user, content_id)
     if not entry:
-        data = UserContentListCreate(status=WatchStatusEnum.COMPLETED)
-        entry = await WatchListService.add_to_list(db, current_user, content_id, data)
-    else:
-        data = UserContentListUpdate(status=WatchStatusEnum.COMPLETED)
-        entry = await WatchListService.update_list_entry(db, current_user, content_id, data)
-    return entry
+        create_data = UserContentListCreate(status=WatchStatusEnum.COMPLETED)
+        return await WatchListService.add_to_list(db, current_user, content_id, create_data)
+    update_data = UserContentListUpdate(status=WatchStatusEnum.COMPLETED)
+    updated_entry = await WatchListService.update_list_entry(db, current_user, content_id, update_data)
+    if not updated_entry:
+        raise HTTPException(status_code=404, detail='Entry not found')
+    return updated_entry
 
 
 @router.post('/{content_id}/mark-planned', response_model=UserContentListRead, tags=['Watchlist'])
@@ -191,16 +183,16 @@ async def mark_as_planned(
     content_id: UUID,
     current_user: UUID = Depends(get_user_from_token),
     db: AsyncSession = Depends(get_async_session)
-):
-    """Отметить как планирую"""
+) -> UserContentList:
     entry = await WatchListService.get_user_list(db, current_user, content_id)
     if not entry:
-        data = UserContentListCreate(status=WatchStatusEnum.PLANNED)
-        entry = await WatchListService.add_to_list(db, current_user, content_id, data)
-    else:
-        data = UserContentListUpdate(status=WatchStatusEnum.PLANNED)
-        entry = await WatchListService.update_list_entry(db, current_user, content_id, data)
-    return entry
+        create_data = UserContentListCreate(status=WatchStatusEnum.PLANNED)
+        return await WatchListService.add_to_list(db, current_user, content_id, create_data)
+    update_data = UserContentListUpdate(status=WatchStatusEnum.PLANNED)
+    updated_entry = await WatchListService.update_list_entry(db, current_user, content_id, update_data)
+    if not updated_entry:
+        raise HTTPException(status_code=404, detail='Entry not found')
+    return updated_entry
 
 
 @router.post('/{content_id}/mark-dropped', response_model=UserContentListRead, tags=['Watchlist'])
@@ -208,13 +200,13 @@ async def mark_as_dropped(
     content_id: UUID,
     current_user: UUID = Depends(get_user_from_token),
     db: AsyncSession = Depends(get_async_session)
-):
-    """Отметить как забросил"""
+) -> UserContentList:
     entry = await WatchListService.get_user_list(db, current_user, content_id)
     if not entry:
-        data = UserContentListCreate(status=WatchStatusEnum.DROPPED)
-        entry = await WatchListService.add_to_list(db, current_user, content_id, data)
-    else:
-        data = UserContentListUpdate(status=WatchStatusEnum.DROPPED)
-        entry = await WatchListService.update_list_entry(db, current_user, content_id, data)
-    return entry
+        create_data = UserContentListCreate(status=WatchStatusEnum.DROPPED)
+        return await WatchListService.add_to_list(db, current_user, content_id, create_data)
+    update_data = UserContentListUpdate(status=WatchStatusEnum.DROPPED)
+    updated_entry = await WatchListService.update_list_entry(db, current_user, content_id, update_data)
+    if not updated_entry:
+        raise HTTPException(status_code=404, detail='Entry not found')
+    return updated_entry
