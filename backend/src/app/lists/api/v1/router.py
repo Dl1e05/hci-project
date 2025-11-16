@@ -136,6 +136,21 @@ async def get_dropped(
     )
     return entries
 
+@router.get('/status/watching', response_model=list[UserContentListRead], tags=['Watchlist'])
+async def get_watching(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(20, ge=1, le=100),
+    current_user: UUID = Depends(get_user_from_token),
+    db: AsyncSession = Depends(get_async_session)
+) -> list[UserContentList]:
+    entries, _ = await WatchListService.get_user_list_by_status(
+        db=db,
+        user_id=current_user,
+        status=WatchStatus.WATCHING,
+        skip=skip,
+        limit=limit
+    )
+    return entries
 
 @router.get('/all/grouped', response_model=UserContentListReadGroups, tags=['Watchlist'])
 async def get_all_grouped(
@@ -206,6 +221,22 @@ async def mark_as_dropped(
         create_data = UserContentListCreate(status=WatchStatusEnum.DROPPED)
         return await WatchListService.add_to_list(db, current_user, content_id, create_data)
     update_data = UserContentListUpdate(status=WatchStatusEnum.DROPPED)
+    updated_entry = await WatchListService.update_list_entry(db, current_user, content_id, update_data)
+    if not updated_entry:
+        raise HTTPException(status_code=404, detail='Entry not found')
+    return updated_entry
+
+@router.post('/{content_id}/mark-watching', response_model=UserContentListRead, tags=['Watchlist'])
+async def mark_as_watching(
+    content_id: UUID,
+    current_user: UUID = Depends(get_user_from_token),
+    db: AsyncSession = Depends(get_async_session)
+) -> UserContentList:
+    entry = await WatchListService.get_user_list(db, current_user, content_id)
+    if not entry:
+        create_data = UserContentListCreate(status=WatchStatusEnum.WATCHING)
+        return await WatchListService.add_to_list(db, current_user, content_id, create_data)
+    update_data = UserContentListUpdate(status=WatchStatusEnum.WATCHING)
     updated_entry = await WatchListService.update_list_entry(db, current_user, content_id, update_data)
     if not updated_entry:
         raise HTTPException(status_code=404, detail='Entry not found')
