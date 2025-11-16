@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.content.models.content import Book
 from app.content.repo import ContentRepository
 from app.content.schemas.content import BookCreate, BookRead, BookUpdate
+from app.content.schemas.filters import BookFilterParams
 
 
 class BookService:
@@ -18,6 +19,34 @@ class BookService:
     async def get_all(db: AsyncSession, skip: int = 0, limit: int = 100) -> list[BookRead]:
         books = await ContentRepository.get_all(db, Book, skip, limit)
         return [BookRead.model_validate(book) for book in books]
+
+    @staticmethod
+    async def get_filtered(
+        db: AsyncSession, filters: BookFilterParams, skip: int = 0, limit: int = 100
+    ) -> tuple[list[BookRead], int]:
+        """Get filtered books with pagination"""
+        # Build additional book-specific filters
+        additional_filters = {}
+
+        if filters.isbn is not None:
+            additional_filters['isbn'] = filters.isbn
+
+        if filters.publisher is not None:
+            additional_filters['publisher'] = filters.publisher
+
+        if filters.min_pages is not None or filters.max_pages is not None:
+            additional_filters['pages'] = {}
+            if filters.min_pages is not None:
+                additional_filters['pages']['min'] = filters.min_pages
+            if filters.max_pages is not None:
+                additional_filters['pages']['max'] = filters.max_pages
+
+        # Get filtered books
+        books, total = await ContentRepository.get_filtered(
+            db, Book, filters, skip=skip, limit=limit, additional_filters=additional_filters
+        )
+
+        return [BookRead.model_validate(book) for book in books], total
 
     @staticmethod
     async def get_by_id(db: AsyncSession, book_id: UUID) -> BookRead | None:
