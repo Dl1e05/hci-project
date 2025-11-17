@@ -69,7 +69,16 @@ class ContentRepository:
             content.content_tags = tags_list
 
         await db.commit()
-        await db.refresh(content, attribute_names=['genres', 'audio_languages', 'subtitle_languages', 'content_tags'])
+        await db.refresh(
+            content,
+            attribute_names=[
+                'genres',
+                'audio_languages',
+                'subtitle_languages',
+                'content_tags',
+                'difficulty_level',
+            ],
+        )
         return content
 
     @staticmethod
@@ -86,6 +95,7 @@ class ContentRepository:
                 selectinload(model_class.age_rating),
                 selectinload(model_class.original_author),
                 selectinload(model_class.country),
+                selectinload(model_class.difficulty_level),
             )
             .offset(skip)
             .limit(limit)
@@ -107,6 +117,7 @@ class ContentRepository:
                 selectinload(model_class.age_rating),
                 selectinload(model_class.original_author),
                 selectinload(model_class.country),
+                selectinload(model_class.difficulty_level),
             )
             .where(model_class.id == content_id)
         )
@@ -127,6 +138,7 @@ class ContentRepository:
                 selectinload(model_class.age_rating),
                 selectinload(model_class.original_author),
                 selectinload(model_class.country),
+                selectinload(model_class.difficulty_level),
             )
             .where(model_class.id == content_id)
         )
@@ -177,7 +189,16 @@ class ContentRepository:
             content.content_tags = tags_list
 
         await db.commit()
-        await db.refresh(content, attribute_names=['genres', 'audio_languages', 'subtitle_languages', 'content_tags'])
+        await db.refresh(
+            content,
+            attribute_names=[
+                'genres',
+                'audio_languages',
+                'subtitle_languages',
+                'content_tags',
+                'difficulty_level',
+            ],
+        )
         return content
 
     @staticmethod
@@ -302,6 +323,7 @@ class ContentRepository:
             selectinload(model_class.age_rating),
             selectinload(model_class.original_author),
             selectinload(model_class.country),
+            selectinload(model_class.difficulty_level),
         )
 
         # Apply base content filters
