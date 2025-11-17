@@ -9,6 +9,7 @@ class WatchStatusEnum(str, Enum):
     PLANNED = "planned"
     DROPPED = "dropped"
     WATCHING = "watching"
+    POSTPONED = "postponed"
 
 class UserContentListCreate(BaseModel):
     status: WatchStatusEnum = WatchStatusEnum.PLANNED
@@ -33,9 +34,12 @@ class UserContentListReadStats(BaseModel):
     planned_count: int
     dropped_count: int
     watching_count: int
+    postponed_count: int
 
 class UserContentListReadGroups(BaseModel):
     completed: list[UserContentListRead] = Field(default_factory=list)
     planned: list[UserContentListRead] = Field(default_factory=list)
     dropped: list[UserContentListRead] = Field(default_factory=list)
     watching: list[UserContentListRead] = Field(default_factory=list)
+    postponed: list[UserContentListRead] = Field(default_factory=list)
+    
