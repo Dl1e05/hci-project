@@ -50,6 +50,7 @@ class BookFormData:
         age_rating_id: int = Form(...),
         original_author_id: int = Form(...),
         country_id: UUID = Form(...),
+        difficulty_level_id: int = Form(...),
         is_active: bool = Form(True),
         short_description: str | None = Form(None),
         long_description: str | None = Form(None),
@@ -96,6 +97,7 @@ class BookFormData:
         self.age_rating_id = age_rating_id
         self.original_author_id = original_author_id
         self.country_id = country_id
+        self.difficulty_level_id = difficulty_level_id
         self.is_active = is_active
         self.short_description = short_description
         self.long_description = long_description
@@ -122,6 +124,7 @@ class BookFormData:
             age_rating_id=self.age_rating_id,
             original_author_id=self.original_author_id,
             country_id=self.country_id,
+            difficulty_level_id=self.difficulty_level_id,
             genre_ids=self.genre_ids,
             audio_language_ids=self.audio_language_ids,
             subtitle_language_ids=self.subtitle_language_ids,
@@ -142,6 +145,7 @@ class FilmFormData:
         age_rating_id: int = Form(...),
         original_author_id: int = Form(...),
         country_id: UUID = Form(...),
+        difficulty_level_id: int = Form(...),
         is_active: bool = Form(True),
         short_description: str | None = Form(None),
         long_description: str | None = Form(None),
@@ -186,6 +190,7 @@ class FilmFormData:
         self.age_rating_id = age_rating_id
         self.original_author_id = original_author_id
         self.country_id = country_id
+        self.difficulty_level_id = difficulty_level_id
         self.is_active = is_active
         self.short_description = short_description
         self.long_description = long_description
@@ -210,6 +215,7 @@ class FilmFormData:
             age_rating_id=self.age_rating_id,
             original_author_id=self.original_author_id,
             country_id=self.country_id,
+            difficulty_level_id=self.difficulty_level_id,
             genre_ids=self.genre_ids,
             audio_language_ids=self.audio_language_ids,
             subtitle_language_ids=self.subtitle_language_ids,
@@ -228,6 +234,7 @@ class SeriesFormData:
         age_rating_id: int = Form(...),
         original_author_id: int = Form(...),
         country_id: UUID = Form(...),
+        difficulty_level_id: int = Form(...),
         is_active: bool = Form(True),
         short_description: str | None = Form(None),
         long_description: str | None = Form(None),
@@ -274,6 +281,7 @@ class SeriesFormData:
         self.age_rating_id = age_rating_id
         self.original_author_id = original_author_id
         self.country_id = country_id
+        self.difficulty_level_id = difficulty_level_id
         self.is_active = is_active
         self.short_description = short_description
         self.long_description = long_description
@@ -300,6 +308,7 @@ class SeriesFormData:
             age_rating_id=self.age_rating_id,
             original_author_id=self.original_author_id,
             country_id=self.country_id,
+            difficulty_level_id=self.difficulty_level_id,
             genre_ids=self.genre_ids,
             audio_language_ids=self.audio_language_ids,
             subtitle_language_ids=self.subtitle_language_ids,
@@ -320,6 +329,7 @@ class AnimeFormData:
         age_rating_id: int = Form(...),
         original_author_id: int = Form(...),
         country_id: UUID = Form(...),
+        difficulty_level_id: int = Form(...),
         is_active: bool = Form(True),
         short_description: str | None = Form(None),
         long_description: str | None = Form(None),
@@ -366,6 +376,7 @@ class AnimeFormData:
         self.age_rating_id = age_rating_id
         self.original_author_id = original_author_id
         self.country_id = country_id
+        self.difficulty_level_id = difficulty_level_id
         self.is_active = is_active
         self.short_description = short_description
         self.long_description = long_description
@@ -392,6 +403,7 @@ class AnimeFormData:
             age_rating_id=self.age_rating_id,
             original_author_id=self.original_author_id,
             country_id=self.country_id,
+            difficulty_level_id=self.difficulty_level_id,
             genre_ids=self.genre_ids,
             audio_language_ids=self.audio_language_ids,
             subtitle_language_ids=self.subtitle_language_ids,
@@ -412,6 +424,7 @@ class PodcastFormData:
         age_rating_id: int = Form(...),
         original_author_id: int = Form(...),
         country_id: UUID = Form(...),
+        difficulty_level_id: int = Form(...),
         is_active: bool = Form(True),
         short_description: str | None = Form(None),
         long_description: str | None = Form(None),
@@ -458,6 +471,7 @@ class PodcastFormData:
         self.age_rating_id = age_rating_id
         self.original_author_id = original_author_id
         self.country_id = country_id
+        self.difficulty_level_id = difficulty_level_id
         self.is_active = is_active
         self.short_description = short_description
         self.long_description = long_description
@@ -484,6 +498,7 @@ class PodcastFormData:
             age_rating_id=self.age_rating_id,
             original_author_id=self.original_author_id,
             country_id=self.country_id,
+            difficulty_level_id=self.difficulty_level_id,
             genre_ids=self.genre_ids,
             audio_language_ids=self.audio_language_ids,
             subtitle_language_ids=self.subtitle_language_ids,
@@ -504,6 +519,7 @@ class CourseFormData:
         age_rating_id: int = Form(...),
         original_author_id: int = Form(...),
         country_id: UUID = Form(...),
+        difficulty_level_id: int = Form(...),
         is_active: bool = Form(True),
         short_description: str | None = Form(None),
         long_description: str | None = Form(None),
@@ -516,7 +532,7 @@ class CourseFormData:
         tag_ids: str | list[str] = Form(default=''),
         total_lessons: int | None = Form(None),
         total_duration_hours: float | None = Form(None),
-        difficulty_level: str | None = Form(None),
+        course_difficulty: str | None = Form(None),
         instructor: str | None = Form(None),
     ):
         parsed_genre_ids = parse_list_field(genre_ids, 'genre_ids')
@@ -550,6 +566,7 @@ class CourseFormData:
         self.age_rating_id = age_rating_id
         self.original_author_id = original_author_id
         self.country_id = country_id
+        self.difficulty_level_id = difficulty_level_id
         self.is_active = is_active
         self.short_description = short_description
         self.long_description = long_description
@@ -558,7 +575,7 @@ class CourseFormData:
         self.link = link
         self.total_lessons = total_lessons
         self.total_duration_hours = total_duration_hours
-        self.difficulty_level = difficulty_level
+        self.course_difficulty = course_difficulty
         self.instructor = instructor
 
     def to_schema(self, banner_url: str) -> CourseCreate:
@@ -576,13 +593,14 @@ class CourseFormData:
             age_rating_id=self.age_rating_id,
             original_author_id=self.original_author_id,
             country_id=self.country_id,
+            difficulty_level_id=self.difficulty_level_id,
             genre_ids=self.genre_ids,
             audio_language_ids=self.audio_language_ids,
             subtitle_language_ids=self.subtitle_language_ids,
             tag_ids=self.tag_ids,
             total_lessons=self.total_lessons,
             total_duration_hours=self.total_duration_hours,
-            difficulty_level=self.difficulty_level,
+            course_difficulty=self.course_difficulty,
             instructor=self.instructor,
         )
 
@@ -596,6 +614,7 @@ class ArticleFormData:
         age_rating_id: int = Form(...),
         original_author_id: int = Form(...),
         country_id: UUID = Form(...),
+        difficulty_level_id: int = Form(...),
         is_active: bool = Form(True),
         short_description: str | None = Form(None),
         long_description: str | None = Form(None),
@@ -641,6 +660,7 @@ class ArticleFormData:
         self.age_rating_id = age_rating_id
         self.original_author_id = original_author_id
         self.country_id = country_id
+        self.difficulty_level_id = difficulty_level_id
         self.is_active = is_active
         self.short_description = short_description
         self.long_description = long_description
@@ -666,6 +686,7 @@ class ArticleFormData:
             age_rating_id=self.age_rating_id,
             original_author_id=self.original_author_id,
             country_id=self.country_id,
+            difficulty_level_id=self.difficulty_level_id,
             genre_ids=self.genre_ids,
             audio_language_ids=self.audio_language_ids,
             subtitle_language_ids=self.subtitle_language_ids,
@@ -685,6 +706,7 @@ class GameFormData:
         age_rating_id: int = Form(...),
         original_author_id: int = Form(...),
         country_id: UUID = Form(...),
+        difficulty_level_id: int = Form(...),
         is_active: bool = Form(True),
         short_description: str | None = Form(None),
         long_description: str | None = Form(None),
@@ -731,6 +753,7 @@ class GameFormData:
         self.age_rating_id = age_rating_id
         self.original_author_id = original_author_id
         self.country_id = country_id
+        self.difficulty_level_id = difficulty_level_id
         self.is_active = is_active
         self.short_description = short_description
         self.long_description = long_description
@@ -757,6 +780,7 @@ class GameFormData:
             age_rating_id=self.age_rating_id,
             original_author_id=self.original_author_id,
             country_id=self.country_id,
+            difficulty_level_id=self.difficulty_level_id,
             genre_ids=self.genre_ids,
             audio_language_ids=self.audio_language_ids,
             subtitle_language_ids=self.subtitle_language_ids,
@@ -777,6 +801,7 @@ class VideoFormData:
         age_rating_id: int = Form(...),
         original_author_id: int = Form(...),
         country_id: UUID = Form(...),
+        difficulty_level_id: int = Form(...),
         is_active: bool = Form(True),
         short_description: str | None = Form(None),
         long_description: str | None = Form(None),
@@ -821,6 +846,7 @@ class VideoFormData:
         self.age_rating_id = age_rating_id
         self.original_author_id = original_author_id
         self.country_id = country_id
+        self.difficulty_level_id = difficulty_level_id
         self.is_active = is_active
         self.short_description = short_description
         self.long_description = long_description
@@ -845,6 +871,7 @@ class VideoFormData:
             age_rating_id=self.age_rating_id,
             original_author_id=self.original_author_id,
             country_id=self.country_id,
+            difficulty_level_id=self.difficulty_level_id,
             genre_ids=self.genre_ids,
             audio_language_ids=self.audio_language_ids,
             subtitle_language_ids=self.subtitle_language_ids,

@@ -5,7 +5,7 @@ from uuid import UUID
 from pydantic import Field, HttpUrl, StringConstraints
 
 from app.base import ORMModel
-from app.references.schemas import TagsRead
+from app.references.schemas import DifficultyLevelRead, GenresRead, LanguageRead, TagsRead
 
 TITLE = Annotated[str, StringConstraints(min_length=1, max_length=128)]
 SHORT_DESCRIPTION = Annotated[str | None, StringConstraints(min_length=1, max_length=500)]
@@ -31,6 +31,7 @@ class BaseContentCreate(BaseContentBase):
     age_rating_id: int
     original_author_id: int
     country_id: UUID
+    difficulty_level_id: int
     genre_ids: list[UUID] = Field(default_factory=list)
     audio_language_ids: list[int] = Field(default_factory=list)
     subtitle_language_ids: list[int] = Field(default_factory=list)
@@ -51,6 +52,7 @@ class BaseContentUpdate(ORMModel):
     age_rating_id: int | None = None
     original_author_id: int | None = None
     country_id: UUID | None = None
+    difficulty_level_id: int | None = None
     genre_ids: list[UUID] | None = None
     audio_language_ids: list[int] | None = None
     subtitle_language_ids: list[int] | None = None
@@ -65,6 +67,11 @@ class BaseContentRead(BaseContentBase):
     age_rating_id: int
     original_author_id: int
     country_id: UUID
+    difficulty_level_id: int
+    difficulty_level: DifficultyLevelRead
     content_tags: list[TagsRead] = Field(default_factory=list)
+    content_genres: list[GenresRead] = Field(default_factory=list)
+    audio_languages: list[LanguageRead] = Field(default_factory=list)
+    subtitle_languages: list[LanguageRead] = Field(default_factory=list)
     created_at: datetime
     updated_at: datetime

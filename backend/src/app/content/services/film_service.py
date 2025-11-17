@@ -1,3 +1,4 @@
+from typing import Any
 from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -25,7 +26,7 @@ class FilmService:
         db: AsyncSession, filters: FilmFilterParams, skip: int = 0, limit: int = 100
     ) -> tuple[list[FilmRead], int]:
         """Get filtered films with pagination"""
-        additional_filters = {}
+        additional_filters: dict[str, Any] = {}
 
         if filters.director is not None:
             additional_filters['director'] = filters.director
