@@ -1,10 +1,10 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.db import get_async_session
-from app.core.security import get_user_from_token
+from app.core.deps import require_user_from_cookie
 from app.lists.models import UserContentList, WatchStatus
 from app.lists.schemas import (
     UserContentListCreate,
@@ -21,10 +21,11 @@ router = APIRouter(prefix='/lists')
 @router.post('/add/{content_id}', response_model=UserContentListRead, tags=['Watchlist'])
 async def add_to_watchlist(
     content_id: UUID,
+    request: Request,
     data: UserContentListCreate,
-    current_user: UUID = Depends(get_user_from_token),
     db: AsyncSession = Depends(get_async_session)
 ) -> UserContentList:
+    current_user = require_user_from_cookie(request)
     try:
         return await WatchListService.add_to_list(
             db=db,
@@ -39,9 +40,10 @@ async def add_to_watchlist(
 @router.get('/{content_id}', response_model=UserContentListRead, tags=['Watchlist'])
 async def get_watchlist_entry(
     content_id: UUID,
-    current_user: UUID = Depends(get_user_from_token),
+    request: Request,
     db: AsyncSession = Depends(get_async_session)
 ) -> UserContentList:
+    current_user = require_user_from_cookie(request)
     entry = await WatchListService.get_user_list(
         db=db,
         user_id=current_user,
@@ -55,10 +57,11 @@ async def get_watchlist_entry(
 @router.patch('/{content_id}', response_model=UserContentListRead, tags=['Watchlist'])
 async def update_watchlist_entry(
     content_id: UUID,
+    request: Request,
     data: UserContentListUpdate,
-    current_user: UUID = Depends(get_user_from_token),
     db: AsyncSession = Depends(get_async_session)
 ) -> UserContentList:
+    current_user = require_user_from_cookie(request)
     entry = await WatchListService.update_list_entry(
         db=db,
         user_id=current_user,
@@ -73,9 +76,10 @@ async def update_watchlist_entry(
 @router.delete('/{content_id}', tags=['Watchlist'])
 async def remove_from_watchlist(
     content_id: UUID,
-    current_user: UUID = Depends(get_user_from_token),
+    request: Request,
     db: AsyncSession = Depends(get_async_session)
 ) -> dict[str, str]:
+    current_user = require_user_from_cookie(request)
     success = await WatchListService.remove_from_list(
         db=db,
         user_id=current_user,
@@ -88,11 +92,12 @@ async def remove_from_watchlist(
 
 @router.get('/status/completed', response_model=list[UserContentListRead], tags=['Watchlist'])
 async def get_completed(
+    request: Request,
     skip: int = Query(0, ge=0),
     limit: int = Query(20, ge=1, le=100),
-    current_user: UUID = Depends(get_user_from_token),
     db: AsyncSession = Depends(get_async_session)
 ) -> list[UserContentList]:
+    current_user = require_user_from_cookie(request)
     entries, _ = await WatchListService.get_user_list_by_status(
         db=db,
         user_id=current_user,
@@ -105,11 +110,12 @@ async def get_completed(
 
 @router.get('/status/planned', response_model=list[UserContentListRead], tags=['Watchlist'])
 async def get_planned(
+    request: Request,
     skip: int = Query(0, ge=0),
     limit: int = Query(20, ge=1, le=100),
-    current_user: UUID = Depends(get_user_from_token),
     db: AsyncSession = Depends(get_async_session)
 ) -> list[UserContentList]:
+    current_user = require_user_from_cookie(request)
     entries, _ = await WatchListService.get_user_list_by_status(
         db=db,
         user_id=current_user,
@@ -122,11 +128,12 @@ async def get_planned(
 
 @router.get('/status/dropped', response_model=list[UserContentListRead], tags=['Watchlist'])
 async def get_dropped(
+    request: Request,
     skip: int = Query(0, ge=0),
     limit: int = Query(20, ge=1, le=100),
-    current_user: UUID = Depends(get_user_from_token),
     db: AsyncSession = Depends(get_async_session)
 ) -> list[UserContentList]:
+    current_user = require_user_from_cookie(request)
     entries, _ = await WatchListService.get_user_list_by_status(
         db=db,
         user_id=current_user,
@@ -136,13 +143,15 @@ async def get_dropped(
     )
     return entries
 
+
 @router.get('/status/watching', response_model=list[UserContentListRead], tags=['Watchlist'])
 async def get_watching(
+    request: Request,
     skip: int = Query(0, ge=0),
     limit: int = Query(20, ge=1, le=100),
-    current_user: UUID = Depends(get_user_from_token),
     db: AsyncSession = Depends(get_async_session)
 ) -> list[UserContentList]:
+    current_user = require_user_from_cookie(request)
     entries, _ = await WatchListService.get_user_list_by_status(
         db=db,
         user_id=current_user,
@@ -152,13 +161,15 @@ async def get_watching(
     )
     return entries
 
+
 @router.get('/status/postponed', response_model=list[UserContentListRead], tags=['Watchlist'])
 async def get_postponed(
+    request: Request,
     skip: int = Query(0, ge=0),
     limit: int = Query(20, ge=1, le=100),
-    current_user: UUID = Depends(get_user_from_token),
     db: AsyncSession = Depends(get_async_session)
 ) -> list[UserContentList]:
+    current_user = require_user_from_cookie(request)
     entries, _ = await WatchListService.get_user_list_by_status(
         db=db,
         user_id=current_user,
@@ -168,11 +179,13 @@ async def get_postponed(
     )
     return entries
 
+
 @router.get('/all/grouped', response_model=UserContentListReadGroups, tags=['Watchlist'])
 async def get_all_grouped(
-    current_user: UUID = Depends(get_user_from_token),
+    request: Request,
     db: AsyncSession = Depends(get_async_session)
 ) -> UserContentListReadGroups:
+    current_user = require_user_from_cookie(request)
     grouped = await WatchListService.get_user_lists_grouped(
         db=db,
         user_id=current_user
@@ -182,9 +195,10 @@ async def get_all_grouped(
 
 @router.get('/stats', response_model=UserContentListReadStats, tags=['Watchlist'])
 async def get_user_stats(
-    current_user: UUID = Depends(get_user_from_token),
+    request: Request,
     db: AsyncSession = Depends(get_async_session)
 ) -> UserContentListReadStats:
+    current_user = require_user_from_cookie(request)
     stats = await WatchListService.get_user_stats(
         db=db,
         user_id=current_user
@@ -195,9 +209,10 @@ async def get_user_stats(
 @router.post('/{content_id}/mark-completed', response_model=UserContentListRead, tags=['Watchlist'])
 async def mark_as_completed(
     content_id: UUID,
-    current_user: UUID = Depends(get_user_from_token),
+    request: Request,
     db: AsyncSession = Depends(get_async_session)
 ) -> UserContentList:
+    current_user = require_user_from_cookie(request)
     entry = await WatchListService.get_user_list(db, current_user, content_id)
     if not entry:
         create_data = UserContentListCreate(status=WatchStatusEnum.COMPLETED)
@@ -212,9 +227,10 @@ async def mark_as_completed(
 @router.post('/{content_id}/mark-planned', response_model=UserContentListRead, tags=['Watchlist'])
 async def mark_as_planned(
     content_id: UUID,
-    current_user: UUID = Depends(get_user_from_token),
+    request: Request,
     db: AsyncSession = Depends(get_async_session)
 ) -> UserContentList:
+    current_user = require_user_from_cookie(request)
     entry = await WatchListService.get_user_list(db, current_user, content_id)
     if not entry:
         create_data = UserContentListCreate(status=WatchStatusEnum.PLANNED)
@@ -229,9 +245,10 @@ async def mark_as_planned(
 @router.post('/{content_id}/mark-dropped', response_model=UserContentListRead, tags=['Watchlist'])
 async def mark_as_dropped(
     content_id: UUID,
-    current_user: UUID = Depends(get_user_from_token),
+    request: Request,
     db: AsyncSession = Depends(get_async_session)
 ) -> UserContentList:
+    current_user = require_user_from_cookie(request)
     entry = await WatchListService.get_user_list(db, current_user, content_id)
     if not entry:
         create_data = UserContentListCreate(status=WatchStatusEnum.DROPPED)
@@ -242,12 +259,14 @@ async def mark_as_dropped(
         raise HTTPException(status_code=404, detail='Entry not found')
     return updated_entry
 
+
 @router.post('/{content_id}/mark-watching', response_model=UserContentListRead, tags=['Watchlist'])
 async def mark_as_watching(
     content_id: UUID,
-    current_user: UUID = Depends(get_user_from_token),
+    request: Request,
     db: AsyncSession = Depends(get_async_session)
 ) -> UserContentList:
+    current_user = require_user_from_cookie(request)
     entry = await WatchListService.get_user_list(db, current_user, content_id)
     if not entry:
         create_data = UserContentListCreate(status=WatchStatusEnum.WATCHING)
@@ -258,12 +277,14 @@ async def mark_as_watching(
         raise HTTPException(status_code=404, detail='Entry not found')
     return updated_entry
 
+
 @router.post('/{content_id}/mark-postponed', response_model=UserContentListRead, tags=['Watchlist'])
 async def mark_as_postponed(
     content_id: UUID,
-    current_user: UUID = Depends(get_user_from_token),
+    request: Request,
     db: AsyncSession = Depends(get_async_session)
 ) -> UserContentList:
+    current_user = require_user_from_cookie(request)
     entry = await WatchListService.get_user_list(db, current_user, content_id)
     if not entry:
         create_data = UserContentListCreate(status=WatchStatusEnum.POSTPONED)
