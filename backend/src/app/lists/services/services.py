@@ -125,7 +125,9 @@ class WatchListService:
         grouped: dict[str, list[UserContentList]] = {
             'completed': [],
             'planned': [],
-            'dropped': []
+            'dropped': [],
+            'watching': [],
+            'postponed': []
         }
 
         for entry in entries:
@@ -152,7 +154,9 @@ class WatchListService:
         counts = {
             'completed_count': 0,
             'planned_count': 0,
-            'dropped_count': 0
+            'dropped_count': 0,
+            'watching_count': 0,
+            'postponed_count': 0
         }
 
         for status, count in stats:
@@ -162,5 +166,9 @@ class WatchListService:
                 counts['planned_count'] = count
             elif status == WatchStatus.DROPPED:
                 counts['dropped_count'] = count
+            elif status == WatchStatus.WATCHING:
+                counts['watching_count'] = count
+            elif status == WatchStatus.POSTPONED:
+                counts['postponed_count'] = count
 
         return counts

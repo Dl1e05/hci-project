@@ -17,7 +17,8 @@ class WatchStatus(str, Enum):
     COMPLETED = "completed"
     PLANNED = "planned"
     DROPPED = "dropped"
-
+    WATCHING = "watching"
+    POSTPONED = "postponed"
 
 watch_status_enum = SQLEnum(
     WatchStatus,
