@@ -1,3 +1,4 @@
+from typing import Any
 from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -26,7 +27,7 @@ class BookService:
     ) -> tuple[list[BookRead], int]:
         """Get filtered books with pagination"""
         # Build additional book-specific filters
-        additional_filters = {}
+        additional_filters: dict[str, Any] = {}
 
         if filters.isbn is not None:
             additional_filters['isbn'] = filters.isbn

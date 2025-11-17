@@ -1,3 +1,4 @@
+from typing import Any
 from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -25,7 +26,7 @@ class SeriesService:
         db: AsyncSession, filters: SeriesFilterParams, skip: int = 0, limit: int = 100
     ) -> tuple[list[SeriesRead], int]:
         """Get filtered series with pagination"""
-        additional_filters = {}
+        additional_filters: dict[str, Any] = {}
 
         if filters.is_ongoing is not None:
             additional_filters['is_ongoing'] = filters.is_ongoing
