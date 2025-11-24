@@ -1,10 +1,11 @@
 from uuid import UUID
 
+from fastapi import HTTPException
 from sqlalchemy import desc, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.lists.models import UserContentList, WatchStatus
-from app.lists.schemas import UserContentListCreate, UserContentListUpdate
+from app.lists.models import ContentType, UserContentList, WatchStatus
+from app.lists.schemas import UserContentListCreate, UserContentListUpdate, VALID_STATUS_COMBINATIONS
 
 
 class WatchListService:
@@ -27,6 +28,7 @@ class WatchListService:
         entry = UserContentList(
             user_id=user_id,
             content_id=content_id,
+            content_type=ContentType(data.content_type.value),
             status=WatchStatus(data.status.value)
         )
 
@@ -61,6 +63,11 @@ class WatchListService:
             return None
         
         if data.status is not None:
+            if data.status not in VALID_STATUS_COMBINATIONS.get(entry.content_type, set()):
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Status '{data.status.value}' is not valid for content type '{entry.content_type.value}'"
+                )
             entry.status = WatchStatus(data.status.value)
         
         await db.commit()
@@ -127,7 +134,13 @@ class WatchListService:
             'planned': [],
             'dropped': [],
             'watching': [],
-            'postponed': []
+            'postponed': [],
+
+            'read': [],
+            'reading': [],
+
+            'finished': [],
+            'playing': [],
         }
 
         for entry in entries:
@@ -156,7 +169,13 @@ class WatchListService:
             'planned_count': 0,
             'dropped_count': 0,
             'watching_count': 0,
-            'postponed_count': 0
+            'postponed_count': 0,
+
+            'read_count': 0,
+            'reading_count': 0,
+
+            'finished_count': 0,
+            'playing_count': 0,
         }
 
         for status, count in stats:
@@ -170,5 +189,13 @@ class WatchListService:
                 counts['watching_count'] = count
             elif status == WatchStatus.POSTPONED:
                 counts['postponed_count'] = count
+            elif status == WatchStatus.READ:
+                counts['read_count'] = count
+            elif status == WatchStatus.READING:
+                counts['reading_count'] = count
+            elif status == WatchStatus.FINISHED:
+                counts['finished_count'] = count
+            elif status == WatchStatus.PLAYING:
+                counts['playing_count'] = count
 
         return counts

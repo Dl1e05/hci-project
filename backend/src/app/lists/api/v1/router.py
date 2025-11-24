@@ -179,6 +179,76 @@ async def get_postponed(
     )
     return entries
 
+@router.get('/status/read', response_model=list[UserContentListRead], tags=['Watchlist'])
+async def get_read(
+    request: Request,
+    skip: int = Query(0, ge=0),
+    limit: int = Query(20, ge=1, le=100),
+    db: AsyncSession = Depends(get_async_session)
+) -> list[UserContentList]:
+    current_user = require_user_from_cookie(request)
+    entries, _ = await WatchListService.get_user_list_by_status(
+        db=db,
+        user_id=current_user,
+        status=WatchStatus.READ,
+        skip=skip,
+        limit=limit
+    )
+    return entries
+
+
+@router.get('/status/reading', response_model=list[UserContentListRead], tags=['Watchlist'])
+async def get_reading(
+    request: Request,
+    skip: int = Query(0, ge=0),
+    limit: int = Query(20, ge=1, le=100),
+    db: AsyncSession = Depends(get_async_session)
+) -> list[UserContentList]:
+    current_user = require_user_from_cookie(request)
+    entries, _ = await WatchListService.get_user_list_by_status(
+        db=db,
+        user_id=current_user,
+        status=WatchStatus.READING,
+        skip=skip,
+        limit=limit
+    )
+    return entries
+
+
+@router.get('/status/finished', response_model=list[UserContentListRead], tags=['Watchlist'])
+async def get_finished(
+    request: Request,
+    skip: int = Query(0, ge=0),
+    limit: int = Query(20, ge=1, le=100),
+    db: AsyncSession = Depends(get_async_session)
+) -> list[UserContentList]:
+    current_user = require_user_from_cookie(request)
+    entries, _ = await WatchListService.get_user_list_by_status(
+        db=db,
+        user_id=current_user,
+        status=WatchStatus.FINISHED,
+        skip=skip,
+        limit=limit
+    )
+    return entries
+
+
+@router.get('/status/playing', response_model=list[UserContentListRead], tags=['Watchlist'])
+async def get_playing(
+    request: Request,
+    skip: int = Query(0, ge=0),
+    limit: int = Query(20, ge=1, le=100),
+    db: AsyncSession = Depends(get_async_session)
+) -> list[UserContentList]:
+    current_user = require_user_from_cookie(request)
+    entries, _ = await WatchListService.get_user_list_by_status(
+        db=db,
+        user_id=current_user,
+        status=WatchStatus.PLAYING,
+        skip=skip,
+        limit=limit
+    )
+    return entries
 
 @router.get('/all/grouped', response_model=UserContentListReadGroups, tags=['Watchlist'])
 async def get_all_grouped(
@@ -290,6 +360,73 @@ async def mark_as_postponed(
         create_data = UserContentListCreate(status=WatchStatusEnum.POSTPONED)
         return await WatchListService.add_to_list(db, current_user, content_id, create_data)
     update_data = UserContentListUpdate(status=WatchStatusEnum.POSTPONED)
+    updated_entry = await WatchListService.update_list_entry(db, current_user, content_id, update_data)
+    if not updated_entry:
+        raise HTTPException(status_code=404, detail='Entry not found')
+    return updated_entry
+
+@router.post('/{content_id}/mark-read', response_model=UserContentListRead, tags=['Watchlist'])
+async def mark_as_read(
+    content_id: UUID,
+    request: Request,
+    db: AsyncSession = Depends(get_async_session)
+) -> UserContentList:
+    current_user = require_user_from_cookie(request)
+    entry = await WatchListService.get_user_list(db, current_user, content_id)
+    if not entry:
+        raise HTTPException(status_code=400, detail='Content not in list. Use /add endpoint first.')
+    update_data = UserContentListUpdate(status=WatchStatusEnum.READ)
+    updated_entry = await WatchListService.update_list_entry(db, current_user, content_id, update_data)
+    if not updated_entry:
+        raise HTTPException(status_code=404, detail='Entry not found')
+    return updated_entry
+
+
+@router.post('/{content_id}/mark-reading', response_model=UserContentListRead, tags=['Watchlist'])
+async def mark_as_reading(
+    content_id: UUID,
+    request: Request,
+    db: AsyncSession = Depends(get_async_session)
+) -> UserContentList:
+    current_user = require_user_from_cookie(request)
+    entry = await WatchListService.get_user_list(db, current_user, content_id)
+    if not entry:
+        raise HTTPException(status_code=400, detail='Content not in list. Use /add endpoint first.')
+    update_data = UserContentListUpdate(status=WatchStatusEnum.READING)
+    updated_entry = await WatchListService.update_list_entry(db, current_user, content_id, update_data)
+    if not updated_entry:
+        raise HTTPException(status_code=404, detail='Entry not found')
+    return updated_entry
+
+
+@router.post('/{content_id}/mark-finished', response_model=UserContentListRead, tags=['Watchlist'])
+async def mark_as_finished(
+    content_id: UUID,
+    request: Request,
+    db: AsyncSession = Depends(get_async_session)
+) -> UserContentList:
+    current_user = require_user_from_cookie(request)
+    entry = await WatchListService.get_user_list(db, current_user, content_id)
+    if not entry:
+        raise HTTPException(status_code=400, detail='Content not in list. Use /add endpoint first.')
+    update_data = UserContentListUpdate(status=WatchStatusEnum.FINISHED)
+    updated_entry = await WatchListService.update_list_entry(db, current_user, content_id, update_data)
+    if not updated_entry:
+        raise HTTPException(status_code=404, detail='Entry not found')
+    return updated_entry
+
+
+@router.post('/{content_id}/mark-playing', response_model=UserContentListRead, tags=['Watchlist'])
+async def mark_as_playing(
+    content_id: UUID,
+    request: Request,
+    db: AsyncSession = Depends(get_async_session)
+) -> UserContentList:
+    current_user = require_user_from_cookie(request)
+    entry = await WatchListService.get_user_list(db, current_user, content_id)
+    if not entry:
+        raise HTTPException(status_code=400, detail='Content not in list. Use /add endpoint first.')
+    update_data = UserContentListUpdate(status=WatchStatusEnum.PLAYING)
     updated_entry = await WatchListService.update_list_entry(db, current_user, content_id, update_data)
     if not updated_entry:
         raise HTTPException(status_code=404, detail='Entry not found')
