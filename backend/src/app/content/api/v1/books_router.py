@@ -5,7 +5,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.status import HTTP_201_CREATED
 
 from app.content.schemas.content import BookRead, BookUpdate
+from app.content.schemas.filters import BookFilterParams
 from app.content.schemas.forms import BookFormData
+from app.content.schemas.pagination import PaginatedResponse, PaginationParams
 from app.content.services.book_service import BookService
 from app.core.db import get_async_session
 from app.core.storage import get_storage_service
@@ -30,6 +32,17 @@ async def create_book(
         return await BookService.create(db, book_data)
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)) from e
+
+
+@router.get('/books/search', response_model=PaginatedResponse[BookRead], tags=['books'])
+async def search_books(
+    filters: BookFilterParams = Depends(),
+    pagination: PaginationParams = Depends(),
+    db: AsyncSession = Depends(get_async_session),
+) -> PaginatedResponse[BookRead]:
+    """Search and filter books with pagination"""
+    books, total = await BookService.get_filtered(db, filters, skip=pagination.skip, limit=pagination.limit)
+    return PaginatedResponse.create(items=books, total=total, skip=pagination.skip, limit=pagination.limit)
 
 
 @router.get('/books', response_model=list[BookRead], tags=['books'])

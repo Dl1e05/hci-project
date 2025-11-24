@@ -20,6 +20,7 @@ from app.references.models import (
 if TYPE_CHECKING:
     from app.lists.models import UserContentList
     from app.references.models import AgeRating, Author, Country, Genres, Language, Tags, UserRating
+    from app.references.models import AgeRating, Author, Country, DifficultyLevel, Genres, Language, Tags, UserRating
 
 
 class BaseContent(Base):
@@ -55,6 +56,9 @@ class BaseContent(Base):
     country_id: Mapped[uuid.UUID] = mapped_column(
         PG_UUID(as_uuid=True), ForeignKey('countries.id', ondelete='RESTRICT'), nullable=False, index=True
     )
+    difficulty_level_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey('difficulty_levels.id', ondelete='RESTRICT'), nullable=False, index=True
+    )
 
     original_language: Mapped[Language] = relationship(
         'Language', foreign_keys=[original_language_id], back_populates='contents'
@@ -62,6 +66,7 @@ class BaseContent(Base):
     age_rating: Mapped[AgeRating] = relationship('AgeRating', back_populates='contents')
     original_author: Mapped[Author] = relationship('Author', back_populates='contents')
     country: Mapped[Country] = relationship('Country', back_populates='contents')
+    difficulty_level: Mapped[DifficultyLevel] = relationship('DifficultyLevel', back_populates='contents')
 
     genres: Mapped[list[Genres]] = relationship('Genres', secondary=content_genres, back_populates='contents')
     audio_languages: Mapped[list[Language]] = relationship(
