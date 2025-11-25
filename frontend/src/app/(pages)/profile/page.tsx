@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Layout from "@/app/components/Layout";
 import ProfileForm from "@/app/(pages)/profile/components/ProfileForm";
@@ -10,8 +10,8 @@ import { isAuthenticated } from "@/app/lib/utils";
 export default function ProfilePage() {
     const router = useRouter();
     
-    // Немедленная проверка авторизации - если не авторизован, сразу редиректим
-    useEffect(() => {
+    // Моментальная проверка авторизации - выполняется синхронно до рендера
+    useLayoutEffect(() => {
         if (!isAuthenticated()) {
             router.replace('/login');
         }

@@ -32,7 +32,7 @@ def upgrade() -> None:
     watch_status_enum.create(op.get_bind(), checkfirst=True)
 
     # Normalize existing values to lowercase before casting
-    op.execute("UPDATE user_content_lists SET status = lower(status::text)::watchstatus")
+    op.execute("UPDATE user_content_lists SET status = lower(status::text)::watch_status")
 
     # Alter the column to use the new enum and keep data
     op.alter_column(

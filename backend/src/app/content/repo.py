@@ -69,16 +69,25 @@ class ContentRepository:
             content.content_tags = tags_list
 
         await db.commit()
-        await db.refresh(
-            content,
-            attribute_names=[
-                'genres',
-                'audio_languages',
-                'subtitle_languages',
-                'content_tags',
-                'difficulty_level',
-            ],
+        await db.refresh(content)
+        
+        
+        result = await db.execute(
+            select(model_class)
+            .options(
+                selectinload(model_class.genres),
+                selectinload(model_class.audio_languages),
+                selectinload(model_class.subtitle_languages),
+                selectinload(model_class.content_tags),
+                selectinload(model_class.original_language),
+                selectinload(model_class.age_rating),
+                selectinload(model_class.original_author),
+                selectinload(model_class.country),
+                selectinload(model_class.difficulty_level),
+            )
+            .where(model_class.id == content.id)
         )
+        content = result.scalar_one()
         return content
 
     @staticmethod

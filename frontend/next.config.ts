@@ -9,11 +9,11 @@ const nextConfig: NextConfig = {
       // Placeholder service (demo images)
       { protocol: 'https', hostname: 'placehold.co' },
       // Local backend (development)
-      { protocol: 'http', hostname: 'localhost', port: '8001' },
-      { protocol: 'http', hostname: '127.0.0.1', port: '8001' },
+      { protocol: 'http', hostname: 'localhost', port: '8000' },
+      { protocol: 'http', hostname: '127.0.0.1', port: '8000' },
       // Allow https on localhost too, just in case
-      { protocol: 'https', hostname: 'localhost', port: '8001' },
-      { protocol: 'https', hostname: '127.0.0.1', port: '8001' },
+      { protocol: 'https', hostname: 'localhost', port: '8000' },
+      { protocol: 'https', hostname: '127.0.0.1', port: '8000' },
       // Cloudflare R2 storage - allow R2 public domains
       // Pattern matches subdomains like pub-{account_id}.r2.dev
       { protocol: 'https', hostname: '*.r2.dev' },

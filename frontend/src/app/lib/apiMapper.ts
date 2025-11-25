@@ -52,6 +52,13 @@ export function mapApiContentToCard(apiContent: ApiContent, type: ApiContentType
         ? apiContent.poster 
         : bannerUrl; // Use banner as fallback for poster (since backend only has banner)
 
+    const languageLevel = apiContent.difficulty_level?.name || 'C1';
+    
+    // Логирование для отладки маппинга
+    if (!apiContent.difficulty_level) {
+        console.warn(`⚠️ Content ${apiContent.id} (${apiContent.title}) has no difficulty_level, using default 'C1'`);
+    }
+
     return {
         id: apiContent.id,
         title: apiContent.title,
@@ -64,7 +71,7 @@ export function mapApiContentToCard(apiContent: ApiContent, type: ApiContentType
         trailerUrl: apiContent.trailer || '',
         genre,
         genres: genres.length > 0 ? genres : undefined,
-        languageLevel: 'C1', // TODO: получить с бэка (может быть в tags или отдельном поле)
+        languageLevel, // Получаем уровень сложности с бэка
         contentType: contentTypeMap[type],
         fullDescription: apiContent.long_description || '',
         duration: apiContent.duration_minutes ?? null,

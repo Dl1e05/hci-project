@@ -2,7 +2,7 @@ import type { ApiContent, ApiContentType, ApiResponse } from '@/app/types/api';
 import type { ContentCard } from '@/app/types/content';
 import { mapApiContentToCard } from '@/app/lib/apiMapper';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8001';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
 
 type FetchParams = {
     page?: number;
@@ -145,20 +145,72 @@ export async function fetchContentByLevel(
     limit: number = 4
 ): Promise<{ items: ContentCard[]; total: number }> {
     try {
-        // Получаем контент разных типов с фильтром по уровню
-        const [movies, books, games] = await Promise.all([
-            fetchMovies({ language_level: level, per_page: Math.ceil(limit / 3) }),
-            fetchBooks({ language_level: level, per_page: Math.ceil(limit / 3) }),
-            fetchGames({ language_level: level, per_page: Math.ceil(limit / 3) }),
+        // Получаем контент разных типов БЕЗ фильтрации (бэкенд не поддерживает фильтрацию по language_level)
+        // Получаем больше элементов, чтобы потом отфильтровать на клиенте
+        const [movies, tvShows, books, games] = await Promise.all([
+            fetchMovies({ per_page: 50 }).catch(() => ({ items: [], total: 0 })),
+            fetchTVShows({ per_page: 50 }).catch(() => ({ items: [], total: 0 })),
+            fetchBooks({ per_page: 50 }).catch(() => ({ items: [], total: 0 })),
+            fetchGames({ per_page: 50 }).catch(() => ({ items: [], total: 0 })),
         ]);
 
-        // Объединяем и берем первые 4
-        const allItems = [...movies.items, ...books.items, ...games.items];
-        const items = allItems.slice(0, limit);
+        // Фильтруем каждый тип по уровню на клиенте
+        const filteredMovies = movies.items.filter(item => item.languageLevel === level);
+        const filteredTVShows = tvShows.items.filter(item => item.languageLevel === level);
+        const filteredBooks = books.items.filter(item => item.languageLevel === level);
+        const filteredGames = games.items.filter(item => item.languageLevel === level);
+        
+        // Берем по одному элементу из каждого типа (если доступен)
+        const diverseItems: ContentCard[] = [];
+        
+        // Приоритетный порядок типов для отображения
+        const typeOrder: Array<{ type: string; items: ContentCard[] }> = [
+            { type: 'Movies', items: filteredMovies },
+            { type: 'TV shows', items: filteredTVShows },
+            { type: 'Books', items: filteredBooks },
+            { type: 'Games', items: filteredGames },
+        ];
+        
+        // Берем по одному элементу из каждого доступного типа (максимум 4 разных типа)
+        const usedIds = new Set<string>();
+        typeOrder.forEach(({ type, items: typeItems }) => {
+            if (typeItems.length > 0 && diverseItems.length < limit) {
+                // Проверяем, что у нас еще нет элемента этого типа
+                const hasTypeAlready = diverseItems.some(item => item.contentType === type);
+                if (!hasTypeAlready) {
+                    // Берем первый элемент этого типа, который еще не использован
+                    const item = typeItems.find(i => !usedIds.has(i.id)) || typeItems[0];
+                    if (item && !usedIds.has(item.id)) {
+                        usedIds.add(item.id);
+                        diverseItems.push(item);
+                    }
+                }
+            }
+        });
+        
+        // НЕ добавляем дубликаты типов - показываем только по одному элементу каждого типа
+        // Если есть только 1-2 типа контента, покажем только 1-2 карточки
 
-        return { items, total: allItems.length };
+        const items = diverseItems.slice(0, limit);
+        
+        console.log(`✅ Fetched ${items.length} items for level ${level}:`, {
+            byType: {
+                Movies: filteredMovies.length,
+                'TV shows': filteredTVShows.length,
+                Books: filteredBooks.length,
+                Games: filteredGames.length,
+            },
+            selected: items.map(i => ({ 
+                title: i.title, 
+                type: i.contentType,
+                languageLevel: i.languageLevel 
+            }))
+        });
+
+        const totalFiltered = filteredMovies.length + filteredTVShows.length + filteredBooks.length + filteredGames.length;
+        return { items, total: totalFiltered };
     } catch (error) {
-        console.error('Failed to fetch content by level:', error);
-        throw error;
+        console.error(`❌ Failed to fetch content by level ${level}:`, error);
+        return { items: [], total: 0 };
     }
 }
