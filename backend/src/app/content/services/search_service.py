@@ -112,11 +112,7 @@ class SearchService:
         if params.sort_by:
             sort_column = getattr(BaseContent, params.sort_by, None)
             if sort_column is not None:
-                query = (
-                    query.order_by(sort_column.asc())
-                    if params.sort_order == 'asc'
-                    else query.order_by(sort_column.desc())
-                )
+                query = query.order_by(sort_column.asc()) if params.sort_order == 'asc' else query.order_by(sort_column.desc())
         else:
             query = query.order_by(BaseContent.created_at.desc())
 

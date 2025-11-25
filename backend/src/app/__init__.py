@@ -14,6 +14,7 @@ from app.content.api.v1.podcasts_router import router as podcasts_router
 from app.content.api.v1.search_router import router as search_router
 from app.content.api.v1.series_router import router as series_router
 from app.content.api.v1.videos_router import router as videos_router
+from app.lists.api.v1.router import router as lists_router
 from app.references.api.v1.age_ratings_router import router as age_ratings_router
 from app.references.api.v1.authors_router import router as authors_router
 from app.references.api.v1.content_categories_router import router as content_categories_router
@@ -57,6 +58,7 @@ main_router.include_router(courses_router)
 main_router.include_router(articles_router)
 main_router.include_router(games_router)
 main_router.include_router(videos_router)
+main_router.include_router(lists_router)
 
 # Reviews
 main_router.include_router(reviews_router)

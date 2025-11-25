@@ -18,6 +18,7 @@ from app.references.models import (
 )
 
 if TYPE_CHECKING:
+    from app.lists.models import UserContentList
     from app.references.models import AgeRating, Author, Country, DifficultyLevel, Genres, Language, Tags, UserRating
 
 
@@ -80,6 +81,13 @@ class BaseContent(Base):
         foreign_keys='UserRating.content_id',
         primaryjoin='BaseContent.id == foreign(UserRating.content_id)',
         viewonly=True,
+    )
+
+    user_lists: Mapped[list[UserContentList]] = relationship(
+        'UserContentList',
+        back_populates='content',
+        cascade='all, delete-orphan',
+        passive_deletes=True,
     )
 
     @property
