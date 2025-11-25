@@ -28,6 +28,7 @@ class BaseContentBase(ORMModel):
 
 class BaseContentCreate(BaseContentBase):
     original_language_id: int
+    difficulty_level_id: int
     age_rating_id: int
     original_author_id: int
     country_id: UUID
@@ -49,6 +50,7 @@ class BaseContentUpdate(ORMModel):
     trailer: URL_FIELD = None
     link: URL_FIELD = None
     original_language_id: int | None = None
+    difficulty_level_id: int | None = None
     age_rating_id: int | None = None
     original_author_id: int | None = None
     country_id: UUID | None = None
@@ -64,6 +66,7 @@ class BaseContentRead(BaseContentBase):
     view_count: int = Field(ge=0)
     rating: float = Field(..., ge=0.0, le=10.0)
     original_language_id: int
+    difficulty_level_id: int
     age_rating_id: int
     original_author_id: int
     country_id: UUID

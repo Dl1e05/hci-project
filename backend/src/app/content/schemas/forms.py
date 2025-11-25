@@ -17,7 +17,6 @@ from .content import (
 
 
 def parse_list_field(value: list[str] | str | None, field_name: str = 'field') -> list[str]:  # noqa: ARG001
-    """Parse list field that may come as list, comma-separated string, or None."""
     if not value:
         return []
 
@@ -47,6 +46,7 @@ class BookFormData:
         title: str = Form(...),
         release_date: datetime = Form(...),
         original_language_id: int = Form(...),
+        difficulty_level_id: int = Form(...),
         age_rating_id: int = Form(...),
         original_author_id: int = Form(...),
         country_id: UUID = Form(...),
@@ -94,6 +94,7 @@ class BookFormData:
         self.title = title
         self.release_date = release_date
         self.original_language_id = original_language_id
+        self.difficulty_level_id = difficulty_level_id
         self.age_rating_id = age_rating_id
         self.original_author_id = original_author_id
         self.country_id = country_id
@@ -121,6 +122,7 @@ class BookFormData:
             trailer=self.trailer,
             link=self.link,
             original_language_id=self.original_language_id,
+            difficulty_level_id=self.difficulty_level_id,
             age_rating_id=self.age_rating_id,
             original_author_id=self.original_author_id,
             country_id=self.country_id,
@@ -142,6 +144,7 @@ class FilmFormData:
         title: str = Form(...),
         release_date: datetime = Form(...),
         original_language_id: int = Form(...),
+        difficulty_level_id: int = Form(...),
         age_rating_id: int = Form(...),
         original_author_id: int = Form(...),
         country_id: UUID = Form(...),
@@ -187,6 +190,7 @@ class FilmFormData:
         self.title = title
         self.release_date = release_date
         self.original_language_id = original_language_id
+        self.difficulty_level_id = difficulty_level_id
         self.age_rating_id = age_rating_id
         self.original_author_id = original_author_id
         self.country_id = country_id
@@ -212,6 +216,7 @@ class FilmFormData:
             trailer=self.trailer,
             link=self.link,
             original_language_id=self.original_language_id,
+            difficulty_level_id=self.difficulty_level_id,
             age_rating_id=self.age_rating_id,
             original_author_id=self.original_author_id,
             country_id=self.country_id,
@@ -231,6 +236,7 @@ class SeriesFormData:
         title: str = Form(...),
         release_date: datetime = Form(...),
         original_language_id: int = Form(...),
+        difficulty_level_id: int = Form(...),
         age_rating_id: int = Form(...),
         original_author_id: int = Form(...),
         country_id: UUID = Form(...),
@@ -278,6 +284,7 @@ class SeriesFormData:
         self.title = title
         self.release_date = release_date
         self.original_language_id = original_language_id
+        self.difficulty_level_id = difficulty_level_id
         self.age_rating_id = age_rating_id
         self.original_author_id = original_author_id
         self.country_id = country_id
@@ -305,6 +312,7 @@ class SeriesFormData:
             trailer=self.trailer,
             link=self.link,
             original_language_id=self.original_language_id,
+            difficulty_level_id=self.difficulty_level_id,
             age_rating_id=self.age_rating_id,
             original_author_id=self.original_author_id,
             country_id=self.country_id,
@@ -326,6 +334,7 @@ class AnimeFormData:
         title: str = Form(...),
         release_date: datetime = Form(...),
         original_language_id: int = Form(...),
+        difficulty_level_id: int = Form(...),
         age_rating_id: int = Form(...),
         original_author_id: int = Form(...),
         country_id: UUID = Form(...),
@@ -373,6 +382,7 @@ class AnimeFormData:
         self.title = title
         self.release_date = release_date
         self.original_language_id = original_language_id
+        self.difficulty_level_id = difficulty_level_id
         self.age_rating_id = age_rating_id
         self.original_author_id = original_author_id
         self.country_id = country_id
@@ -400,6 +410,7 @@ class AnimeFormData:
             trailer=self.trailer,
             link=self.link,
             original_language_id=self.original_language_id,
+            difficulty_level_id=self.difficulty_level_id,
             age_rating_id=self.age_rating_id,
             original_author_id=self.original_author_id,
             country_id=self.country_id,
@@ -421,6 +432,7 @@ class PodcastFormData:
         title: str = Form(...),
         release_date: datetime = Form(...),
         original_language_id: int = Form(...),
+        difficulty_level_id: int = Form(...),
         age_rating_id: int = Form(...),
         original_author_id: int = Form(...),
         country_id: UUID = Form(...),
@@ -468,6 +480,7 @@ class PodcastFormData:
         self.title = title
         self.release_date = release_date
         self.original_language_id = original_language_id
+        self.difficulty_level_id = difficulty_level_id
         self.age_rating_id = age_rating_id
         self.original_author_id = original_author_id
         self.country_id = country_id
@@ -495,6 +508,7 @@ class PodcastFormData:
             trailer=self.trailer,
             link=self.link,
             original_language_id=self.original_language_id,
+            difficulty_level_id=self.difficulty_level_id,
             age_rating_id=self.age_rating_id,
             original_author_id=self.original_author_id,
             country_id=self.country_id,
@@ -516,6 +530,7 @@ class CourseFormData:
         title: str = Form(...),
         release_date: datetime = Form(...),
         original_language_id: int = Form(...),
+        difficulty_level_id: int = Form(...),
         age_rating_id: int = Form(...),
         original_author_id: int = Form(...),
         country_id: UUID = Form(...),
@@ -563,6 +578,7 @@ class CourseFormData:
         self.title = title
         self.release_date = release_date
         self.original_language_id = original_language_id
+        self.difficulty_level_id = difficulty_level_id
         self.age_rating_id = age_rating_id
         self.original_author_id = original_author_id
         self.country_id = country_id
@@ -590,6 +606,7 @@ class CourseFormData:
             trailer=self.trailer,
             link=self.link,
             original_language_id=self.original_language_id,
+            difficulty_level_id=self.difficulty_level_id,
             age_rating_id=self.age_rating_id,
             original_author_id=self.original_author_id,
             country_id=self.country_id,
@@ -611,6 +628,7 @@ class ArticleFormData:
         title: str = Form(...),
         release_date: datetime = Form(...),
         original_language_id: int = Form(...),
+        difficulty_level_id: int = Form(...),
         age_rating_id: int = Form(...),
         original_author_id: int = Form(...),
         country_id: UUID = Form(...),
@@ -657,6 +675,7 @@ class ArticleFormData:
         self.title = title
         self.release_date = release_date
         self.original_language_id = original_language_id
+        self.difficulty_level_id = difficulty_level_id
         self.age_rating_id = age_rating_id
         self.original_author_id = original_author_id
         self.country_id = country_id
@@ -683,6 +702,7 @@ class ArticleFormData:
             trailer=self.trailer,
             link=self.link,
             original_language_id=self.original_language_id,
+            difficulty_level_id=self.difficulty_level_id,
             age_rating_id=self.age_rating_id,
             original_author_id=self.original_author_id,
             country_id=self.country_id,
@@ -703,6 +723,7 @@ class GameFormData:
         title: str = Form(...),
         release_date: datetime = Form(...),
         original_language_id: int = Form(...),
+        difficulty_level_id: int = Form(...),
         age_rating_id: int = Form(...),
         original_author_id: int = Form(...),
         country_id: UUID = Form(...),
@@ -750,6 +771,7 @@ class GameFormData:
         self.title = title
         self.release_date = release_date
         self.original_language_id = original_language_id
+        self.difficulty_level_id = difficulty_level_id
         self.age_rating_id = age_rating_id
         self.original_author_id = original_author_id
         self.country_id = country_id
@@ -777,6 +799,7 @@ class GameFormData:
             trailer=self.trailer,
             link=self.link,
             original_language_id=self.original_language_id,
+            difficulty_level_id=self.difficulty_level_id,
             age_rating_id=self.age_rating_id,
             original_author_id=self.original_author_id,
             country_id=self.country_id,
@@ -798,6 +821,7 @@ class VideoFormData:
         title: str = Form(...),
         release_date: datetime = Form(...),
         original_language_id: int = Form(...),
+        difficulty_level_id: int = Form(...),
         age_rating_id: int = Form(...),
         original_author_id: int = Form(...),
         country_id: UUID = Form(...),
@@ -843,6 +867,7 @@ class VideoFormData:
         self.title = title
         self.release_date = release_date
         self.original_language_id = original_language_id
+        self.difficulty_level_id = difficulty_level_id
         self.age_rating_id = age_rating_id
         self.original_author_id = original_author_id
         self.country_id = country_id
@@ -868,6 +893,7 @@ class VideoFormData:
             trailer=self.trailer,
             link=self.link,
             original_language_id=self.original_language_id,
+            difficulty_level_id=self.difficulty_level_id,
             age_rating_id=self.age_rating_id,
             original_author_id=self.original_author_id,
             country_id=self.country_id,
