@@ -11,6 +11,7 @@ from app.content.api.v1.games_router import router as games_router
 from app.content.api.v1.podcasts_router import router as podcasts_router
 
 # Content routers
+from app.content.api.v1.search_router import router as search_router
 from app.content.api.v1.series_router import router as series_router
 from app.content.api.v1.videos_router import router as videos_router
 from app.references.api.v1.age_ratings_router import router as age_ratings_router
@@ -46,6 +47,7 @@ main_router.include_router(difficulty_levels_router)
 main_router.include_router(content_categories_router)
 
 # Content types
+main_router.include_router(search_router)
 main_router.include_router(series_router)
 main_router.include_router(books_router)
 main_router.include_router(films_router)

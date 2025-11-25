@@ -28,12 +28,12 @@ target-version = "py312"
 line-length = 128
 src = ["src"]
 show-fixes = true
-exclude = [".venv", ".mypy_cache", "__pycache__", "uv.lock", "alembic"]
+exclude = [".venv", ".mypy_cache", "__pycache__", "uv.lock", "alembic", "scripts"]
+
+[tool.ruff.lint]
 ignore = [
     "B008",
 ]
-
-[tool.ruff.lint]
 select = [
   "E",   # pycodestyle
   "F",   # pyflakes
