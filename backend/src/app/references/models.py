@@ -120,6 +120,8 @@ class DifficultyLevel(Base):
     level: Mapped[int] = mapped_column(Integer, nullable=False, unique=True, index=True)
     description: Mapped[str] = mapped_column(String(255), nullable=False)
 
+    contents: Mapped[list['BaseContent']] = relationship('BaseContent', back_populates='difficulty_level')
+
 
 class ContentCategory(Base):
     __tablename__ = 'content_categories'

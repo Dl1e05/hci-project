@@ -11,6 +11,7 @@ from app.content.api.v1.games_router import router as games_router
 from app.content.api.v1.podcasts_router import router as podcasts_router
 
 # Content routers
+from app.content.api.v1.search_router import router as search_router
 from app.content.api.v1.series_router import router as series_router
 from app.content.api.v1.videos_router import router as videos_router
 from app.lists.api.v1.router import router as lists_router
@@ -25,6 +26,7 @@ from app.references.api.v1.platforms_router import router as platforms_router
 
 # Reference routers
 from app.references.api.v1.tags_router import router as tags_router
+from app.reviews.api.v1.reviews_router import router as reviews_router
 from app.users.api.v1.router import router as users_router
 
 main_router = APIRouter()
@@ -46,6 +48,7 @@ main_router.include_router(difficulty_levels_router)
 main_router.include_router(content_categories_router)
 
 # Content types
+main_router.include_router(search_router)
 main_router.include_router(series_router)
 main_router.include_router(books_router)
 main_router.include_router(films_router)
@@ -56,5 +59,8 @@ main_router.include_router(articles_router)
 main_router.include_router(games_router)
 main_router.include_router(videos_router)
 main_router.include_router(lists_router)
+
+# Reviews
+main_router.include_router(reviews_router)
 
 __all__ = ['main_router']

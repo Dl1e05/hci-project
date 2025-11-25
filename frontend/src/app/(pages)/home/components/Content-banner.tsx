@@ -2,6 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { getSafeImageUrl } from '@/app/lib/utils';
 
 export type ContentBannerProps = {
     id: string;
@@ -11,18 +12,21 @@ export type ContentBannerProps = {
 };
 
 export function ContentBanner({item}: { item: ContentBannerProps }) {
+    const imageSrc = getSafeImageUrl(item.imageUrl);
+
     return (
         <Link
             href={item.href ?? '#'}
             className="group relative block overflow-hidden rounded-[20px] ring-1 ring-black/5 shadow-sm transition hover:shadow-lg"
         >
-            <div className="relative aspect-[9/14] w-full">
+            <div className="relative aspect-[9/14] w-full bg-gray-200">
                 <Image
-                    src={item.imageUrl}
+                    src={imageSrc}
                     alt={item.title}
                     fill
                     sizes="(max-width: 1024px) 50vw, 25vw"
                     className="object-cover"
+                    unoptimized={true}
                 />
             </div>
 

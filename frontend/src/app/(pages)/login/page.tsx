@@ -32,7 +32,7 @@ export default function Login() {
       if (access_token) storage.setItem('access_token', access_token);
       if (refresh_token) storage.setItem('refresh_token', refresh_token);
 
-      router.push('/home');
+      router.push('/');
     } catch (err) {
       console.error('Login error:', err);
       let message = 'Ошибка входа. Проверьте данные.';
@@ -101,7 +101,7 @@ export default function Login() {
         </form>
 
         <div className="text-center p-2">
-          <p>Don’t have an account? <a href="/signup" className="underline">Sign up</a></p>
+          <p>Don't have an account? <a href="/signup" className="underline">Sign up</a></p>
         </div>
       </div>
     </AuthModal>

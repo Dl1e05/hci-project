@@ -111,21 +111,21 @@ class PodcastRead(BaseContentRead):
 class CourseCreate(BaseContentCreate):
     total_lessons: int | None = Field(None, ge=1)
     total_duration_hours: float | None = Field(None, ge=0.0)
-    difficulty_level: str | None = Field(None, max_length=20)
+    course_difficulty: str | None = Field(None, max_length=20)
     instructor: str | None = Field(None, max_length=100)
 
 
 class CourseUpdate(BaseContentUpdate):
     total_lessons: int | None = Field(None, ge=1)
     total_duration_hours: float | None = Field(None, ge=0.0)
-    difficulty_level: str | None = Field(None, max_length=20)
+    course_difficulty: str | None = Field(None, max_length=20)
     instructor: str | None = Field(None, max_length=100)
 
 
 class CourseRead(BaseContentRead):
     total_lessons: int | None = Field(None, ge=1)
     total_duration_hours: float | None = Field(None, ge=0.0)
-    difficulty_level: str | None = Field(None, max_length=20)
+    course_difficulty: str | None = Field(None, max_length=20)
     instructor: str | None = Field(None, max_length=100)
 
 

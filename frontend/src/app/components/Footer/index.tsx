@@ -11,27 +11,27 @@ const Footer: React.FC = () => {
   ];
 
   return (
-    <footer className="bg-slate-700 text-white py-8">
+    <footer className="bg-[#F9F9F9] text-gray-700 py-8">
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-center">
           {/* Logo and company name */}
           <div className="flex items-center gap-2 mb-4 md:mb-0">
-            <div className="w-8 h-8 bg-white rounded-lg"></div>
-            <span className="font-semibold">TheCompany</span>
+            <div className="w-8 h-8 bg-gray-700 rounded-lg"></div>
+            <span className="font-semibold text-gray-700">TheCompany</span>
           </div>
 
           {/* Navigation links */}
           <nav className="flex gap-6 mb-4 md:mb-0">
-            <a href="/privacy" className="text-sm hover:text-blue-300 transition-colors">
+            <a href="/privacy" className="text-sm text-gray-700 hover:text-gray-900 transition-colors">
               Privacy
             </a>
-            <a href="/about" className="text-sm hover:text-blue-300 transition-colors">
+            <a href="/about" className="text-sm text-gray-700 hover:text-gray-900 transition-colors">
               About
             </a>
-            <a href="/terms" className="text-sm hover:text-blue-300 transition-colors">
+            <a href="/terms" className="text-sm text-gray-700 hover:text-gray-900 transition-colors">
               Terms
             </a>
-            <a href="/contact" className="text-sm hover:text-blue-300 transition-colors">
+            <a href="/contact" className="text-sm text-gray-700 hover:text-gray-900 transition-colors">
               Contact Us
             </a>
           </nav>
@@ -41,18 +41,18 @@ const Footer: React.FC = () => {
             {socialLinks.map((social, index) => (
               <button
                 key={index}
-                className="w-8 h-8 bg-slate-600 rounded-full flex items-center justify-center hover:bg-slate-500 transition-colors"
+                className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-600 transition-colors"
                 aria-label={social.label}
               >
-                <span className="text-xs font-semibold">{social.letter}</span>
+                <span className="text-xs font-semibold text-white">{social.letter}</span>
               </button>
             ))}
           </div>
         </div>
 
         {/* Copyright */}
-        <div className="text-center mt-6 pt-6 border-t border-slate-600">
-          <p className="text-sm text-slate-400">
+        <div className="text-center mt-6 pt-6 border-t border-gray-300">
+          <p className="text-sm text-gray-700">
             © {currentYear} All right reserved
           </p>
         </div>

@@ -85,7 +85,6 @@ class Course(BaseContent):
     )
     total_lessons: Mapped[int | None] = mapped_column(Integer, nullable=True)
     total_duration_hours: Mapped[float | None] = mapped_column(Float, nullable=True)
-    difficulty_level: Mapped[str | None] = mapped_column(String(20), nullable=True)
     instructor: Mapped[str | None] = mapped_column(String(100), nullable=True)
 
     __mapper_args__ = {'polymorphic_identity': 'course'}
