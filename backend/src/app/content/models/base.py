@@ -19,8 +19,6 @@ from app.references.models import (
 
 if TYPE_CHECKING:
     from app.lists.models import UserContentList
-    from app.references.models import AgeRating, Author, Country, Genres, Language, Tags, UserRating
-    from app.references.models import AgeRating, Author, Country, DifficultyLevel, Genres, Language, Tags, UserRating
     from app.references.models import AgeRating, Author, Country, DifficultyLevel, Genres, Language, Tags, UserRating
 
 

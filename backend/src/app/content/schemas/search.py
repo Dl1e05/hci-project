@@ -25,9 +25,9 @@ class ContentSearchParams(BaseModel):
     long_description: str | None = Field(None, min_length=1, max_length=10000)
     keywords: str | None = Field(None, min_length=1, max_length=500)
 
-    content_types: list[
-        Literal['series', 'book', 'film', 'anime', 'podcast', 'course', 'article', 'game', 'video']
-    ] | None = None
+    content_types: list[Literal['series', 'book', 'film', 'anime', 'podcast', 'course', 'article', 'game', 'video']] | None = (
+        None
+    )
 
     genre_ids: list[UUID] | None = None
     tag_ids: list[UUID] | None = None

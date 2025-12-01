@@ -70,8 +70,7 @@ class ContentRepository:
 
         await db.commit()
         await db.refresh(content)
-        
-        
+
         result = await db.execute(
             select(model_class)
             .options(

@@ -13,12 +13,14 @@ if TYPE_CHECKING:
     from app.content.models.base import BaseContent
     from app.users.models import User
 
+
 class WatchStatus(str, Enum):
-    COMPLETED = "completed"
-    PLANNED = "planned"
-    DROPPED = "dropped"
-    WATCHING = "watching"
-    POSTPONED = "postponed"
+    COMPLETED = 'completed'
+    PLANNED = 'planned'
+    DROPPED = 'dropped'
+    WATCHING = 'watching'
+    POSTPONED = 'postponed'
+
 
 watch_status_enum = SQLEnum(
     WatchStatus,
