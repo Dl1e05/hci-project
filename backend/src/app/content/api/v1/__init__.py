@@ -7,6 +7,7 @@ from .games_router import router as games_router
 from .podcasts_router import router as podcasts_router
 from .series_router import router as series_router
 from .videos_router import router as videos_router
+from .recommendations import router as recommedations_router
 
 __all__ = [
     'series_router',
@@ -18,4 +19,5 @@ __all__ = [
     'articles_router',
     'games_router',
     'videos_router',
+    'recommedations_router',
 ]
