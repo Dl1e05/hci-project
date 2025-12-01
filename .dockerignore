@@ -1,0 +1,33 @@
+# Git
+.git
+.gitignore
+.github
+
+# Documentation
+*.md
+docs/
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Frontend (not needed for backend builds)
+frontend/
+
+# Logs
+*.log
+nginx/logs/
+
+# Environment
+.env
+.env.local
+
+# Docker
+docker-compose*.yaml
+Dockerfile
+.dockerignore
+
+# Other
+.DS_Store

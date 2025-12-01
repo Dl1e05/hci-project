@@ -1,5 +1,7 @@
 'use client';
 import React, { useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { isAuthenticated } from '@/app/lib/utils';
 
 type Review = {
     id: string;
@@ -17,6 +19,7 @@ type Props = {
 };
 
 export default function ReviewsSection({ contentId }: Props) {
+    const router = useRouter();
     const [reviews, setReviews] = useState<Review[]>([]);
     const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'highest'>('newest');
     const [loading, setLoading] = useState(true);
@@ -25,8 +28,17 @@ export default function ReviewsSection({ contentId }: Props) {
     const [newText, setNewText] = useState('');
     const [newRating, setNewRating] = useState<number>(0);
     const [submitting, setSubmitting] = useState(false);
+    const [containsSpoilers, setContainsSpoilers] = useState(false);
 
-    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8001';
+    const checkAuthAndRedirect = () => {
+        if (!isAuthenticated()) {
+            router.replace('/login');
+            return false;
+        }
+        return true;
+    };
+
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
     const COMMENTS_PATH = process.env.NEXT_PUBLIC_COMMENTS_PATH || '/comments'; // allows switching to any backend path later
 
     const commentsUrl = useMemo(() => {
@@ -80,6 +92,7 @@ export default function ReviewsSection({ contentId }: Props) {
     }, [reviews, sortBy]);
 
     async function handleSubmit() {
+        if (!checkAuthAndRedirect()) return;
         if (!newText.trim()) return;
         if (submitting) return;
         setSubmitting(true);
@@ -129,39 +142,86 @@ export default function ReviewsSection({ contentId }: Props) {
     }
 
     return (
-        <section className="bg-slate-700/50 rounded-3xl p-8">
-            <h2 className="text-3xl font-bold text-white mb-6">Reviews</h2>
+        <section className="bg-white rounded-3xl p-8 shadow-sm">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">Reviews</h2>
 
             {/* Форма добавления отзыва */}
-            <div className="bg-slate-600/50 rounded-2xl p-6 mb-6">
-                <p className="text-white/70 text-sm mb-4">Post a comment for this series:</p>
-
-                <textarea
-                    value={newText}
-                    onChange={(e) => setNewText(e.target.value)}
-                    placeholder="Review Text..."
-                    className="w-full bg-slate-700/50 text-white rounded-lg p-4 min-h-[120px] focus:outline-none focus:ring-2 focus:ring-yellow-500 placeholder-white/40 mb-4"
-                />
+            <div className="bg-gray-100 rounded-2xl p-6 mb-6">
+                <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-gray-900 font-medium">Post a comment for this series:</h3>
+                    <label className="flex items-center gap-2 text-gray-700 text-sm cursor-pointer">
+                        <span>Contains spoilers</span>
+                        <div className="relative">
+                            <input 
+                                type="checkbox" 
+                                checked={containsSpoilers}
+                                onChange={(e) => {
+                                    if (!checkAuthAndRedirect()) return;
+                                    setContainsSpoilers(e.target.checked);
+                                }}
+                                className="sr-only"
+                            />
+                            <div className={`w-11 h-6 rounded-full transition-colors ${
+                                containsSpoilers ? 'bg-blue-500' : 'bg-gray-300'
+                            }`}>
+                                <div className={`w-5 h-5 bg-white rounded-full transition-transform mt-0.5 ml-0.5 ${
+                                    containsSpoilers ? 'translate-x-5' : 'translate-x-0'
+                                }`} />
+                            </div>
+                        </div>
+                    </label>
+                </div>
+                
+                <div className="relative mb-4">
+                    <textarea
+                        value={newText}
+                        onChange={(e) => {
+                            if (!isAuthenticated()) {
+                                router.replace('/login');
+                                return;
+                            }
+                            setNewText(e.target.value);
+                        }}
+                        onFocus={() => {
+                            if (!isAuthenticated()) {
+                                router.replace('/login');
+                            }
+                        }}
+                        placeholder="Review Text..."
+                        className="w-full bg-white text-gray-900 rounded-lg p-4 pr-12 min-h-[120px] focus:outline-none focus:ring-2 focus:ring-blue-500 border border-gray-300 placeholder-gray-400"
+                    />
+                    <div className="absolute right-4 top-4">
+                        <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                        </svg>
+                    </div>
+                </div>
 
                 <div className="flex items-center justify-between">
                     <button
                         onClick={handleSubmit}
                         disabled={submitting || !newText.trim()}
-                        className={`px-6 py-2 rounded-lg font-semibold transition-colors ${
-                            submitting || !newText.trim() ? 'bg-yellow-500/60 text-gray-900 cursor-not-allowed' : 'bg-yellow-500 hover:bg-yellow-600 text-gray-900'
+                        className={`flex items-center gap-2 px-6 py-2 rounded-lg font-semibold transition-colors ${
+                            submitting || !newText.trim() ? 'bg-blue-400/60 text-white cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600 text-white'
                         }`}
                     >
-                        {submitting ? 'Posting...' : 'Post comment'}
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        {submitting ? 'Submitting...' : 'Submit Review'}
                     </button>
-                    <div className="flex items-center gap-2 text-white/60 text-sm">
-                        <span>Your rating</span>
+                    <div className="flex items-center gap-2 text-gray-700 text-sm">
+                        <span>Your Score</span>
                         <div className="flex gap-1">
                             {[1, 2, 3, 4, 5].map((star) => (
                                 <button
                                     key={star}
-                                    onClick={() => setNewRating(star)}
+                                    onClick={() => {
+                                        if (!checkAuthAndRedirect()) return;
+                                        setNewRating(star);
+                                    }}
                                     type="button"
-                                    className={star <= newRating ? 'text-yellow-500' : 'text-white/30 hover:text-yellow-400'}
+                                    className={star <= newRating ? 'text-blue-500' : 'text-gray-300 hover:text-blue-400'}
                                     aria-label={`Rate ${star}`}
                                 >
                                     <svg className="w-5 h-5 fill-current" viewBox="0 0 20 20">
@@ -174,56 +234,56 @@ export default function ReviewsSection({ contentId }: Props) {
                 </div>
 
                 {error && (
-                    <p className="text-red-400 text-sm mt-3">{error}</p>
+                    <p className="text-red-500 text-sm mt-3">{error}</p>
                 )}
             </div>
 
             {/* Фильтры */}
             <div className="flex items-center gap-3 mb-6">
+                <span className="text-gray-700 text-sm font-medium">Sort By:</span>
                 <button
                     onClick={() => setSortBy('newest')}
-                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                        sortBy === 'newest' ? 'bg-yellow-500 text-gray-900' : 'bg-slate-600 text-white hover:bg-slate-500'
+                    className={`px-4 py-2 rounded-lg font-medium transition-colors text-sm ${
+                        sortBy === 'newest' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                 >
                     Newest
                 </button>
                 <button
                     onClick={() => setSortBy('oldest')}
-                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                        sortBy === 'oldest' ? 'bg-yellow-500 text-gray-900' : 'bg-slate-600 text-white hover:bg-slate-500'
+                    className={`px-4 py-2 rounded-lg font-medium transition-colors text-sm ${
+                        sortBy === 'oldest' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                 >
                     Oldest
                 </button>
                 <button
                     onClick={() => setSortBy('highest')}
-                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                        sortBy === 'highest' ? 'bg-yellow-500 text-gray-900' : 'bg-slate-600 text-white hover:bg-slate-500'
+                    className={`px-4 py-2 rounded-lg font-medium transition-colors text-sm ${
+                        sortBy === 'highest' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                 >
-                    Highest
+                    Hottest
                 </button>
-                <span className="ml-auto text-white/60 text-sm">({reviews.length})</span>
             </div>
 
             {/* Список отзывов */}
             <div className="space-y-4">
                 {loading && (
-                    <div className="text-white/70">Loading comments...</div>
+                    <div className="text-gray-500">Loading comments...</div>
                 )}
                 {!loading && sorted.length === 0 && !error && (
-                    <div className="text-white/50">No comments yet. Be the first to comment.</div>
+                    <div className="text-gray-400">No comments yet. Be the first to comment.</div>
                 )}
                 {!loading && sorted.map((review) => (
-                    <div key={review.id} className="bg-slate-600/50 rounded-2xl p-6">
+                    <div key={review.id} className="bg-gray-100 rounded-2xl p-6">
                         <div className="flex items-start gap-4">
                             {/* Аватар */}
                             {review.avatar ? (
                                 // eslint-disable-next-line @next/next/no-img-element
                                 <img src={review.avatar} alt={review.author} className="w-10 h-10 rounded-full" />
                             ) : (
-                                <div className="w-10 h-10 rounded-full bg-slate-500 flex items-center justify-center text-white/80">
+                                <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-semibold">
                                     {review.author?.[0]?.toUpperCase() ?? '?'}
                                 </div>
                             )}
@@ -232,19 +292,24 @@ export default function ReviewsSection({ contentId }: Props) {
                             <div className="flex-1">
                                 <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-3">
-                                        <span className="text-white font-semibold">{review.author}</span>
-                                        <span className="text-yellow-500 text-sm">{'★'.repeat(review.rating || 0)}</span>
+                                        <span className="text-gray-900 font-semibold">{review.author}</span>
+                                        {review.rating > 0 && (
+                                            <span className="text-gray-600 text-sm">Score: {review.rating}/10</span>
+                                        )}
                                     </div>
-                                    <span className="text-white/60 text-sm">{new Date(review.created_at).toLocaleString()}</span>
+                                    <span className="text-gray-500 text-sm">{new Date(review.created_at).toLocaleString()}</span>
                                 </div>
 
-                                <p className="text-white/80 mb-4">{review.text}</p>
+                                <p className="text-gray-700 mb-4">{review.text}</p>
 
                                 {/* Лайки/дизлайки */}
                                 <div className="flex items-center gap-4">
                                     <button
-                                        onClick={() => { /* TODO: integrate like endpoint */ }}
-                                        className="flex items-center gap-2 text-white/60 hover:text-white transition-colors"
+                                        onClick={() => {
+                                            if (!checkAuthAndRedirect()) return;
+                                            /* TODO: integrate like endpoint */
+                                        }}
+                                        className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
                                     >
                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
@@ -252,8 +317,11 @@ export default function ReviewsSection({ contentId }: Props) {
                                         <span className="text-sm">{review.likes ?? 0}</span>
                                     </button>
                                     <button
-                                        onClick={() => { /* TODO: integrate dislike endpoint */ }}
-                                        className="flex items-center gap-2 text-white/60 hover:text-white transition-colors"
+                                        onClick={() => {
+                                            if (!checkAuthAndRedirect()) return;
+                                            /* TODO: integrate dislike endpoint */
+                                        }}
+                                        className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
                                     >
                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.096c.5 0 .905-.405.905-.904 0-.715.211-1.413.608-2.008L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5" />
@@ -261,8 +329,19 @@ export default function ReviewsSection({ contentId }: Props) {
                                         <span className="text-sm">{review.dislikes ?? 0}</span>
                                     </button>
                                     <button
-                                        onClick={() => { /* TODO: integrate report endpoint */ }}
-                                        className="text-white/60 hover:text-white transition-colors text-sm ml-auto"
+                                        onClick={() => {
+                                            if (!checkAuthAndRedirect()) return;
+                                        }}
+                                        className="text-gray-600 hover:text-gray-900 transition-colors text-sm"
+                                    >
+                                        Reply
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            if (!checkAuthAndRedirect()) return;
+                                            /* TODO: integrate report endpoint */
+                                        }}
+                                        className="text-gray-600 hover:text-gray-900 transition-colors text-sm ml-auto"
                                     >
                                         Report
                                     </button>

@@ -32,16 +32,44 @@ function mapContentTypeToQuery(type?: ContentCard['contentType']): 'movie' | 'an
 }
 
 export default function ContentBannerSection({ level, items, description, badge, viewMoreHref }: Props) {
+    // Логирование для отладки
+    if (typeof window === 'undefined') {
+        console.log(`📦 ContentBannerSection for ${level}:`, {
+            itemsCount: items.length,
+            items: items.map((it: any) => ({
+                id: it.id,
+                title: it.title,
+                contentType: (it as ContentCard).contentType,
+                imageUrl: it.imageUrl || (it as ContentCard).imageUrl,
+            }))
+        });
+    }
+
+    // Убираем дубликаты по ID и типу контента
+    const uniqueItems = items.reduce((acc, item) => {
+        const contentCard = item as ContentCard;
+        const existingById = acc.find((i: any) => (i as ContentCard).id === contentCard.id);
+        const existingByType = acc.find((i: any) => (i as ContentCard).contentType === contentCard.contentType);
+        
+        // Добавляем только если нет дубликата по ID И нет дубликата по типу
+        if (!existingById && !existingByType) {
+            acc.push(item);
+        }
+        return acc;
+    }, [] as (ContentBannerProps | ContentCard)[]);
+
+    const displayItems = uniqueItems.slice(0, 4);
+
     return (
         <section className="w-full py-8 px-6" style={{ backgroundColor: '#F9F9F9' }}>
             <div className="max-w-7xl mx-auto">
                 {/* Заголовок и кнопка */}
                 <div className="mb-6 flex items-center justify-between">
-                    <h2 className="text-2xl font-bold text-slate-700">{level}</h2>
+                    <h2 className="text-2xl font-bold text-gray-800">{level} Level</h2>
                     {viewMoreHref && (
                         <a
                             href={viewMoreHref}
-                            className="rounded-full border-2 border-slate-300 px-6 py-2.5 text-sm font-medium text-slate-700 hover:bg-white hover:border-slate-400 transition-all"
+                            className="rounded-lg bg-blue-100 hover:bg-blue-200 px-6 py-2.5 text-sm font-medium text-blue-700 transition-all"
                         >
                             View More
                         </a>
@@ -52,17 +80,25 @@ export default function ContentBannerSection({ level, items, description, badge,
                 <div className="bg-white rounded-3xl p-8 shadow-sm">
                     {/* Сетка карточек */}
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-6">
-                        {items.slice(0, 4).map((it) => {
-                            const typeQuery = mapContentTypeToQuery((it as ContentCard).contentType as ContentCard['contentType'] | undefined);
-                            const href = (it as ContentBannerProps).href ?? `/catalog?type=${typeQuery}&level=${encodeURIComponent(level)}`;
-                            const bannerItem: ContentBannerProps = {
-                                id: (it as any).id,
-                                title: (it as any).title,
-                                imageUrl: (it as any).imageUrl,
-                                href,
-                            };
-                            return <ContentBanner key={bannerItem.id} item={bannerItem} />;
-                        })}
+                        {displayItems.length > 0 ? (
+                            displayItems.map((it) => {
+                                const contentCard = it as ContentCard;
+                                const typeQuery = mapContentTypeToQuery(contentCard.contentType);
+                                const href = (it as ContentBannerProps).href ?? `/catalog?type=${typeQuery}&level=${encodeURIComponent(level)}`;
+                                const bannerItem: ContentBannerProps = {
+                                    id: contentCard.id || (it as any).id,
+                                    title: contentCard.title || (it as any).title || 'Untitled',
+                                    category: contentCard.contentType || (it as any).category,
+                                    imageUrl: contentCard.imageUrl || (it as any).imageUrl || '',
+                                    href,
+                                };
+                                return <ContentBanner key={bannerItem.id} item={bannerItem} />;
+                            })
+                        ) : (
+                            <div className="col-span-4 text-center text-gray-500 py-8">
+                                No content available for {level} level
+                            </div>
+                        )}
                     </div>
 
                     {/* Описание и бейдж внизу */}

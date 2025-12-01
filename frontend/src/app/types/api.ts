@@ -33,6 +33,15 @@ export type ApiAgeRating = {
     updated_at: string;
 };
 
+export type ApiDifficultyLevel = {
+    id: number;
+    name: string; // "A1", "A2", "B1", "B2", "C1", "C2"
+    level: number;
+    description: string;
+    created_at: string;
+    updated_at: string;
+};
+
 export type ApiContent = {
     id: string;
     title: string;
@@ -50,6 +59,7 @@ export type ApiContent = {
     age_rating_id: number;
     original_author_id: number;
     country_id: string;
+    difficulty_level_id: number;
     genre_ids?: string[]; // May not be present if genres are nested
     audio_language_ids?: number[];
     subtitle_language_ids?: number[];
@@ -61,6 +71,7 @@ export type ApiContent = {
     original_language?: ApiLanguage;
     age_rating?: ApiAgeRating;
     country?: ApiCountry;
+    difficulty_level?: ApiDifficultyLevel;
     duration_minutes: number | null;
     director?: string | null;
     rating: number;

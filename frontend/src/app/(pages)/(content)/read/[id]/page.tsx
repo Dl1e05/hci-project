@@ -5,6 +5,7 @@ import ContentHero from '@/app/components/Content-Hero';
 import AboutSection from '@/app/components/About-Section';
 import SimilarContent from '@/app/components/Similar-Content';
 import ReviewsSection from '@/app/components/Review-Section';
+import ContentHeader from '@/app/components/Content-Header';
 
 type Props = {
     params: { id: string };
@@ -21,11 +22,12 @@ export default async function ReadDetailPage({ params }: Props) {
     const similarItems = rawSimilar.filter((i) => i.id !== item.id).slice(0, 8);
 
     return (
-        <div className="min-h-screen bg-slate-800">
+        <div className="min-h-screen bg-white">
+            <ContentHeader />
             <ContentHero item={item} />
             <div className="container mx-auto px-6 py-12">
                 <AboutSection item={item} />
-                <SimilarContent items={similarItems} title="Similar Books" />
+                <SimilarContent items={similarItems} title={`More like ${item.title}`} />
                 <ReviewsSection contentId={item.id} />
             </div>
         </div>

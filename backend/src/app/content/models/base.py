@@ -46,6 +46,9 @@ class BaseContent(Base):
     original_language_id: Mapped[int] = mapped_column(
         Integer, ForeignKey('languages.id', ondelete='RESTRICT'), nullable=False, index=True
     )
+    difficulty_level_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey('difficulty_levels.id', ondelete='RESTRICT'), nullable=False, index=True
+    )
     age_rating_id: Mapped[int] = mapped_column(
         Integer, ForeignKey('age_ratings.id', ondelete='RESTRICT'), nullable=False, index=True
     )
@@ -62,6 +65,7 @@ class BaseContent(Base):
     original_language: Mapped[Language] = relationship(
         'Language', foreign_keys=[original_language_id], back_populates='contents'
     )
+    difficulty_level: Mapped[DifficultyLevel] = relationship('DifficultyLevel')
     age_rating: Mapped[AgeRating] = relationship('AgeRating', back_populates='contents')
     original_author: Mapped[Author] = relationship('Author', back_populates='contents')
     country: Mapped[Country] = relationship('Country', back_populates='contents')

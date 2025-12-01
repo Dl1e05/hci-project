@@ -13,14 +13,14 @@ type Props = {
 export default function SimilarContent({ items, title }: Props) {
     return (
         <section className="mb-12">
-            <h2 className="text-3xl font-bold text-white mb-6">{title}</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">{title}</h2>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 {items.map((item) => {
                     const imageSrc = getSafeImageUrl(item.imageUrl);
                     return (
                         <Link key={item.id} href={getContentUrl(item)} className="group">
-                            <div className="relative aspect-[2/3] rounded-xl overflow-hidden bg-gray-800">
+                            <div className="relative aspect-[2/3] rounded-xl overflow-hidden bg-gray-200">
                                 <Image
                                     src={imageSrc}
                                     alt={item.title}
