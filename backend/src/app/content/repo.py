@@ -86,8 +86,7 @@ class ContentRepository:
             )
             .where(model_class.id == content.id)
         )
-        content = result.scalar_one()
-        return content
+        return result.scalar_one()
 
     @staticmethod
     async def get_all(db: AsyncSession, model_class: type[T], skip: int = 0, limit: int = 100) -> list[T]:

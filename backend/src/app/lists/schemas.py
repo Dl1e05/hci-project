@@ -1,30 +1,61 @@
-from enum import Enum
 from uuid import UUID
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
+from pydantic_core.core_schema import ValidationInfo
 
+from app.lists.models import ContentType, WatchStatus
 
-class WatchStatusEnum(str, Enum):
-    COMPLETED = 'completed'
-    PLANNED = 'planned'
-    DROPPED = 'dropped'
-    WATCHING = 'watching'
-    POSTPONED = 'postponed'
+VALID_STATUS_COMBINATIONS = {
+    ContentType.MEDIA: {
+        WatchStatus.COMPLETED,
+        WatchStatus.PLANNED,
+        WatchStatus.DROPPED,
+        WatchStatus.WATCHING,
+        WatchStatus.POSTPONED,
+    },
+    ContentType.GAMES: {
+        WatchStatus.FINISHED,
+        WatchStatus.PLAYING,
+        WatchStatus.PLANNED,
+        WatchStatus.DROPPED,
+        WatchStatus.POSTPONED,
+    },
+    ContentType.LITERATURE: {
+        WatchStatus.READ,
+        WatchStatus.READING,
+        WatchStatus.PLANNED,
+        WatchStatus.DROPPED,
+        WatchStatus.POSTPONED,
+    },
+}
 
 
 class UserContentListCreate(BaseModel):
-    status: WatchStatusEnum = WatchStatusEnum.PLANNED
+    content_type: ContentType
+    status: WatchStatus = WatchStatus.PLANNED
+
+    @field_validator('status')
+    @classmethod
+    def validate_status_for_content_type(cls, status: WatchStatus, info: ValidationInfo) -> WatchStatus:
+        content_type = info.data.get('content_type')
+        if content_type and status not in VALID_STATUS_COMBINATIONS.get(content_type, set()):
+            raise ValueError(
+                f"Status '{status.value}' is not valid for content type '{content_type.value}'. "
+                f'Valid statuses: {[s.value for s in VALID_STATUS_COMBINATIONS[content_type]]}'
+            )
+        return status
 
 
 class UserContentListUpdate(BaseModel):
-    status: WatchStatusEnum | None = None
+    status: WatchStatus | None = None
 
 
 class UserContentListRead(BaseModel):
     id: UUID
     user_id: UUID
     content_id: UUID
-    status: WatchStatusEnum
+    content_type: ContentType
+    status: WatchStatus
 
     class Config:
         from_attributes = True
@@ -37,6 +68,12 @@ class UserContentListReadStats(BaseModel):
     watching_count: int
     postponed_count: int
 
+    read_count: int
+    reading_count: int
+
+    finished_count: int
+    playing_count: int
+
 
 class UserContentListReadGroups(BaseModel):
     completed: list[UserContentListRead] = Field(default_factory=list)
@@ -44,3 +81,9 @@ class UserContentListReadGroups(BaseModel):
     dropped: list[UserContentListRead] = Field(default_factory=list)
     watching: list[UserContentListRead] = Field(default_factory=list)
     postponed: list[UserContentListRead] = Field(default_factory=list)
+
+    read: list[UserContentListRead] = Field(default_factory=list)
+    reading: list[UserContentListRead] = Field(default_factory=list)
+
+    finished: list[UserContentListRead] = Field(default_factory=list)
+    playing: list[UserContentListRead] = Field(default_factory=list)
