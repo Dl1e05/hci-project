@@ -10,7 +10,7 @@ class SearchService:
     @staticmethod
     async def search_content(db: AsyncSession, params: ContentSearchParams) -> ContentSearchResult:
         query = select(BaseContent).options(
-            selectinload(BaseContent.genres),
+            selectinload(BaseContent.content_genres),
             selectinload(BaseContent.audio_languages),
             selectinload(BaseContent.subtitle_languages),
             selectinload(BaseContent.content_tags),
@@ -52,7 +52,7 @@ class SearchService:
         if params.genre_ids:
             from app.references.models import Genres
 
-            query = query.join(BaseContent.genres).where(Genres.id.in_(params.genre_ids))
+            query = query.join(BaseContent.content_genres).where(Genres.id.in_(params.genre_ids))
 
         if params.tag_ids:
             from app.references.models import Tags

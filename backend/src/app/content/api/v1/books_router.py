@@ -23,12 +23,9 @@ async def create_book(
 ) -> BookRead:
     try:
         storage = get_storage_service()
-
         banner_key = storage.upload_file(banner.file, banner.filename or 'banner', banner.content_type, 'banners')
         banner_url = storage.get_public_url(banner_key)
-
         book_data = form_data.to_schema(banner_url=banner_url)
-
         return await BookService.create(db, book_data)
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)) from e

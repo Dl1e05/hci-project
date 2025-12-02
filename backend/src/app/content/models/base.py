@@ -71,7 +71,7 @@ class BaseContent(Base):
     country: Mapped[Country] = relationship('Country', back_populates='contents')
     difficulty_level: Mapped[DifficultyLevel] = relationship('DifficultyLevel', back_populates='contents')
 
-    genres: Mapped[list[Genres]] = relationship('Genres', secondary=content_genres, back_populates='contents')
+    content_genres: Mapped[list[Genres]] = relationship('Genres', secondary=content_genres, back_populates='contents')
     audio_languages: Mapped[list[Language]] = relationship(
         'Language', secondary=content_audio_languages, back_populates='audio_contents'
     )

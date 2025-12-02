@@ -57,7 +57,9 @@ class Genres(Base):
     id: Mapped[uuid.UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
     name: Mapped[str] = mapped_column(String(64), nullable=False, unique=True, index=True)
 
-    contents: Mapped[list['BaseContent']] = relationship('BaseContent', secondary=content_genres, back_populates='genres')
+    contents: Mapped[list['BaseContent']] = relationship(
+        'BaseContent', secondary=content_genres, back_populates='content_genres'
+    )
 
 
 class Country(Base):
